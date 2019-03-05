@@ -1,7 +1,7 @@
 {
   "name": "klih",
   "version": "1.0.0",
-  "description": "",
+  "description": "MERN app for record foosball match and display statistics",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
@@ -10,6 +10,10 @@
   },
   "author": "Florent DUPONT",
   "license": "MIT",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/nguyinh/klih"
+  },
   "dependencies": {
     "bcrypt": "^3.0.4",
     "body-parser": "^1.18.3",
