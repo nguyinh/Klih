@@ -1,7 +1,9 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
+
+const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const playerScheme = mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
+  _id: ObjectId,
   email: {
     type: String,
     required: true
@@ -10,17 +12,34 @@ const playerScheme = mongoose.Schema({
     type: String,
     required: true
   },
-  firstname: {
+  firstName: {
     type: String,
     required: true
   },
-  lastname: {
+  lastName: {
     type: String,
     required: true
   },
-  creationDate: {
+  alias: {
+    type: String
+  },
+  teams: {
+    type: [ObjectId]
+  },
+  avatar: {
+    data: Buffer,
+    contentType: String
+  },
+  createdAt: {
     type: Date,
     required: true
+  },
+  updatedAt: {
+    type: Date,
+    required: true
+  },
+  lastConnectionAt: {
+    type: Date
   }
 });
 
