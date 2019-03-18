@@ -45,6 +45,8 @@ module.exports = (() => {
             createdAt: Date.now()
           }) // Create and save new team
 
+          // TODO: Add TeamId to Players ?
+
           team.save().then((result) => {
             return res.status(201).json({team: team})
           }).catch((error) => {

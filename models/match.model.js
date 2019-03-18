@@ -63,6 +63,9 @@ const matchScheme = mongoose.Schema({
   team: {
     type: ObjectId,
     required: true
+  },
+  table: {
+    type: ObjectId
   }
 });
 

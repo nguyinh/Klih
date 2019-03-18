@@ -1,0 +1,37 @@
+.navigationBar {
+  border-top-left-radius: 0px !important;
+  border-top-right-radius: 0px !important;
+  background: #f7f7fa;
+  margin-bottom: 10px;
+  // box-shadow: 2px 5px 1px black;
+
+  .rs-panel-body {
+    padding-bottom: 10px !important;
+    background: linear-gradient(#f7f7fa, #efeff5);
+    // box-shadow: -1px 2px 5px 1px black inset;
+  }
+
+  .playerInfo {
+    float: right;
+    font-size: 15px;
+  }
+
+  .title {
+    margin-top: 5px;
+  }
+
+  .rs-panel-heading:before {
+    top: 35% !important;
+  }
+
+  .avatarImage {
+    margin-left: 5px;
+    height: 40px;
+    width: 40px;
+    border-radius: 100px;
+  }
+
+  h1 {
+    margin: 0px !important;
+  }
+}
