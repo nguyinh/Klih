@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './Match.scss';
-import {withRouter} from "react-router-dom";
+import {withRouter, Link} from "react-router-dom";
 import {connect} from 'react-redux';
 
 class Match extends Component {
@@ -13,6 +13,7 @@ class Match extends Component {
     return <div>
       <h1>Create a match</h1>
       <span>{this.props.match.params.tableTag}</span>
+      <Link to='/match/test'>hey</Link>
     </div>;
   }
 }

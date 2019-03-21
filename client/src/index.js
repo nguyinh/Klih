@@ -7,16 +7,18 @@ import Match from './Components/Match/Match';
 import Profile from './Components/Profile/Profile';
 import Navigation from './Components/Navigation/Navigation';
 import * as serviceWorker from './serviceWorker';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
-import {Provider} from 'react-redux'
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Provider } from 'react-redux'
 import store from "./redux/store.js";
 
-import 'rsuite/dist/styles/rsuite.min.css';
+// import 'rsuite/dist/styles/rsuite.min.css';
+import 'rsuite/dist/styles/rsuite.css';
 
 ReactDOM.render(<Provider store={store}>
   <Router>
     <div>
       <Navigation/>
+
       <Route exact={true} path="/" render={props => <div>
           <App/>
         </div>}/>

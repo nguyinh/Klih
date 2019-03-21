@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import './Profile.scss';
-import {withRouter} from "react-router-dom";
+import Auth from '../Auth/Auth';
+import {withRouter, Link} from "react-router-dom";
 import {connect} from 'react-redux';
+import {Button} from 'rsuite';
 import {setUserAuth} from '../../redux/actions/index.actions.js'
 
 const mapDispatchToProps = dispatch => {
@@ -23,11 +25,12 @@ class Profile extends Component {
   }
 
   render() {
-    return <div>Profile {
+    return <div>{
         this.props.isConnected
           ? 'Connected'
-          : 'Not connected'
-      }</div>
+          : <Auth/>
+      }
+    </div>
   }
 }
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Profile));

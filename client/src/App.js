@@ -1,12 +1,12 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.scss';
 import axios from 'axios';
-import {Button, Grid, Row, Col} from 'rsuite';
-import {Link, withRouter} from "react-router-dom";
+import { Button, Grid, Row, Col } from 'rsuite';
+import { Link, withRouter } from "react-router-dom";
 
-import {connect} from 'react-redux';
-import {setUserAuth} from './redux/actions/index.actions.js'
+import { connect } from 'react-redux';
+import { setUserAuth } from './redux/actions/index.actions.js'
 
 const mapDispatchToProps = dispatch => {
   return ({
@@ -17,7 +17,7 @@ const mapDispatchToProps = dispatch => {
 }
 
 const mapStateToProps = state => {
-  return {isConnected: state.isConnected};
+  return { isConnected: state.isConnected };
 };
 
 class App extends Component {
@@ -39,9 +39,9 @@ class App extends Component {
 
   fetchAPI = () => {
     axios.get('http://localhost:8116/api/test', {}).then((res) => {
-      this.props.setUserAuth(true);
+      // this.props.setUserAuth(true);
     }).catch((err) => {
-      this.props.setUserAuth(false);
+      // this.props.setUserAuth(false);
     });
   }
 
