@@ -75,7 +75,10 @@ playerScheme.statics.upsertFbUser = function(accessToken, refreshToken, profile,
         facebookProvider: {
           id: profile.id,
           token: accessToken
-        }
+        },
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        lastConnectionAt: Date.now()
       });
 
       newUser.save(function(error, savedUser) {

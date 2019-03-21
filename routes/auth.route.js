@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt')
 const mongoose = require('mongoose')
 const Player = require('./../models/player.model.js')
 const fs = require('fs')
+const {generateToken, sendToken} = require('../utils/token.utils');
 
 require("dotenv").config()
 
@@ -29,7 +30,7 @@ module.exports = (() => {
     })
   })
 
-  router.post('/api/signup', function(req, res) {
+  router.post('/api/signup', function(req, res, next) {
     bcrypt.hash(req.body.password, 10, (err, hash) => {
       if (err) {
         console.log(err);
@@ -58,14 +59,15 @@ module.exports = (() => {
             }) // Create and save new user
 
             user.save().then((result) => {
-              const JWTToken = jwt.sign({
-                email: user.email,
-                _id: user._id
-              }, process.env.JWT_SECRET, {expiresIn: '10d'})
-              res.cookie('token', JWTToken, {
-                expiresIn: 90000,
-                httpOnly: true
-              })
+              console.log(generateToken(req, res, next));
+              // const JWTToken = jwt.sign({
+              //   email: user.email,
+              //   _id: user._id
+              // }, process.env.JWT_SECRET, {expiresIn: '10d'})
+              // res.cookie('token', JWTToken, {
+              //   expiresIn: 90000,
+              //   httpOnly: true
+              // })
 
               return res.status(201).json({success: 'New user has been created', token: JWTToken})
             }).catch((error) => {
@@ -109,7 +111,7 @@ module.exports = (() => {
 
   })
 
-  router.post('/api/signout', function(req, res) {
+  router.post('/api/logout', function(req, res) {
     res.clearCookie('token')
     return res.status(202).send({message: 'Logout successful'})
   })

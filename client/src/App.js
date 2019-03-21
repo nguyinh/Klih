@@ -8,6 +8,8 @@ import { Link, withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
 import { setUserAuth } from './redux/actions/index.actions.js'
 
+require('dotenv').config({ path: require('find-config')('.env') })
+
 const mapDispatchToProps = dispatch => {
   return ({
     setUserAuth: (value) => {
@@ -28,7 +30,8 @@ class App extends Component {
       working: false,
       collapse: true
     }
-
+    console.log(!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
+    console.log('lol');
     this.collapseSwitch = this.collapseSwitch.bind(this);
   }
 
@@ -38,7 +41,7 @@ class App extends Component {
   }
 
   fetchAPI = () => {
-    axios.get('http://localhost:8116/api/test', {}).then((res) => {
+    axios.get('/api/test', {}).then((res) => {
       // this.props.setUserAuth(true);
     }).catch((err) => {
       // this.props.setUserAuth(false);
@@ -53,12 +56,6 @@ class App extends Component {
 
   render() {
     return (<div className="App">
-      {
-        this.props.isConnected
-          ? <h1>Works !</h1>
-          : <h1>Don't work</h1>
-      }
-
       <Grid>
         <Row>
           <Col md={6}>

@@ -3,13 +3,10 @@ const express = require('express');
 require("dotenv").config()
 
 const createToken = (auth, user) => {
-  console.log(user);
   return jwt.sign({
     email: user.email,
     id: auth.id
-  }, process.env.JWT_SECRET, {
-    expiresIn: 60 * 120
-  });
+  }, process.env.JWT_SECRET, {expiresIn: '10d'});
 };
 
 module.exports = {

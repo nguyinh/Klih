@@ -1,7 +1,7 @@
 import act from '../../config/actions.constants.js'
 
 const initialState = {
-  isConnected: false,
+  isConnected: undefined,
   actualPage: ''
 }
 

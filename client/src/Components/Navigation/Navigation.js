@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './Navigation.scss';
 import {
   Button,
@@ -8,20 +8,24 @@ import {
   Nav,
   Panel
 } from 'rsuite';
-import {Link, Redirect} from "react-router-dom";
-import {connect} from 'react-redux';
-import {setNavigationState} from './../../redux/actions/index.actions.js'
+import { Link, Redirect } from "react-router-dom";
+import { connect } from 'react-redux';
+import { setNavigationState, setUserAuth } from './../../redux/actions/index.actions.js'
+import axios from 'axios';
 
 const mapDispatchToProps = dispatch => {
   return ({
     setNavigationState: (value) => {
       dispatch(setNavigationState(value))
+    },
+    setUserAuth: (value) => {
+      dispatch(setUserAuth(value))
     }
   })
 }
 
 const mapStateToProps = state => {
-  return {actualPage: state.actualPage};
+  return { actualPage: state.actualPage };
 };
 
 class Navigation extends Component {
@@ -35,6 +39,21 @@ class Navigation extends Component {
     this.profilePage = this.profilePage.bind(this);
     this.teamPage = this.teamPage.bind(this);
     this.openPanel = this.openPanel.bind(this);
+  }
+
+  componentDidMount() {
+    axios.defaults.withCredentials = true;
+    // if (this.props.isStarting) {
+    axios.post('/api/connect', {}).then((res) => {
+      console.log(res);
+      console.log('OKKKKK');
+      this.props.setUserAuth(true);
+    }).catch((err) => {
+      console.error(err.response);
+      this.props.setUserAuth(false);
+      // this.props.setToken('');
+    });
+    // }
   }
 
   matchPage() {
@@ -51,10 +70,10 @@ class Navigation extends Component {
   }
 
   openPanel(e) {
-    if (e.target.type === 'button' || (e.target.type !== 'button' && this.state.expanded)) 
-      this.setState({expanded: false})
-    else 
-      this.setState({expanded: true})
+    if (e.target.type === 'button' || (e.target.type !== 'button' && this.state.expanded))
+      this.setState({ expanded: false })
+    else
+      this.setState({ expanded: true })
   }
 
   render() {
