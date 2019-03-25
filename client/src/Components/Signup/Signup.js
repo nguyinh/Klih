@@ -1,48 +1,212 @@
 import React, { Component } from 'react';
 import './Signup.scss';
-import { withRouter, Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
+import axios from 'axios';
 import {
   Button,
-  Grid,
-  Row,
-  Col,
   Form,
   FormGroup,
   FormControl,
-  ControlLabel,
-  HelpBlock,
-  ButtonToolbar
 } from 'rsuite';
+import { setUserAuth } from '../../redux/actions/index.actions.js';
+import str from '../../constants/labels.constants.js'
+
+const mapDispatchToProps = dispatch => {
+  return ({
+    setUserAuth: (value) => {
+      dispatch(setUserAuth(value))
+    }
+  })
+}
+
+const mapStateToProps = state => {
+  return { isConnected: state.isConnected };
+};
 
 class Signup extends Component {
   constructor(props) {
     super(props);
-    this.state = {}
+
+    this.state = {
+      inputs: {
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+      },
+      buttonDisabled: false,
+      errorMessage: '',
+      inputErrors: {
+        lastName: '',
+        firstName: '',
+        email: '',
+        password: ''
+      }
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.signUpButton = this.signUpButton.bind(this);
+  }
+
+  handleChange(newInputs) {
+    this.setState({
+      inputs: newInputs,
+      errorMessage: '',
+      inputErrors: {
+        lastName: '',
+        firstName: '',
+        email: '',
+        password: ''
+      }
+    });
+  }
+
+  async signUpButton() {
+    // TODO: Setup inputs security
+    const { lastName, firstName, email, password } = this.state.inputs;
+    console.log(lastName);
+    console.log(firstName);
+    console.log(email);
+    console.log(password);
+
+    await this.setState((state) => {
+      return {
+        inputErrors: {
+          lastName: (lastName ? '' : str.EMPTY_FIELD),
+          firstName: (firstName ? '' : str.EMPTY_FIELD),
+          email: (email ? '' : str.EMPTY_FIELD),
+          password: (password ? '' : str.EMPTY_FIELD)
+        }
+      }
+    });
+
+    const hasEmpty = (obj) => {
+      for (var key in obj) {
+        if (obj[key] !== '')
+          return true;
+      }
+      return false;
+    }
+
+    if (hasEmpty(this.state.inputErrors))
+      return;
+
+    await this.setState((state) => {
+      return {
+        inputErrors: {
+          lastName: lastName.includes(' ') ? str.ERROR_FIELD : '',
+          firstName: firstName.includes(' ') ? str.ERROR_FIELD : '',
+          email: email.includes(' ') ? str.ERROR_FIELD : '',
+          password: password.includes(' ') ? str.ERROR_FIELD : ''
+        }
+      }
+    });
+
+    const hasSpace = (obj) => {
+      for (var key in obj) {
+        if (obj[key].includes(' ')) {
+          console.log(obj[key]);
+          return true;
+        }
+      }
+      return false;
+    }
+
+    if (hasSpace(this.state.inputs))
+      return;
+
+    if (!email.includes('@') || !email.includes('.')) {
+      await this.setState((state) => {
+        return {
+          inputErrors: {
+            email: !email.includes('@') || !email.includes('.') ? str.EMAIL_FORMAT_INCORRECT : '',
+          }
+        }
+      });
+
+      return;
+    }
+
+    // TODO: check if password is strong enough
+    // if ()
+
+    this.setState({ buttonDisabled: true });
+
+    axios.post('api/signup', {
+      firstName: this.state.inputs.firstName,
+      lastName: this.state.inputs.lastName,
+      email: this.state.inputs.email,
+      password: this.state.inputs.password
+    }).then((res) => {
+      if (res.status === 201) {
+        this.props.setUserAuth(true);
+        // this.props.setToken(res.data.token);
+      }
+      this.setState({ buttonDisabled: false });
+    }).catch((err) => {
+      console.log(err);
+      // TODO: Highligh errors
+      // this.props.setToken('');
+      this.setState({
+        errorMessage: str[err.response.data.error] || str.INTERNAL_SERVER_ERROR,
+        buttonDisabled: false
+      });
+      this.props.setUserAuth(false);
+    });
   }
 
   render() {
-    return <Form fluid={true}>
+    return <Form fluid={true} onChange={this.handleChange} inputs={this.state.inputs}>
       <FormGroup>
-        <ControlLabel>Nom</ControlLabel>
-        <FormControl name="lastName"/>
+        <FormControl
+          name="lastName"
+          placeholder={str.LASTNAME}
+          errorMessage={this.state.inputErrors.lastName}
+          errorPlacement='bottomLeft'/>
       </FormGroup>
       <FormGroup>
-        <ControlLabel>Prenom</ControlLabel>
-        <FormControl name="firstName"/>
+        <FormControl
+          name="firstName"
+          placeholder={str.FIRSTNAME}
+          errorMessage={this.state.inputErrors.firstName}
+          errorPlacement='bottomLeft'/>
       </FormGroup>
       <FormGroup>
-        <ControlLabel>Email</ControlLabel>
-        <FormControl name="email" type="email"/>
+        <FormControl
+          name="email"
+          type="email"
+          placeholder={str.EMAIL}
+          errorMessage={this.state.inputErrors.email}
+          errorPlacement='bottomLeft'/>
       </FormGroup>
       <FormGroup>
-        <ControlLabel>Mot de passe</ControlLabel>
-        <FormControl name="password" type="password"/>
+        <FormControl
+          name="password"
+          type="password"
+          placeholder={str.PASSWORD}
+          errorMessage={this.state.inputErrors.password}
+          errorPlacement='bottomLeft'/>
       </FormGroup>
+      <div style={{
+          display: this.state.errorMessage ? 'block' : 'none',
+          color: 'red',
+          marginTop: 6
+        }}>
+        {this.state.errorMessage}
+      </div>
       <FormGroup>
-        <Button appearance="primary" block={true} size="lg">Créer un compte</Button>
+        <Button
+          appearance="primary"
+          block={true}
+          size="lg"
+          onClick={this.signUpButton}
+          disabled={this.state.buttonDisabled}
+          color='green'>
+          {str.CREATE_ACCOUNT}
+        </Button>
       </FormGroup>
     </Form>
   }
 }
-export default withRouter(connect(null, null)(Signup));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Signup));

@@ -1,11 +1,19 @@
 import React, { Component } from 'react';
 import './Profile.scss';
 import Auth from '../Auth/Auth';
-import { withRouter, Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
-import { Button } from 'rsuite';
+import {
+  Button,
+  Grid,
+  Row,
+  Col,
+  Icon
+} from 'rsuite';
+
 import { setUserAuth } from '../../redux/actions/index.actions.js';
 import axios from 'axios';
+import str from '../../constants/labels.constants.js'
 
 const mapDispatchToProps = dispatch => {
   return ({
@@ -41,15 +49,20 @@ class Profile extends Component {
 
   render() {
     return <div>
-      {
-        this.props.isConnected === undefined
-        ? 'Loading'
-        :
-          this.props.isConnected
-            ? <Button onClick={this.logout}>Log out</Button>
-            : <Auth/>
+    {
+      this.props.isConnected === undefined ?
+      'Loading' :
+        this.props.isConnected ?
+        <Grid>
+              <Row>
+                <Col xsOffset={1} xs={22}>
+                  <Button onClick={this.logout} block color='red'>{str.LOGOUT}</Button>
+                </Col>
+              </Row>
+            </Grid> :
+        <Auth/>
 
-      }
+    }
 
     </div>
   }

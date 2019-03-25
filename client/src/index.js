@@ -4,6 +4,9 @@ import './index.css';
 import App from './App';
 import Team from './Components/Team';
 import Match from './Components/Match/Match';
+import History from './Components/History/History';
+import Statistics from './Components/Statistics/Statistics';
+import Monitor from './Components/Monitor/Monitor';
 import Profile from './Components/Profile/Profile';
 import Navigation from './Components/Navigation/Navigation';
 import * as serviceWorker from './serviceWorker';
@@ -25,9 +28,15 @@ ReactDOM.render(<Provider store={store}>
 
       <Route path="/match/:tableTag?" component={Match}/>
 
-      <Route path="/join/:teamTag" component={Team}/>
+      <Route path="/history" component={History}/>
+
+      <Route path="/statistics" component={Statistics}/>
+
+      <Route path="/monitor" component={Monitor}/>
 
       <Route path="/profile" component={Profile}/>
+
+      <Route path="/join/:teamTag" component={Team}/>
     </div>
   </Router>
 </Provider>, document.getElementById('root')); // ReactDOM.render(<App/>, document.getElementById('root'));

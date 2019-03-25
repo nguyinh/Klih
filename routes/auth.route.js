@@ -50,7 +50,6 @@ module.exports = (() => {
               updatedAt: Date.now(),
               lastConnectionAt: Date.now()
               // TODO: Add isAdmin field
-              // TODO: Add avatar
               // TODO: Add stats
               // a.img.data = fs.readFileSync(imgPath);
               // a.img.contentType = 'image/png';
@@ -59,15 +58,15 @@ module.exports = (() => {
             }) // Create and save new user
 
             user.save().then((result) => {
-              console.log(generateToken(req, res, next));
-              // const JWTToken = jwt.sign({
-              //   email: user.email,
-              //   _id: user._id
-              // }, process.env.JWT_SECRET, {expiresIn: '10d'})
-              // res.cookie('token', JWTToken, {
-              //   expiresIn: 90000,
-              //   httpOnly: true
-              // })
+              // console.log(generateToken(req, res, next));
+              const JWTToken = jwt.sign({
+                email: user.email,
+                _id: user._id
+              }, process.env.JWT_SECRET, {expiresIn: '10d'})
+              res.cookie('token', JWTToken, {
+                expiresIn: 90000,
+                httpOnly: true
+              })
 
               return res.status(201).json({success: 'New user has been created', token: JWTToken})
             }).catch((error) => {

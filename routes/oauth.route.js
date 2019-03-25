@@ -28,6 +28,8 @@ module.exports = (() => {
   }, generateToken, sendToken);
 
   router.route('/auth/google').post(passport.authenticate('google-token', {session: false}), (req, res, next) => {
+    console.log('req user ' + !req.user);
+    console.log(req);
     if (!req.user) {
       return res.send(401, 'User Not Authenticated');
     }

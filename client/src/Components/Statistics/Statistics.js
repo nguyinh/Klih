@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import './History.scss';
+import './Statistics.scss';
 import { withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
 
-class History extends Component {
+class Statistics extends Component {
   constructor(props) {
     super(props);
     this.state = {}
@@ -13,4 +13,4 @@ class History extends Component {
     return <div></div>
   }
 }
-export default withRouter(connect(null, null)(History));
+export default withRouter(connect(null, null)(Statistics));
