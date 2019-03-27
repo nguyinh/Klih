@@ -1,13 +1,22 @@
 .navigationBar {
   border-top-left-radius: 0px !important;
   border-top-right-radius: 0px !important;
-  background: #f7f7fa;
+  // background: #f7f7fa;
+  background: #E0EAFC;
   margin-bottom: 10px;
   // box-shadow: 2px 5px 1px black;
+  box-shadow: inset 0px -11px 8px -10px #bbb;
 
   .rs-panel-body {
     padding-bottom: 10px !important;
     background: linear-gradient(#f7f7fa, #efeff5);
+    box-shadow: inset 0px -11px 8px -10px #bbb;
+    background: #E0EAFC;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to top, #CFDEF3, #E0EAFC);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to top, #CFDEF3, #E0EAFC); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+// background-image: linear-gradient(180deg, #f5f7fa 0%, #c3cfe2 100%);
+// background-image: linear-gradient(90deg, #fff1eb 0%, #ace0f9 100%);
     // box-shadow: -1px 2px 5px 1px black inset;
   }
 

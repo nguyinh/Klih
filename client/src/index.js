@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import Team from './Components/Team';
 import Match from './Components/Match/Match';
+import Lobby from './Components/Lobby/Lobby';
 import History from './Components/History/History';
 import Statistics from './Components/Statistics/Statistics';
 import Monitor from './Components/Monitor/Monitor';
@@ -26,7 +27,7 @@ ReactDOM.render(<Provider store={store}>
           <App/>
         </div>}/>
 
-      <Route path="/match/:tableTag?" component={Match}/>
+      <Route path="/match/:tableTag?" component={Lobby}/>
 
       <Route path="/history" component={History}/>
 

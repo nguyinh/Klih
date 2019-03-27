@@ -1,0 +1,26 @@
+ .playerHolder {
+  text-align: center;
+
+  .avatarImage {
+    height: 50px;
+    width: 50px;
+    border-radius: 100px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.46);
+    -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.46);
+    -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.46);
+
+  }
+
+  .playerName {
+    font-size: 10px;
+    font-weight: 500;
+
+  }
+
+
+  .playerScore {
+    font-size: 10px;
+    font-weight: 300;
+    font-family: sans-serif;
+  }
+}
