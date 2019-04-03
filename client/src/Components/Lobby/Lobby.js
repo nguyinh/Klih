@@ -135,8 +135,19 @@ class Lobby extends Component {
                     </Grid>
 
                   </Col>
+                </Row>
 
-
+                <Row className='buttonsContainer'>
+                  <Grid>
+                    <Row>
+                      <Col xs={12}>
+                        <Button block color='yellow' size='lg'><Icon icon='random'/> Aléatoire</Button>
+                      </Col>
+                      <Col xs={12}>
+                        <Button block color='green' size='lg'>Commencer ⚽️</Button>
+                      </Col>
+                    </Row>
+                  </Grid>
                 </Row>
 
                 <Row>
@@ -153,37 +164,10 @@ class Lobby extends Component {
                   </Grid>
                 </Row>
 
-                <Row>
-                  <Grid>
-                    <Row>
-                      <Col xs={12}>
-                        <Button block color='yellow' size='lg'><Icon icon='random'/> Aléatoire</Button>
-                      </Col>
-                      <Col xs={12}>
-                        <Button block color='green' size='lg'>Commencer ⚽️</Button>
-                      </Col>
-                    </Row>
-                  </Grid>
-                </Row>
+
               </Grid>
           </Col>
-        </Row>
-
-        <Row>
-          <Col
-            xs={24}
-            className=''>
-
-
-          </Col>
-        </Row>
-
-        <Row>
-          <Col xs={22} xsOffset={1}>
-            <h1>Create a match</h1>
-            <span>{this.props.match.params.tableTag}</span>
-            <Link to='/match/test'>hey</Link>
-          </Col>
+          <Link to='/match/test'>hey</Link>
         </Row>
       </Grid>
 

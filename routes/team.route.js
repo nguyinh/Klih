@@ -114,7 +114,7 @@ module.exports = (() => {
   //   })
   // });
 
-  router.get('/api/team/:teamTag', (req, res) => {
+  router.get('/api/team/byTeamTag/:teamTag', (req, res) => {
     jwt.verify(req.cookies.token, process.env.JWT_SECRET, (err, decoded) => {
       if (decoded) {
         // res.sendFile(path.join(__dirname + './../client/build/index.html'));
@@ -139,7 +139,7 @@ module.exports = (() => {
     })
   });
 
-  router.post('/api/team/:teamTag', (req, res) => {
+  router.post('/api/team/byTeamTag/:teamTag', (req, res) => {
     jwt.verify(req.cookies.token, process.env.JWT_SECRET, (err, decoded) => {
       if (decoded) {
         req.params.teamTag = req.params.teamTag.toUpperCase();
@@ -175,6 +175,52 @@ module.exports = (() => {
             return res.status(404).send({error: err})
           return res.status(500).send({error: 'INTERNAL_SERVER_ERROR'})
         });
+      } else { // Token expired or no token
+
+        // TODO: Ask for connection
+
+        res.clearCookie('token')
+        return res.status(401).send({error: 'TOKEN_EXPIRED'})
+      }
+    })
+  });
+
+  router.get('/api/team/getAllPlayers', (req, res) => {
+    jwt.verify(req.cookies.token, process.env.JWT_SECRET, async (err, decoded) => {
+      if (decoded) {
+        try {
+          // Get teams where logged Player is
+          const teamsObj = await Team.find({"players.playerId": decoded._id}).lean().exec();
+
+          const playerIds = new Set();
+          const playerTest = {}
+
+          for (const teamObj of teamsObj) {
+            console.log(teamObj.name);
+            playerTest[teamObj.name] = [];
+            for (const playerObj of teamObj.players) {
+              playerTest[teamObj.name].push(playerObj.playerId.toString());
+              playerIds.add(playerObj.playerId.toString());
+            }
+          }
+
+          const result = {};
+          for (let name in playerTest) {
+            result[name] = await Player.find({
+              _id: [...playerTest[name]]
+            }).lean().exec();
+            result[name] = result[name].map((player) => {
+              return {_id: player._id, firstName: player.firstName, lastName: player.lastName, email: player.email};
+            });
+            // console.log(result[name]);
+          }
+          // TODO: Add picture
+          return res.status(200).send(result);
+
+        } catch (err) {
+          res.status(500).send({error: 'INTERNAL_SERVER_ERROR'});
+        }
+
       } else { // Token expired or no token
 
         // TODO: Ask for connection

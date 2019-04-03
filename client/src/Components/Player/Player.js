@@ -16,15 +16,15 @@ class Player extends Component {
     return <div className='playerHolder'>
       <img src={require('./../../profile.png')} className='avatarImage' alt='Avatar'></img>
       <br/>
-      <span className='playerName'>
+      <div className='playerName'>
         {this.state.name}
-      </span>
-      <br/>
+      </div>
+
       {
         this.state.score &&
-        <span className='playerScore'>
+        <div className='playerScore'>
           {this.state.score} 🏆
-        </span>
+        </div>
       }
     </div>
   }

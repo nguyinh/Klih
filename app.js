@@ -44,7 +44,10 @@ const logger = log4js.getLogger();
 logger.level = 'all';
 
 const mongoURL = process.env.MONGODB_URI || "mongodb://localhost/klih"
-mongoose.connect(mongoURL, {useNewUrlParser: true})
+mongoose.connect(mongoURL, {
+  useNewUrlParser: true,
+  bufferCommands: false
+})
 
 const db = mongoose.connection;
 db.on('error', () => {
