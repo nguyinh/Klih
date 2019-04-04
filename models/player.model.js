@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const fs = require('fs')
 
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
