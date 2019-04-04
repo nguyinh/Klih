@@ -30,9 +30,13 @@ const mapStateToProps = state => {
 class Profile extends Component {
   constructor(props) {
     super(props);
-    this.state = {}
+    this.state = {
+      selectedFile: null
+    }
 
     this.logout = this.logout.bind(this);
+    // this.fileChangedHandler = this.fileChangedHandler.bind(this);
+    // this.uploadHandler = this.uploadHandler.bind(this);
   }
 
   logout() {
@@ -47,6 +51,24 @@ class Profile extends Component {
     });
   }
 
+  fileChangedHandler = event => {
+    this.setState({ selectedFile: event.target.files[0] })
+  }
+
+  uploadHandler = async () => {
+    // Format image file
+    const formData = new FormData();
+    formData.append('myAvatar', this.state.selectedFile)
+    const config = {
+      headers: {
+        'content-type': 'multipart/form-data'
+      }
+    }
+    const response = await axios.post('api/profile/avatar', formData, config);
+    console.log(response);
+    // TODO: Save avatar to redux and display in Navigation + Profile
+  }
+
   render() {
     return <div>
     {
@@ -54,15 +76,22 @@ class Profile extends Component {
       'Loading' :
         this.props.isConnected ?
         <Grid>
-              <Row>
-                <Col xsOffset={1} xs={22}>
-                  <Button onClick={this.logout} block color='red'>{str.LOGOUT}</Button>
-                </Col>
-              </Row>
-            </Grid> :
-        <Auth/>
+          <Row>
+            <Col xsOffset={1} xs={22}>
+              <Button onClick={this.logout} block color='red'>{str.LOGOUT}</Button>
+            </Col>
 
+            <Col xsOffset={1} xs={22}>
+
+              <input type="file" name="myAvatar" accept="image/*" onChange={this.fileChangedHandler}/>
+              <button type="submit" value="submit" onClick={this.uploadHandler}>Upload!</button>
+
+            </Col>
+          </Row>
+        </Grid> :
+        <Auth/>
     }
+
 
     </div>
   }

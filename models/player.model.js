@@ -68,7 +68,12 @@ playerScheme.statics.upsertFbUser = function(accessToken, refreshToken, profile,
   }, function(err, user) {
     // no user was found, lets create a new one
     if (!user) {
-      var newUser = new that({
+      let avatar = {
+        data: fs.readFileSync('./image.png'),
+        contentType: 'image/png'
+      };
+
+      let newUser = new that({
         _id: new mongoose.Types.ObjectId(),
         fullName: profile.displayName,
         email: profile.emails[0].value,
@@ -78,7 +83,8 @@ playerScheme.statics.upsertFbUser = function(accessToken, refreshToken, profile,
         },
         createdAt: Date.now(),
         updatedAt: Date.now(),
-        lastConnectionAt: Date.now()
+        lastConnectionAt: Date.now(),
+        avatar: avatar
       });
 
       newUser.save(function(error, savedUser) {
@@ -100,14 +106,22 @@ playerScheme.statics.upsertGoogleUser = function(accessToken, refreshToken, prof
   }, function(err, user) {
     // no user was found, lets create a new one
     if (!user) {
-      var newUser = new that({
+      let avatar = {
+        data: fs.readFileSync('./image.png'),
+        contentType: 'image/png'
+      };
+      let newUser = new that({
         _id: new mongoose.Types.ObjectId(),
         fullName: profile.displayName,
         email: profile.emails[0].value,
         googleProvider: {
           id: profile.id,
           token: accessToken
-        }
+        },
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        lastConnectionAt: Date.now(),
+        avatar: avatar
       });
 
       newUser.save(function(error, savedUser) {

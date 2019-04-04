@@ -16,7 +16,14 @@ module.exports = (() => {
       if (decoded) {
         Player.findOne({email: decoded.email}).exec().then((user) => {
           if (user) { // User exists
-            return res.status(200).json({email: decoded.email, fullName: user.fullName, token: req.cookies.token})
+            return res.status(200).json({
+              email: decoded.email,
+              fullName: (
+                user.fullName
+                ? user.fullName
+                : user.firstName + ' ' + user.lastName),
+              token: req.cookies.token
+            })
           } else { // User no longer exists
             res.clearCookie('token')
             return res.status(401).send({error: 'USER_NO_LONGER_EXISTS'})
@@ -39,7 +46,12 @@ module.exports = (() => {
         Player.findOne({email: req.body.email}).exec().then((user) => {
           if (user) { // User already exists
             return res.status(409).json({error: 'USER_ALREADY_EXISTS'})
-          } else { // User doesn't exists for now
+          } else { // User is not in database
+            let avatar = {
+              data: fs.readFileSync('./image.png'),
+              contentType: 'image/png'
+            };
+
             const user = new Player({
               _id: new mongoose.Types.ObjectId(),
               email: req.body.email,
@@ -48,13 +60,10 @@ module.exports = (() => {
               lastName: req.body.lastName,
               createdAt: Date.now(),
               updatedAt: Date.now(),
-              lastConnectionAt: Date.now()
+              lastConnectionAt: Date.now(),
+              avatar: avatar
               // TODO: Add isAdmin field
               // TODO: Add stats
-              // a.img.data = fs.readFileSync(imgPath);
-              // a.img.contentType = 'image/png';
-              // res.contentType(user.avatar.contentType)
-              // res.send(user.avatar.data)
             }) // Create and save new user
 
             user.save().then((result) => {

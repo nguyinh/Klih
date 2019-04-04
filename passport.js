@@ -2,7 +2,7 @@
 
 // require('./mongoose')();
 const passport = require('passport');
-const User = require('mongoose').model('Player');
+const Player = require('mongoose').model('Player');
 const FacebookTokenStrategy = require('passport-facebook-token');
 const GoogleTokenStrategy = require('passport-google-token').Strategy;
 const config = require('./config');
@@ -13,7 +13,7 @@ module.exports = () => {
     clientID: config.facebookAuth.clientID,
     clientSecret: config.facebookAuth.clientSecret
   }, (accessToken, refreshToken, profile, next) => {
-    User.upsertFbUser(accessToken, refreshToken, profile, (err, user) => {
+    Player.upsertFbUser(accessToken, refreshToken, profile, (err, user) => {
       return next(err, user);
     });
   }));
@@ -22,7 +22,7 @@ module.exports = () => {
     clientID: config.googleAuth.clientID,
     clientSecret: config.googleAuth.clientSecret
   }, (accessToken, refreshToken, profile, next) => {
-    User.upsertGoogleUser(accessToken, refreshToken, profile, function(err, user) {
+    Player.upsertGoogleUser(accessToken, refreshToken, profile, function(err, user) {
       return next(err, user);
     });
   }));

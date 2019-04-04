@@ -12,6 +12,7 @@ const authRoute = require('./routes/auth.route.js');
 const matchRoute = require('./routes/match.route.js');
 const teamRoute = require('./routes/team.route.js');
 const oauthRoute = require('./routes/oauth.route.js');
+const profileRoute = require('./routes/profile.route.js');
 
 const app = express();
 require("dotenv").config()
@@ -64,6 +65,7 @@ app.use('/', authRoute);
 app.use('/', matchRoute);
 app.use('/', teamRoute);
 app.use('/api', oauthRoute);
+app.use('/', profileRoute);
 
 // Put all API endpoints under '/api'
 app.get('/api/*', (req, res) => {

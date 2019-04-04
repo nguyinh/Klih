@@ -32,7 +32,9 @@ class Navigation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      expanded: undefined
+      expanded: undefined,
+      image: null,
+      playerName: ''
     }
 
     this.matchPage = this.matchPage.bind(this);
@@ -44,13 +46,33 @@ class Navigation extends Component {
     this.openPanel = this.openPanel.bind(this);
   }
 
+  arrayBufferToBase64(buffer) {
+    let binary = '';
+    let bytes = [].slice.call(new Uint8Array(buffer));
+    bytes.forEach((b) => binary += String.fromCharCode(b));
+    return window.btoa(binary);
+  };
+
   componentDidMount() {
     // Fetch user session with token in cookies
     axios.defaults.withCredentials = true;
-    axios.post('/api/connect', {}).then((res) => {
+    axios.post('/api/connect', {}).then(async (res) => {
       console.log(res);
-      console.log('OKKKKK');
       this.props.setUserAuth(true);
+      this.setState({
+        playerName: res.data.fullName
+      });
+
+      try {
+        const avatarResponse = await axios.get('/api/profile/avatar', {});
+        var base64Flag = 'data:image/jpeg;base64,';
+        var imageStr = this.arrayBufferToBase64(avatarResponse.data.avatar.data.data);
+        this.setState({
+          image: base64Flag + imageStr
+        });
+      } catch (err) {
+        console.log(err);
+      }
     }).catch((err) => {
       console.error(err.response);
       this.props.setUserAuth(false);
@@ -89,7 +111,9 @@ class Navigation extends Component {
     else
       this.setState({ expanded: true })
   }
-
+  // {
+  //   this.state.image && <img src={'data:image/png;base64,' + this.state.image.data} className='avatarImage' alt='Avatar'></img>
+  // }
   render() {
     const header = <Grid justify="space-between">
       <Row>
@@ -100,9 +124,18 @@ class Navigation extends Component {
         </Col>
         <Col xs={16}>
           <div className='playerInfo'>
-            <span>Alias
+            <span>
+              {this.state.playerName ? this.state.playerName : 'Se connecter'}
             </span>
-            <img src={require('./../../image.jpg')} className='avatarImage' alt='Avatar'></img>
+            { this.state.image ?
+              <img
+                src={this.state.image}
+                className='avatarImage' /> :
+              <img
+                src={require('./../../profile.png')}
+                className='avatarImage'
+                alt='Avatar'></img>
+            }
           </div>
         </Col>
       </Row>
