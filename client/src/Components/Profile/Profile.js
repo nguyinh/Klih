@@ -83,9 +83,19 @@ class Profile extends Component {
 
             <Col xsOffset={1} xs={22}>
 
-              <input type="file" name="myAvatar" accept="image/*" onChange={this.fileChangedHandler}/>
-              <button type="submit" value="submit" onClick={this.uploadHandler}>Upload!</button>
-
+              <input
+                type="file" 
+                name="myAvatar" 
+                accept="image/*" 
+                onChange={this.fileChangedHandler}/>
+              <Button
+                block="block"
+                type="submit"
+                value="submit"
+                color='blue'
+                onClick={this.uploadHandler}>
+                Upload
+              </Button>
             </Col>
           </Row>
         </Grid> :
