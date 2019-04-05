@@ -10,7 +10,7 @@ import {
 } from 'rsuite';
 import { Link, Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
-import { setNavigationState, setUserAuth } from './../../redux/actions/index.actions.js'
+import { setNavigationState, setUserAuth, setAvatar } from './../../redux/actions/index.actions.js'
 import axios from 'axios';
 
 const mapDispatchToProps = dispatch => {
@@ -20,12 +20,15 @@ const mapDispatchToProps = dispatch => {
     },
     setUserAuth: (value) => {
       dispatch(setUserAuth(value))
+    },
+    setAvatar: (value) => {
+      dispatch(setAvatar(value))
     }
   })
 }
 
 const mapStateToProps = state => {
-  return { actualPage: state.actualPage };
+  return { actualPage: state.actualPage, avatar: state.avatar };
 };
 
 class Navigation extends Component {
@@ -70,6 +73,7 @@ class Navigation extends Component {
         this.setState({
           image: base64Flag + imageStr
         });
+        this.props.setAvatar(base64Flag + imageStr);
       } catch (err) {
         console.log(err);
       }
@@ -127,9 +131,9 @@ class Navigation extends Component {
             <span>
               {this.state.playerName ? this.state.playerName : 'Se connecter'}
             </span>
-            { this.state.image ?
+            { this.props.avatar ?
               <img
-                src={this.state.image}
+                src={this.props.avatar}
                 className='avatarImage' /> :
               <img
                 src={require('./../../profile.png')}

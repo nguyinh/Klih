@@ -2,7 +2,8 @@ import act from '../../config/actions.constants.js'
 
 const initialState = {
   isConnected: undefined,
-  actualPage: ''
+  actualPage: '',
+  avatar: undefined
 }
 
 function rootReducer(state = initialState, action) {
@@ -11,6 +12,8 @@ function rootReducer(state = initialState, action) {
       return Object.assign({}, state, {isConnected: action.payload});
     case act.SET_NAVIGATION_STATE:
       return Object.assign({}, state, {actualPage: action.payload});
+    case act.SET_AVATAR:
+      return Object.assign({}, state, {avatar: action.payload});
     default:
       return state;
   }

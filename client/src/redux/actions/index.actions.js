@@ -12,6 +12,8 @@ import action from '../../config/actions.constants.js'
 export const setUserAuth = content => ({type: action.SET_USER_AUTH, payload: content});
 
 export const setNavigationState = content => ({type: action.SET_NAVIGATION_STATE, payload: content});
+
+export const setAvatar = content => ({type: action.SET_AVATAR, payload: content});
 //
 // export const setAppStarting = content => ({
 //   type: act.SET_APP_STARTING,

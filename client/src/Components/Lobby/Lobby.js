@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import './Lobby.scss';
 import { withRouter, Link } from "react-router-dom";
 import Player from '../Player/Player';
+import TeamContainer from '../TeamContainer/TeamContainer';
 import { connect } from 'react-redux';
+import axios from 'axios';
 import {
   Button,
   Grid,
@@ -18,47 +20,23 @@ class Lobby extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      playersArray: [{
-        name: 'Florent Dupont',
-        score: 28
-      }, {
-        name: 'Claire Lescure',
-        score: 203
-      }, {
-        name: 'Rémi Forsan',
-        score: 182
-      }, {
-        name: 'Jérémy Dos Santos',
-        score: 382
-      }, {
-        name: 'Florent Dupont',
-        score: 28
-      }, {
-        name: 'Claire Lescure',
-        score: 203
-      }, {
-        name: 'Rémi Forsan',
-        score: 182
-      }, {
-        name: 'Jérémy Dos Santos',
-        score: 382
-      }, {
-        name: 'Florent Dupont',
-        score: 28
-      }, {
-        name: 'Claire Lescure',
-        score: 203
-      }, {
-        name: 'Rémi Forsan',
-        score: 182
-      }, {
-        name: 'Jérémy Dos Santos',
-        score: 382
-      }]
+      players: undefined
     }
   }
 
+  async componentDidMount() {
+    const players = await axios('/api/team/getAllPlayers', {});
+    this.setState({ players: players.data });
+  }
+
   render() {
+    let fetchedPlayers = [];
+    for (let team in this.state.players)
+      fetchedPlayers.push(
+        <TeamContainer
+          name={team}
+          players={this.state.players[team]}/>)
+
     return <div>
       <Grid className='test'>
         <Row>
@@ -153,13 +131,7 @@ class Lobby extends Component {
                 <Row>
                   <Grid>
                     <Row>
-                      {this.state.playersArray.map((player) =>
-                        <Col xs={6}>
-                          <Player
-                            name={player.name}
-                            score={player.score}/>
-                        </Col>
-                      )}
+                      {fetchedPlayers}
                     </Row>
                   </Grid>
                 </Row>

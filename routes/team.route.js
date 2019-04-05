@@ -114,11 +114,11 @@ module.exports = (() => {
   //   })
   // });
 
-  router.get('/api/team/byTeamTag/:teamTag', (req, res) => {
+  router.get('/api/team/join', (req, res) => {
     jwt.verify(req.cookies.token, process.env.JWT_SECRET, (err, decoded) => {
       if (decoded) {
         // res.sendFile(path.join(__dirname + './../client/build/index.html'));
-        Team.findOne({teamTag: req.params.teamTag.toUpperCase()}).then(async (team) => {
+        Team.findOne({teamTag: req.body.teamTag.toUpperCase()}).then(async (team) => {
           if (team !== null) 
             return res.status(200).send({team: team});
           else {
@@ -139,12 +139,11 @@ module.exports = (() => {
     })
   });
 
-  router.post('/api/team/byTeamTag/:teamTag', (req, res) => {
+  router.post('/api/team/join', (req, res) => {
     jwt.verify(req.cookies.token, process.env.JWT_SECRET, (err, decoded) => {
       if (decoded) {
-        req.params.teamTag = req.params.teamTag.toUpperCase();
         // Team.findOne({'players.playerId': decoded._id, _id: teamId, 'players.isAdmin': true}).then((player) => {
-        Team.findOne({teamTag: req.params.teamTag}).then(async (team) => {
+        Team.findOne({teamTag: req.body.teamTag.toUpperCase()}).then(async (team) => {
           if (team === null) 
             throw 'TEAM_NOT_FOUND'
           else {
@@ -188,6 +187,7 @@ module.exports = (() => {
   router.get('/api/team/getAllPlayers', (req, res) => {
     jwt.verify(req.cookies.token, process.env.JWT_SECRET, async (err, decoded) => {
       if (decoded) {
+        console.log(decoded);
         try {
           // Get teams where logged Player is
           const teamsObj = await Team.find({"players.playerId": decoded._id}).lean().exec();
@@ -210,7 +210,7 @@ module.exports = (() => {
               _id: [...playerTest[name]]
             }).lean().exec();
             result[name] = result[name].map((player) => {
-              return {_id: player._id, firstName: player.firstName, lastName: player.lastName, email: player.email};
+              return {_id: player._id, firstName: player.firstName, lastName: player.lastName, email: player.email, avatar: player.avatar};
             });
             // console.log(result[name]);
           }
