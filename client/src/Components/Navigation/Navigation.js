@@ -35,6 +35,8 @@ class Navigation extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isStarting: true,
+      intervalId: null,
       expanded: undefined,
       image: null,
       playerName: ''
@@ -56,10 +58,10 @@ class Navigation extends Component {
     return window.btoa(binary);
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     // Fetch user session with token in cookies
     axios.defaults.withCredentials = true;
-    axios.post('/api/connect', {}).then(async (res) => {
+    await axios.post('/api/connect', {}).then(async (res) => {
       console.log(res);
       this.props.setUserAuth(true);
       this.setState({
@@ -77,11 +79,58 @@ class Navigation extends Component {
       } catch (err) {
         console.log(err);
       }
+
+      this.setState({ isStarting: false })
     }).catch((err) => {
       console.error(err.response);
       this.props.setUserAuth(false);
     });
+
+    if (this.state.isStarting) {
+      var intervalId = setInterval(this.timer.bind(this), 500);
+      this.setState({ intervalId: intervalId });
+    }
   }
+
+  // DEBUG
+  timer() {
+    console.log('timer');
+    if (this.state.isStarting) {
+      // Fetch user session with token in cookies
+      axios.defaults.withCredentials = true;
+      axios.post('/api/connect', {}).then(async (res) => {
+        console.log(res);
+        this.props.setUserAuth(true);
+        this.setState({
+          playerName: res.data.fullName
+        });
+
+        try {
+          const avatarResponse = await axios.get('/api/profile/avatar', {});
+          var base64Flag = 'data:image/jpeg;base64,';
+          var imageStr = this.arrayBufferToBase64(avatarResponse.data.avatar.data.data);
+          this.setState({
+            image: base64Flag + imageStr
+          });
+          this.props.setAvatar(base64Flag + imageStr);
+        } catch (err) {
+          console.log(err);
+        }
+
+        this.setState({ isStarting: false })
+      }).catch((err) => {
+        console.error(err.response);
+        this.props.setUserAuth(false);
+      });
+    } else {
+      clearInterval(this.state.intervalId);
+    }
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state.intervalId);
+  }
+  // DEBUG END
 
   matchPage() {
     this.props.setNavigationState('Match');

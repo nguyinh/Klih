@@ -40,6 +40,19 @@
   overflow: hidden;
   padding: 10px 0px;
   margin-bottom: 10px;
+
+  .selectAnimation {
+    animation: pulse ease-out alternate 0.7s infinite;
+  }
+
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 5px #34ab4444
+    }
+    100% {
+      box-shadow: 0 0 15px #34ab44
+    }
+  }
 }
 
 .buttonsContainer {
