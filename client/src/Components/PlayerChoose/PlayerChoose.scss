@@ -1,10 +1,7 @@
- .playerContainer {
+ .playerHolder {
   text-align: center;
   margin-bottom: 5px;
   margin-top: 5px;
-  background: rgb(241, 241, 241);
-  border-radius: 10px;
-  padding: 10px 0px 5px 0px;
 
   .avatarImage {
     height: 50px;
@@ -16,6 +13,7 @@
   .playerName {
     font-size: 10px;
     font-weight: 500;
+
   }
 
 

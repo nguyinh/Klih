@@ -19,6 +19,10 @@ class TeamContainer extends Component {
     };
   }
 
+  onPlayerClick = (content) => {
+    console.log(content);
+  }
+
   render() {
     return <Grid className='teamContainer'>
       <hr/>
@@ -30,7 +34,9 @@ class TeamContainer extends Component {
           <Col xs={6}>
             <Player
               name={player.fullName ? player.fullName : player.firstName + ' ' + player.lastName}
-              score={player.score}/>
+              score={player.score}
+              image={player.avatar}
+              data={player}/>
           </Col>
         )}
 

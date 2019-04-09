@@ -210,8 +210,11 @@ module.exports = (() => {
               _id: [...playerTest[name]]
             }).lean().exec();
             result[name] = result[name].map((player) => {
-              return {_id: player._id, firstName: player.firstName, lastName: player.lastName, email: player.email, avatar: player.avatar};
+              console.log(player.avatar);
+              // return {_id: player._id, firstName: player.firstName, lastName: player.lastName, email: player.email, avatar: player.avatar};
+              return player;
             });
+            // console.log(result[name]);
             // console.log(result[name]);
           }
           // TODO: Add picture

@@ -3,7 +3,13 @@ import act from '../../config/actions.constants.js'
 const initialState = {
   isConnected: undefined,
   actualPage: '',
-  avatar: undefined
+  avatar: undefined,
+  isStarted: false,
+  playerCursor: undefined,
+  P1: undefined,
+  P2: undefined,
+  P3: undefined,
+  P4: undefined
 }
 
 function rootReducer(state = initialState, action) {
@@ -14,6 +20,16 @@ function rootReducer(state = initialState, action) {
       return Object.assign({}, state, {actualPage: action.payload});
     case act.SET_AVATAR:
       return Object.assign({}, state, {avatar: action.payload});
+    case act.SET_PLAYER_CURSOR:
+      return Object.assign({}, state, {playerCursor: action.payload});
+    case act.SET_P1:
+      return Object.assign({}, state, {P1: action.payload});
+    case act.SET_P2:
+      return Object.assign({}, state, {P2: action.payload});
+    case act.SET_P3:
+      return Object.assign({}, state, {P3: action.payload});
+    case act.SET_P4:
+      return Object.assign({}, state, {P4: action.payload});
     default:
       return state;
   }

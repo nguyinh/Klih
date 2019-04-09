@@ -10,8 +10,9 @@ import {
 } from 'rsuite';
 import { Link, Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
-import { setNavigationState, setUserAuth, setAvatar } from './../../redux/actions/index.actions.js'
+import { setNavigationState, setUserAuth, setAvatar, setAppState } from './../../redux/actions/index.actions.js'
 import axios from 'axios';
+require('dotenv').config()
 
 const mapDispatchToProps = dispatch => {
   return ({
@@ -62,7 +63,6 @@ class Navigation extends Component {
     // Fetch user session with token in cookies
     axios.defaults.withCredentials = true;
     await axios.post('/api/connect', {}).then(async (res) => {
-      console.log(res);
       this.props.setUserAuth(true);
       this.setState({
         playerName: res.data.fullName
@@ -86,7 +86,7 @@ class Navigation extends Component {
       this.props.setUserAuth(false);
     });
 
-    if (this.state.isStarting) {
+    if (this.state.isStarting && process.env.NODE_ENV === 'development') {
       var intervalId = setInterval(this.timer.bind(this), 500);
       this.setState({ intervalId: intervalId });
     }
@@ -94,12 +94,10 @@ class Navigation extends Component {
 
   // DEBUG
   timer() {
-    console.log('timer');
     if (this.state.isStarting) {
       // Fetch user session with token in cookies
       axios.defaults.withCredentials = true;
       axios.post('/api/connect', {}).then(async (res) => {
-        console.log(res);
         this.props.setUserAuth(true);
         this.setState({
           playerName: res.data.fullName
@@ -117,7 +115,7 @@ class Navigation extends Component {
           console.log(err);
         }
 
-        this.setState({ isStarting: false })
+        this.setState({ isStarting: false });
       }).catch((err) => {
         console.error(err.response);
         this.props.setUserAuth(false);

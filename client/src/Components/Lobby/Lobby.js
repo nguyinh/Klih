@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './Lobby.scss';
 import { withRouter, Link } from "react-router-dom";
 import Player from '../Player/Player';
+import PlayerChoose from '../PlayerChoose/PlayerChoose';
 import TeamContainer from '../TeamContainer/TeamContainer';
 import { connect } from 'react-redux';
 import axios from 'axios';
@@ -16,6 +17,10 @@ import {
   InputGroup,
   Icon
 } from 'rsuite';
+
+const mapStateToProps = state => {
+  return { isConnected: state.isConnected };
+};
 
 const noPlayer = {
   name: '',
@@ -43,6 +48,15 @@ class Lobby extends Component {
     const players = await axios('/api/team/getAllPlayers', {});
     this.setState({ playersData: players.data });
   }
+
+  // DEBUG
+  async componentWillReceiveProps(nextProps) {
+    if (nextProps.isConnected && !this.props.isConnected) {
+      const players = await axios('/api/team/getAllPlayers', {});
+      this.setState({ playersData: players.data });
+    }
+  }
+  // DEBUG END
 
   player1Click = () => {
     this.setState({
@@ -86,6 +100,10 @@ class Lobby extends Component {
       ),
       selectedPlayer: 'P4'
     });
+  }
+
+  onPlayerSelect = (e) => {
+    // console.log(e.target);
   }
 
   render() {
@@ -149,14 +167,14 @@ class Lobby extends Component {
                     <Grid>
                       <Row>
                         <Col xs={12} onClick={this.player1Click}>
-                          <Player
+                          <PlayerChoose
                             name={selectedP1.name}
                             image={selectedP1.image}
                             score={selectedP1.score}
                             selected={selectedPlayer === 'P1'}/>
                         </Col>
                         <Col xs={12} onClick={this.player2Click}>
-                          <Player
+                          <PlayerChoose
                             name={selectedP2.name}
                             image={selectedP2.image}
                             score={selectedP2.score}
@@ -172,14 +190,14 @@ class Lobby extends Component {
                     <Grid>
                       <Row>
                         <Col xs={12} onClick={this.player3Click}>
-                          <Player
+                          <PlayerChoose
                             name={selectedP3.name}
                             image={selectedP3.image}
                             score={selectedP3.score}
                             selected={selectedPlayer === 'P3'}/>
                         </Col>
                         <Col xs={12} onClick={this.player4Click}>
-                          <Player
+                          <PlayerChoose
                             name={selectedP4.name}
                             image={selectedP4.image}
                             score={selectedP4.score}
@@ -206,7 +224,7 @@ class Lobby extends Component {
 
                 <Row>
                   <Grid>
-                    <Row>
+                    <Row onClick={this.onPlayerSelect}>
                       {fetchedPlayers}
                     </Row>
                   </Grid>
@@ -222,4 +240,4 @@ class Lobby extends Component {
     </div>;
   }
 }
-export default withRouter(connect(null, null)(Lobby));
+export default withRouter(connect(mapStateToProps, null)(Lobby));

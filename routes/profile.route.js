@@ -56,6 +56,7 @@ module.exports = (() => {
       if (decoded) {
         Player.findOne({email: decoded.email}).exec().then((user) => {
           if (user) { // User exists
+            console.log(user.avatar);
             return res.status(200).json(user);
           } else { // User no longer exists
             res.clearCookie('token')

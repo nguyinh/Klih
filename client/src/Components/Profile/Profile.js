@@ -36,7 +36,6 @@ class Profile extends Component {
     this.state = {
       selectedFile: null
     }
-    console.log(this);
     this.uploaderRef = React.createRef();
 
     this.logout = this.logout.bind(this);
@@ -44,7 +43,6 @@ class Profile extends Component {
 
   logout() {
     axios.post('/api/logout', { credentials: 'include' }).then((res) => {
-      console.log(res);
       if (res.status === 202) {
         this.props.setUserAuth(false);
       }
@@ -77,7 +75,6 @@ class Profile extends Component {
     // const response = await axios.post('api/profile/avatar', formData, config);
     try {
       const avatarResponse = await axios.post('api/profile/avatar', formData, config);
-      console.log(avatarResponse);
       var base64Flag = 'data:image/jpeg;base64,';
       var imageStr = this.arrayBufferToBase64(avatarResponse.data.data.data);
       this.setState({
