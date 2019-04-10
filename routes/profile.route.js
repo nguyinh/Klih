@@ -30,9 +30,7 @@ module.exports = (() => {
             const encImg = fs.readFileSync(req.file.path).toString('base64');
             user.avatar.data = Buffer.from(encImg, 'base64');
             user.avatar.contentType = req.file.mimetype;
-            console.log(user);
             await user.save();
-            console.log('saved !');
             fs.unlink(req.file.path, (err) => {
               console.log(err);
             })
@@ -56,7 +54,6 @@ module.exports = (() => {
       if (decoded) {
         Player.findOne({email: decoded.email}).exec().then((user) => {
           if (user) { // User exists
-            console.log(user.avatar);
             return res.status(200).json(user);
           } else { // User no longer exists
             res.clearCookie('token')

@@ -8,7 +8,9 @@ import {
   Grid,
   Row,
   Col,
-  Icon
+  Icon,
+  InputGroup,
+  Input
 } from 'rsuite';
 
 import { setUserAuth, setAvatar } from '../../redux/actions/index.actions.js';
@@ -34,7 +36,10 @@ class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedFile: null
+      selectedFile: null,
+      searchedTeam: {},
+      inputTeamTag: '',
+      loadingJoin: false
     }
     this.uploaderRef = React.createRef();
 
@@ -72,7 +77,7 @@ class Profile extends Component {
         'content-type': 'multipart/form-data'
       }
     }
-    // const response = await axios.post('api/profile/avatar', formData, config);
+
     try {
       const avatarResponse = await axios.post('api/profile/avatar', formData, config);
       var base64Flag = 'data:image/jpeg;base64,';
@@ -87,7 +92,45 @@ class Profile extends Component {
     // TODO: Save avatar to redux and display in Navigation + Profile
   }
 
+  searchTeamByTag = async () => {
+    try {
+      const teamResponse = await axios.get('api/team/info/' + this.state.inputTeamTag, {});
+      this.setState({ searchedTeam: teamResponse.data.team });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  handleChange = (content) => {
+    this.setState({
+      inputTeamTag: content
+    })
+  }
+
+  joinTeamButton = async () => {
+    try {
+      this.setState({ loadingJoin: true });
+      const joinResponse = await axios.post('api/team/join', { teamTag: this.state.searchedTeam.teamTag });
+      console.log(joinResponse);
+    } catch (err) {
+
+    } finally {
+      this.setState({ loadingJoin: false });
+    }
+    // TODO: Do something on join
+    // TODO: Popup on Join
+    // TODO: Popup on Error
+  }
+
   render() {
+    Object.size = (obj) => {
+      let size = 0,
+        key;
+      for (key in obj)
+        if (obj.hasOwnProperty(key)) size++;
+      return size;
+    };
+
     return <div>
     {
       this.props.isConnected === undefined ?
@@ -107,6 +150,30 @@ class Profile extends Component {
               }
             </Col>
           </Row>
+
+
+          <Row>
+            <Col xs={12}>
+              <InputGroup>
+                <Input onChange={this.handleChange} />
+                <InputGroup.Button onClick={this.searchTeamByTag}>
+                  <Icon icon="search" />
+                </InputGroup.Button>
+              </InputGroup>
+            </Col>
+            <Col xs={6}>
+              <span>{this.state.searchedTeam.name}</span>
+            </Col>
+            <Col xs={6}>
+              {Object.size(this.state.searchedTeam) != 0 &&
+                <Button
+                  block
+                  color='blue'
+                  onClick={this.joinTeamButton}
+                  disabled={this.state.loadingJoin}>Join</Button>}
+            </Col>
+          </Row>
+
 
           <Row>
             <Col xsOffset={1} xs={22}>
