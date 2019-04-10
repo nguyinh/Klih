@@ -5,7 +5,13 @@ import Player from '../Player/Player';
 import PlayerChoose from '../PlayerChoose/PlayerChoose';
 import TeamContainer from '../TeamContainer/TeamContainer';
 import { connect } from 'react-redux';
-import { setPlayerCursor } from '../../redux/actions/index.actions.js'
+import {
+  setPlayerCursor,
+  setP1,
+  setP2,
+  setP3,
+  setP4
+} from '../../redux/actions/index.actions.js'
 import axios from 'axios';
 import plusImage from './../../plus.png';
 import {
@@ -23,6 +29,18 @@ const mapDispatchToProps = dispatch => {
   return ({
     setPlayerCursor: (value) => {
       dispatch(setPlayerCursor(value))
+    },
+    setP1: (value) => {
+      dispatch(setP1(value))
+    },
+    setP2: (value) => {
+      dispatch(setP2(value))
+    },
+    setP3: (value) => {
+      dispatch(setP3(value))
+    },
+    setP4: (value) => {
+      dispatch(setP4(value))
     }
   })
 }
@@ -47,17 +65,11 @@ const noPlayer = {
 class Lobby extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       playersData: undefined,
-      selectedPlayer: '',
-      selectedP1: noPlayer,
-      selectedP2: noPlayer,
-      selectedP3: noPlayer,
-      selectedP4: noPlayer,
+      selectedPlayer: ''
     }
-
-    // this.player1Click = this.player1Click.bind(this);
-    this.player2Click = this.player2Click.bind(this);
   }
 
   async componentDidMount() {
@@ -75,55 +87,61 @@ class Lobby extends Component {
   // DEBUG END
 
   player1Click = () => {
-    this.setState({
-      selectedP1: (
-        this.state.selectedPlayer === 'P1' ?
-        noPlayer :
-        this.state.selectedP1
-      ),
-      selectedPlayer: 'P1'
-    });
+    // If cursor already on P1
+    if (this.props.playerCursor === 'P1') {
+      this.props.setP1(noPlayer);
+    } else {
+      this.setState({
+        selectedPlayer: 'P1'
+      });
 
-    this.props.setPlayerCursor('P1');
+      this.props.setPlayerCursor('P1');
+    }
   }
 
   player2Click = () => {
-    this.setState({
-      selectedP2: (
-        this.state.selectedPlayer === 'P2' ?
-        noPlayer :
-        this.state.selectedP2
-      ),
-      selectedPlayer: 'P2'
-    });
+    // If cursor already on P2
+    if (this.props.playerCursor === 'P2') {
+      this.props.setP2(noPlayer);
+    } else {
+      this.setState({
+        selectedPlayer: 'P2'
+      });
 
-    this.props.setPlayerCursor('P2');
+      this.props.setPlayerCursor('P2');
+    }
   }
 
   player3Click = () => {
-    this.setState({
-      selectedP3: (
-        this.state.selectedPlayer === 'P3' ?
-        noPlayer :
-        this.state.selectedP3
-      ),
-      selectedPlayer: 'P3'
-    });
+    // If cursor already on P3
+    if (this.props.playerCursor === 'P3') {
+      this.props.setP3(noPlayer);
+    } else {
+      this.setState({
+        selectedPlayer: 'P3'
+      });
 
-    this.props.setPlayerCursor('P3');
+      this.props.setPlayerCursor('P3');
+    }
   }
 
   player4Click = () => {
-    this.setState({
-      selectedP4: (
-        this.state.selectedPlayer === 'P4' ?
-        noPlayer :
-        this.state.selectedP4
-      ),
-      selectedPlayer: 'P4'
-    });
+    // If cursor already on P4
+    if (this.props.playerCursor === 'P4') {
+      this.props.setP4(noPlayer);
+    } else {
+      this.setState({
+        selectedPlayer: 'P4'
+      });
 
-    this.props.setPlayerCursor('P4');
+      this.props.setPlayerCursor('P4');
+    }
+  }
+
+  isPlayerTaken = (player) => {
+
+
+    return;
   }
 
   onPlayerSelect = (e) => {
@@ -131,18 +149,21 @@ class Lobby extends Component {
   }
 
   render() {
-    let { playersData, selectedPlayer } = this.state;
+    let { playersData } = this.state;
     let selectedP1 = this.props.P1;
     let selectedP2 = this.props.P2;
     let selectedP3 = this.props.P3;
     let selectedP4 = this.props.P4;
-    // console.log(this.props.P1);
+    let selectedPlayer = this.props.playerCursor;
+
     let fetchedPlayers = [];
+    let i = 0;
     for (let team in playersData) {
       fetchedPlayers.push(
         <TeamContainer
           name={team}
-          players={playersData[team]}/>)
+          players={playersData[team]}
+          key={i++}/>)
     }
 
     return <div>

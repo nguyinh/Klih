@@ -40,6 +40,8 @@ const mapStateToProps = state => {
   };
 };
 
+const cmp = (o1, o2) => JSON.stringify(o1) === JSON.stringify(o2);
+
 class Player extends Component {
   constructor(props) {
     super(props);
@@ -75,7 +77,14 @@ class Player extends Component {
       });
   }
 
-  onPlayerClick = (e) => {
+  onPlayerClick = () => {
+    // Check if player already choosen
+    if (cmp(this.state, this.props.P1) ||
+      cmp(this.state, this.props.P2) ||
+      cmp(this.state, this.props.P3) ||
+      cmp(this.state, this.props.P4))
+      return;
+
     switch (this.props.playerCursor) {
       case 'P1':
         this.props.setP1({
@@ -103,7 +112,7 @@ class Player extends Component {
   }
 
   render() {
-    const cmp = (o1, o2) => JSON.stringify(o1) === JSON.stringify(o2);
+
     const isSelected = false;
     const teamColor =
       (cmp(this.props.P1, this.state) || cmp(this.props.P2, this.state)) ?

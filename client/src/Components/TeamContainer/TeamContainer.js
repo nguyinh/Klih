@@ -19,10 +19,6 @@ class TeamContainer extends Component {
     };
   }
 
-  onPlayerClick = (content) => {
-    console.log(content);
-  }
-
   render() {
     return <Grid className='teamContainer'>
       <hr/>
@@ -30,8 +26,8 @@ class TeamContainer extends Component {
         <Col xs={24}>
           <h1>{this.state.name}</h1>
         </Col>
-        {this.state.players.map((player) =>
-          <Col xs={6}>
+        {this.state.players.map((player, i) =>
+          <Col xs={6} key={i}>
             <Player
               name={player.fullName ? player.fullName : player.firstName + ' ' + player.lastName}
               score={player.score}
