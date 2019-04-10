@@ -5,6 +5,7 @@ import Player from '../Player/Player';
 import PlayerChoose from '../PlayerChoose/PlayerChoose';
 import TeamContainer from '../TeamContainer/TeamContainer';
 import { connect } from 'react-redux';
+import { setPlayerCursor } from '../../redux/actions/index.actions.js'
 import axios from 'axios';
 import plusImage from './../../plus.png';
 import {
@@ -18,8 +19,23 @@ import {
   Icon
 } from 'rsuite';
 
+const mapDispatchToProps = dispatch => {
+  return ({
+    setPlayerCursor: (value) => {
+      dispatch(setPlayerCursor(value))
+    }
+  })
+}
+
 const mapStateToProps = state => {
-  return { isConnected: state.isConnected };
+  return {
+    isConnected: state.isConnected,
+    playerCursor: state.playerCursor,
+    P1: state.P1,
+    P2: state.P2,
+    P3: state.P3,
+    P4: state.P4
+  };
 };
 
 const noPlayer = {
@@ -40,7 +56,7 @@ class Lobby extends Component {
       selectedP4: noPlayer,
     }
 
-    this.player1Click = this.player1Click.bind(this);
+    // this.player1Click = this.player1Click.bind(this);
     this.player2Click = this.player2Click.bind(this);
   }
 
@@ -67,6 +83,8 @@ class Lobby extends Component {
       ),
       selectedPlayer: 'P1'
     });
+
+    this.props.setPlayerCursor('P1');
   }
 
   player2Click = () => {
@@ -78,6 +96,8 @@ class Lobby extends Component {
       ),
       selectedPlayer: 'P2'
     });
+
+    this.props.setPlayerCursor('P2');
   }
 
   player3Click = () => {
@@ -89,6 +109,8 @@ class Lobby extends Component {
       ),
       selectedPlayer: 'P3'
     });
+
+    this.props.setPlayerCursor('P3');
   }
 
   player4Click = () => {
@@ -100,6 +122,8 @@ class Lobby extends Component {
       ),
       selectedPlayer: 'P4'
     });
+
+    this.props.setPlayerCursor('P4');
   }
 
   onPlayerSelect = (e) => {
@@ -107,7 +131,12 @@ class Lobby extends Component {
   }
 
   render() {
-    let { playersData, selectedPlayer, selectedP1, selectedP2, selectedP3, selectedP4 } = this.state;
+    let { playersData, selectedPlayer } = this.state;
+    let selectedP1 = this.props.P1;
+    let selectedP2 = this.props.P2;
+    let selectedP3 = this.props.P3;
+    let selectedP4 = this.props.P4;
+    // console.log(this.props.P1);
     let fetchedPlayers = [];
     for (let team in playersData) {
       fetchedPlayers.push(
@@ -240,4 +269,4 @@ class Lobby extends Component {
     </div>;
   }
 }
-export default withRouter(connect(mapStateToProps, null)(Lobby));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Lobby));

@@ -1,4 +1,5 @@
 import act from '../../config/actions.constants.js'
+import plusImage from './../../plus.png';
 
 const initialState = {
   isConnected: undefined,
@@ -6,10 +7,26 @@ const initialState = {
   avatar: undefined,
   isStarted: false,
   playerCursor: undefined,
-  P1: undefined,
-  P2: undefined,
-  P3: undefined,
-  P4: undefined
+  P1: {
+    name: '',
+    image: plusImage,
+    score: undefined
+  },
+  P2: {
+    name: '',
+    image: plusImage,
+    score: undefined
+  },
+  P3: {
+    name: '',
+    image: plusImage,
+    score: undefined
+  },
+  P4: {
+    name: '',
+    image: plusImage,
+    score: undefined
+  }
 }
 
 function rootReducer(state = initialState, action) {

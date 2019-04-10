@@ -2,15 +2,51 @@ import React, { Component } from 'react';
 import './Player.scss';
 import { withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
+import {
+  setPlayerCursor,
+  setP1,
+  setP2,
+  setP3,
+  setP4
+} from '../../redux/actions/index.actions.js'
+
+const mapDispatchToProps = dispatch => {
+  return ({
+    setPlayerCursor: (value) => {
+      dispatch(setPlayerCursor(value))
+    },
+    setP1: (value) => {
+      dispatch(setP1(value))
+    },
+    setP2: (value) => {
+      dispatch(setP2(value))
+    },
+    setP3: (value) => {
+      dispatch(setP3(value))
+    },
+    setP4: (value) => {
+      dispatch(setP4(value))
+    }
+  })
+}
+
+const mapStateToProps = state => {
+  return {
+    playerCursor: state.playerCursor,
+    P1: state.P1,
+    P2: state.P2,
+    P3: state.P3,
+    P4: state.P4
+  };
+};
 
 class Player extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       name: props.name,
       score: props.score,
-      // image: props.image,
-      selected: false,
       data: props.data,
       image: undefined
     }
@@ -33,22 +69,50 @@ class Player extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps !== this.props)
+    if (nextProps.data !== this.props.data)
       this.setState({
         ...nextProps
       });
   }
 
   onPlayerClick = (e) => {
-    console.log(this.state.name);
-    this.setState({
-      selected: true
-    });
+    switch (this.props.playerCursor) {
+      case 'P1':
+        this.props.setP1({
+          ...this.state
+        });
+        break;
+      case 'P2':
+        this.props.setP2({
+          ...this.state
+        });
+        break;
+      case 'P3':
+        this.props.setP3({
+          ...this.state
+        });
+        break;
+      case 'P4':
+        this.props.setP4({
+          ...this.state
+        });
+        break;
+      default:
+        break;
+    }
   }
 
   render() {
+    const cmp = (o1, o2) => JSON.stringify(o1) === JSON.stringify(o2);
+    const isSelected = false;
+    const teamColor =
+      (cmp(this.props.P1, this.state) || cmp(this.props.P2, this.state)) ?
+      'blueTeam ' :
+      (cmp(this.props.P3, this.state) || cmp(this.props.P4, this.state)) ?
+      'orangeTeam ' :
+      '';
     return <div
-      className={'playerContainer ' + (!this.state.selected || 'colorTest')}
+      className={'playerContainer ' + teamColor}
       onClick={this.onPlayerClick}>
       <img
         src= {
@@ -72,4 +136,4 @@ class Player extends Component {
     </div>
   }
 }
-export default withRouter(connect(null, null)(Player));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Player));
