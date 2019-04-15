@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './Profile.scss';
 import Auth from '../Auth/Auth';
+import Team from '../Team/Team';
 import { withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
 import {
@@ -10,8 +11,11 @@ import {
   Col,
   Icon,
   InputGroup,
-  Input
+  Input,
+  Modal,
+  Paragraph
 } from 'rsuite';
+import to from 'await-to-js';
 
 import { setUserAuth, setAvatar } from '../../redux/actions/index.actions.js';
 import axios from 'axios';
@@ -37,13 +41,31 @@ class Profile extends Component {
     super(props);
     this.state = {
       selectedFile: null,
-      searchedTeam: {},
-      inputTeamTag: '',
-      loadingJoin: false
+      createTeamShow: false,
+      teams: [],
+      joinModal: {
+        display: false,
+        inputTeamTag: '',
+        searchedTeam: {},
+        message: '',
+        loading: false,
+        errorMessage: ''
+      },
+      createModal: {
+        display: false,
+        nameInput: '',
+        descriptionInput: '',
+        errorMessage: '',
+        loading: false
+      }
     }
     this.uploaderRef = React.createRef();
 
     this.logout = this.logout.bind(this);
+  }
+
+  componentDidMount() {
+    this.fetchUserTeams();
   }
 
   logout() {
@@ -57,6 +79,13 @@ class Profile extends Component {
     });
   }
 
+  fetchUserTeams = async () => {
+    const fetchResponse = await axios.get('/api/teams', {});
+    console.log(fetchResponse);
+    this.setState({ teams: fetchResponse.data.teams });
+  }
+
+  // ----- Avatar upload -----
   fileChangedHandler = event => {
     this.setState({ selectedFile: event.target.files[0] })
   }
@@ -92,35 +121,229 @@ class Profile extends Component {
     // TODO: Save avatar to redux and display in Navigation + Profile
   }
 
-  searchTeamByTag = async () => {
+
+  // ----- Create team -----
+  openCreateTeamModal = () => {
+    this.setState({
+      createModal: {
+        ...this.state.createModal,
+        display: true
+      }
+    });
+  }
+
+  closeCreateTeamModal = () => {
+    this.setState({
+      createModal: {
+        ...this.state.createModal,
+        display: false,
+        nameInput: '',
+        descriptionInput: '',
+        errorMessage: '',
+        message: '',
+        loading: false,
+      }
+    })
+  }
+
+  nameHandleChange = changes => {
+    this.setState({
+      createModal: {
+        ...this.state.createModal,
+        nameInput: changes,
+        errorMessage: ''
+      }
+    });
+  }
+
+  descriptionHandleChange = changes => {
+    this.setState({
+      createModal: {
+        ...this.state.createModal,
+        descriptionInput: changes,
+        errorMessage: ''
+      }
+    });
+  }
+
+  createTeamButton = async () => {
+    if (!this.state.createModal.nameInput) {
+      this.setState({
+        createModal: {
+          ...this.state.createModal,
+          errorMessage: '🚫 Il manque un joli nom d\'équipe'
+        }
+      })
+      return;
+    }
+
     try {
-      const teamResponse = await axios.get('api/team/info/' + this.state.inputTeamTag, {});
-      this.setState({ searchedTeam: teamResponse.data.team });
+      this.setState({
+        createModal: {
+          ...this.state.createModal,
+          loading: true
+        }
+      });
+      const createResponse = await axios.post('api/team/create', {
+        name: this.state.createModal.nameInput,
+        description: this.state.createModal.descriptionInput
+      });
+
+      this.setState({
+        createModal: {
+          ...this.state.createModal,
+          message: 'Vous avez créé l\'équipe ' + createResponse.data.team.name + ' 👌'
+        }
+      });
+      this.fetchUserTeams();
+      // TODO: Update Profile Teams container
     } catch (err) {
-      console.log(err);
+      console.log(err.response);
+      // if (err.response.status === 409)
+      //   this.setState({
+      //     joinModal: {
+      //       ...this.state.joinModal,
+      //       errorMessage: '👍 Vous êtes déjà membre de cette équipe'
+      //     }
+      //   });
+    } finally {
+      this.setState({
+        createModal: {
+          ...this.state.createModal,
+          loading: false
+        }
+      });
+    }
+  }
+  // -----------------------
+
+
+  // ----- Join team -----
+  openJoinTeamModal = () => {
+    this.setState({
+      joinModal: {
+        ...this.state.joinModal,
+        display: true
+      }
+    })
+  }
+
+  closeJoinTeamModal = () => {
+    this.setState({
+      joinModal: {
+        ...this.state.joinModal,
+        display: false,
+        searchedTeam: {},
+        inputTeamTag: '',
+        message: '',
+        errorMessage: ''
+      }
+    })
+  }
+
+  joinHandleChange = async changes => {
+    await this.setState({
+      joinModal: {
+        ...this.state.joinModal,
+        inputTeamTag: changes,
+        errorMessage: '',
+        searchedTeam: {},
+        message: ''
+      }
+    });
+
+    if (!this.state.joinModal.inputTeamTag)
+      return;
+
+    // Search team on input change
+    try {
+      const teamResponse = await axios.get('api/team/info/' + this.state.joinModal.inputTeamTag, {});
+      this.setState({
+        joinModal: {
+          ...this.state.joinModal,
+          searchedTeam: teamResponse.data.team
+        }
+      });
+    } catch (err) {
+      // console.log(err);
     }
   }
 
-  handleChange = (content) => {
-    this.setState({
-      inputTeamTag: content
-    })
+  searchTeamByTagButton = async () => {
+    if (!this.state.joinModal.inputTeamTag) {
+      this.setState({
+        joinModal: {
+          ...this.state.joinModal,
+          errorMessage: '🤦‍ Essayez quand même d\'écrire quelque chose'
+        }
+      });
+      return;
+    }
+    try {
+      const teamResponse = await axios.get('api/team/info/' + this.state.joinModal.inputTeamTag, {});
+      this.setState({
+        joinModal: {
+          ...this.state.joinModal,
+          searchedTeam: teamResponse.data.team
+        }
+      });
+    } catch (err) {
+      console.log(err);
+      if (err.response.status === 404)
+        this.setState({
+          joinModal: {
+            ...this.state.joinModal,
+            errorMessage: '🙅 Cette équipe n\'existe pas'
+          }
+        });
+      else if (err.response.status === 500)
+        this.setState({
+          joinModal: {
+            ...this.state.joinModal,
+            errorMessage: '🔥 Nos serveurs sont en feu, veuillez réessayer plus tard'
+          }
+        });
+    }
   }
 
   joinTeamButton = async () => {
     try {
-      this.setState({ loadingJoin: true });
-      const joinResponse = await axios.post('api/team/join', { teamTag: this.state.searchedTeam.teamTag });
-      console.log(joinResponse);
+      this.setState({
+        joinModal: {
+          ...this.state.joinModal,
+          loading: true
+        }
+      });
+      const joinResponse = await axios.post('api/team/join', { teamTag: this.state.joinModal.searchedTeam.teamTag });
+      this.setState({
+        joinModal: {
+          ...this.state.joinModal,
+          message: 'Vous avez bien rejoint ' + this.state.joinModal.searchedTeam.name + ' 👌',
+          searchedTeam: {}
+        }
+      });
+      this.fetchUserTeams();
+      // TODO: Update Profile Teams container
     } catch (err) {
-
+      // console.log(err.response);
+      if (err.response.status === 409)
+        this.setState({
+          joinModal: {
+            ...this.state.joinModal,
+            errorMessage: '👍 Vous êtes déjà membre de cette équipe'
+          }
+        });
     } finally {
-      this.setState({ loadingJoin: false });
+      this.setState({
+        joinModal: {
+          ...this.state.joinModal,
+          loading: false
+        }
+      });
     }
-    // TODO: Do something on join
-    // TODO: Popup on Join
-    // TODO: Popup on Error
   }
+  // ---------------------
+
 
   render() {
     Object.size = (obj) => {
@@ -131,71 +354,160 @@ class Profile extends Component {
       return size;
     };
 
-    return <div>
+    return <div className='profile'>
     {
       this.props.isConnected === undefined ?
       'Loading' :
         this.props.isConnected ?
         <Grid>
           <Row>
-            <Col xs={6} onClick={() => {this.uploaderRef.current.click()}}>
-              { this.props.avatar ?
-                <img
-                  src={this.props.avatar}
-                  className='profileAvatarImage' /> :
-                <img
-                  src={require('./../../profile.png')}
-                  className='profileAvatarImage'
-                  alt='Avatar'></img>
-              }
-            </Col>
-          </Row>
+            <Col
+              xs={22}
+              xsOffset={1}
+              className='container'>
+
+              <Row>
+                <Col xs={6} onClick={() => {this.uploaderRef.current.click()}}>
+                  { this.props.avatar ?
+                    <img
+                      src={this.props.avatar}
+                      className='profileAvatarImage' /> :
+                    <img
+                      src={require('./../../profile.png')}
+                      className='profileAvatarImage'
+                      alt='Avatar'></img>
+                  }
+                </Col>
+
+                <Col xsOffset={2} xs={12}>
+                  <input
+                    type="file"
+                    name="myAvatar"
+                    accept="image/*"
+                    onChange={this.fileChangedHandler}
+                    style={{display: 'none'}}
+                    ref={this.uploaderRef}/>
+                  <Button
+                    block="block"
+                    type="submit"
+                    value="submit"
+                    color='blue'
+                    onClick={this.uploadHandler}>
+                    Upload
+                  </Button>
+                </Col>
+              </Row>
+
+              <Row>
+
+              </Row>
+
+              <hr/>
+
+              <Row className='teamButtons'>
+                <Col xs={12}>
+                  <Button
+                    block
+                    color='green'
+                    onClick={this.openCreateTeamModal}>Créer une équipe</Button>
+                </Col>
+
+                <Col xs={12}>
+                  <Button
+                    block
+                    color='blue'
+                    onClick={this.openJoinTeamModal}>Rejoindre une équipe</Button>
+                </Col>
+              </Row>
 
 
-          <Row>
-            <Col xs={12}>
-              <InputGroup>
-                <Input onChange={this.handleChange} />
-                <InputGroup.Button onClick={this.searchTeamByTag}>
-                  <Icon icon="search" />
-                </InputGroup.Button>
-              </InputGroup>
-            </Col>
-            <Col xs={6}>
-              <span>{this.state.searchedTeam.name}</span>
-            </Col>
-            <Col xs={6}>
-              {Object.size(this.state.searchedTeam) != 0 &&
-                <Button
-                  block
-                  color='blue'
-                  onClick={this.joinTeamButton}
-                  disabled={this.state.loadingJoin}>Join</Button>}
-            </Col>
-          </Row>
+              <hr/>
+
+              <Row>
+                <Col xs={24}>
+                  <h2>Vos équipes 👥</h2>
+                </Col>
+              </Row>
+
+              <Row className='teamsContainer'>
+                {this.state.teams.map((team) => {
+                  return <Team
+                    name={team.name}
+                    tag={team.teamTag}/>;
+                })}
+              </Row>
+
+              <hr/>
+
+              <Row className='logoutButton'>
+                <Col xsOffset={1} xs={22}>
+                  <Button onClick={this.logout} block color='red'>{str.LOGOUT}</Button>
+                </Col>
+              </Row>
 
 
-          <Row>
-            <Col xsOffset={1} xs={22}>
-              <input
-                type="file"
-                name="myAvatar"
-                accept="image/*"
-                onChange={this.fileChangedHandler}
-                style={{display: 'none'}}
-                ref={this.uploaderRef}/>
-              <Button
-                block="block"
-                type="submit"
-                value="submit"
-                color='blue'
-                onClick={this.uploadHandler}>
-                Upload
-              </Button>
-            </Col>
+              <Modal
+                show={this.state.createModal.display}
+                onHide={this.closeCreateTeamModal}
+                size='xs'>
+                <Modal.Header>
+                  <Modal.Title>Créer une équipe</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <InputGroup className='createInput'>
+                    <Input
+                      onChange={this.nameHandleChange}
+                      placeholder="Nom de l'équipe"
+                      size="lg"/>
+                    <Input
+                      onChange={this.descriptionHandleChange}
+                      placeholder='Description (falcultatif)'/>
+                  </InputGroup>
 
-            <Col xsOffset={1} xs={22}>
-              <Button onClick={this.logout} block color='red'>{str.LOGOUT}</Button>
+                  <span className='errorMessage'>{this.state.createModal.errorMessage}</span>
+                  <span className='createMessage'>{this.state.createModal.message}</span>
+
+                  {!this.state.createModal.message && <Button
+                    block
+                    color='green'
+                    onClick={this.createTeamButton}
+                    disabled={this.state.createModal.loading}
+                    loading={this.state.createModal.loading}>Créer l'équipe</Button>}
+                </Modal.Body>
+              </Modal>
+
+
+              <Modal
+                show={this.state.joinModal.display}
+                onHide={this.closeJoinTeamModal}
+                size='xs'>
+                <Modal.Header>
+                  <Modal.Title>Rejoindre une équipe</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <InputGroup className='joinInput'>
+                    <Input
+                      onChange={this.joinHandleChange}
+                      placeholder='Team Tag'
+                      size="lg"/>
+                    <InputGroup.Button onClick={this.searchTeamByTagButton}>
+                      <Icon icon="search" />
+                    </InputGroup.Button>
+                  </InputGroup>
+
+                  <span className='errorMessage'>{this.state.joinModal.errorMessage}</span>
+                  <span className='joinMessage'>{this.state.joinModal.message}</span>
+
+                  {Object.size(this.state.joinModal.searchedTeam) != 0 &&
+                    <><h3 className='searchedTeamTitle'>{this.state.joinModal.searchedTeam.name}</h3>
+                    <Button
+                      block
+                      color='blue'
+                      onClick={this.joinTeamButton}
+                      disabled={this.state.joinModal.loading}
+                      loading={this.state.joinModal.loading}>Rejoindre</Button></>}
+                </Modal.Body>
+              </Modal>
             </Col>
           </Row>
         </Grid> :

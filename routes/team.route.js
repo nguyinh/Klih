@@ -11,7 +11,7 @@ require("dotenv").config()
 module.exports = (() => {
   const router = express.Router()
 
-  router.post('/api/team', (req, res) => {
+  router.post('/api/team/create', (req, res) => {
     jwt.verify(req.cookies.token, process.env.JWT_SECRET, (err, decoded) => {
       if (decoded) {
         Player.findOne({_id: decoded._id}).exec().then(async (player) => {
@@ -34,6 +34,7 @@ module.exports = (() => {
           const team = new Team({
             _id: new mongoose.Types.ObjectId(),
             name: req.body.name,
+            description: req.body.description,
             teamTag: tag,
             players: [
               {
@@ -99,20 +100,22 @@ module.exports = (() => {
     })
   });
 
-  router.get('/api/team/old/:teamTag', (req, res) => {
-    jwt.verify(req.cookies.token, process.env.JWT_SECRET, (err, decoded) => {
+  router.get('/api/teams', (req, res) => {
+    jwt.verify(req.cookies.token, process.env.JWT_SECRET, async (err, decoded) => {
       if (decoded) {
-        // res.sendFile(path.join(__dirname + './../client/build/index.html'));
-        Team.findOne({teamTag: req.params.teamTag.toUpperCase()}).then(async (team) => {
-          if (team !== null) 
-            return res.status(200).send({team: team});
-          else {
-            return res.status(404).send({error: 'TEAM_NOT_FOUND'});
+        try {
+          // Get teams where logged Player is
+          let teams = await Team.find({"players.playerId": decoded._id}).lean().exec();
+          for (let i in teams) {
+            teams[i] = {
+              name: teams[i].name,
+              teamTag: teams[i].teamTag
+            };
           }
-        }).catch((err) => {
-          logger.error(err);
-          return res.status(500).send({error: 'INTERNAL_SERVER_ERROR'});
-        });
+          return res.status(200).send({teams})
+        } catch (err) {
+          return res.status(500).send({error: 'INTERNAL_SERVER_ERROR'})
+        }
 
       } else { // Token expired or no token
 

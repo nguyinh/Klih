@@ -42,3 +42,11 @@ html, body {
   background: linear-gradient(to bottom, #96c93d, #00b09b); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   // background-color: rgb(244, 244, 243);
 }
+
+.rs-modal {
+  width: 90% !important;
+}
+
+.rs-modal-body {
+  padding-bottom: 0px !important;
+}

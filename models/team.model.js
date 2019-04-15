@@ -24,6 +24,9 @@ const teamScheme = mongoose.Schema({
     type: String,
     required: true
   },
+  description: {
+    type: String
+  },
   teamTag: {
     type: String,
     required: true

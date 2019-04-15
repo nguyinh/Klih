@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import Team from './Components/Team';
 import Match from './Components/Match/Match';
 import Lobby from './Components/Lobby/Lobby';
 import History from './Components/History/History';
@@ -37,10 +36,12 @@ ReactDOM.render(<Provider store={store}>
 
       <Route path="/profile" component={Profile}/>
 
-      <Route path="/join/:teamTag" component={Team}/>
     </div>
   </Router>
 </Provider>, document.getElementById('root')); // ReactDOM.render(<App/>, document.getElementById('root'));
+
+// <Route path="/join/:teamTag" component={Team}/>
+// TODO: Build join team route
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

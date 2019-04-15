@@ -1,0 +1,30 @@
+.tagContainer {
+  background: linear-gradient(90deg, #e66465, #9198e5);
+  color: white;
+  border-radius: 20px;
+  margin-bottom: 5px;
+}
+
+.nameContainer {
+  background: white;
+  color: black;
+  border-radius: 20px;
+  font-size: 8px;
+  box-shadow: 0 0 1px rgba(34, 25, 25, 0.4);
+  text-align: center;
+  overflow: hidden;
+  padding: 0 !important;
+
+  button {
+    width: 100%;
+    padding: 0;
+  }
+}
+
+
+.tagText {
+  font-size: 8px;
+  display: block;
+  height: 12px;
+  padding-top: 2px;
+}

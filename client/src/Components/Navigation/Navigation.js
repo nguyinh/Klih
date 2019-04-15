@@ -37,6 +37,7 @@ class Navigation extends Component {
     super(props);
     this.state = {
       isStarting: true,
+      retryCount: 0,
       intervalId: null,
       expanded: undefined,
       image: null,
@@ -94,7 +95,8 @@ class Navigation extends Component {
 
   // DEBUG
   timer() {
-    if (this.state.isStarting) {
+    if (this.state.isStarting && this.state.retryCount <= 10) {
+      this.setState({ retryCount: this.state.retryCount + 1 });
       // Fetch user session with token in cookies
       axios.defaults.withCredentials = true;
       axios.post('/api/connect', {}).then(async (res) => {
@@ -196,31 +198,31 @@ class Navigation extends Component {
       <Panel header={header} collapsible="collapsible" className='navigationBar' expanded={this.state.expanded} onClick={this.openPanel}>
         <Nav vertical="vertical" appearance="subtle" className='mainNavbar'>
 
-          <Nav.Item eventKey="match" active={this.props.actualPage === 'Match'} onClick={this.matchPage}>
+          <Nav.Item eventKey="match" active={this.props.actualPage === 'Match'} onClick={this.matchPage} componentClass='div'>
             <Link to={'/match'}>
               <Button block="block" appearance="subtle">Match</Button>
             </Link>
           </Nav.Item>
 
-          <Nav.Item eventKey="statistics" active={this.props.actualPage === 'Statistics'} onClick={this.statisticsPage}>
+          <Nav.Item eventKey="statistics" active={this.props.actualPage === 'Statistics'} onClick={this.statisticsPage} componentClass='div'>
             <Link to={'/statistics'}>
               <Button block="block" appearance="subtle">Statistiques</Button>
             </Link>
           </Nav.Item>
 
-          <Nav.Item eventKey="history" active={this.props.actualPage === 'History'} onClick={this.historyPage}>
+          <Nav.Item eventKey="history" active={this.props.actualPage === 'History'} onClick={this.historyPage} componentClass='div'>
             <Link to={'/history'}>
               <Button block="block" appearance="subtle">Historique</Button>
             </Link>
           </Nav.Item>
 
-          <Nav.Item eventKey="monitor" active={this.props.actualPage === 'Monitor'} onClick={this.monitorPage}>
+          <Nav.Item eventKey="monitor" active={this.props.actualPage === 'Monitor'} onClick={this.monitorPage} componentClass='div'>
             <Link to={'/monitor'}>
               <Button block="block" appearance="subtle">Trouver un babyfoot</Button>
             </Link>
           </Nav.Item>
 
-          <Nav.Item eventKey="profile" active={this.props.actualPage === 'Profile'} onClick={this.profilePage}>
+          <Nav.Item eventKey="profile" active={this.props.actualPage === 'Profile'} onClick={this.profilePage} componentClass='div'>
             <Link to={'/profile'}>
               <Button block="block" appearance="subtle">Profil</Button>
             </Link>

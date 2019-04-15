@@ -3,3 +3,44 @@
   height: 40px;
   border-radius: 100px;
 }
+
+.createInput {
+  margin-bottom: 10px;
+}
+
+.joinInput {
+  margin-bottom: 10px;
+}
+
+.searchedTeamTitle {
+  text-align: center;
+}
+
+.errorMessage {
+  color: red;
+}
+
+.teamsContainer {
+  margin-top: 10px;
+}
+
+.logoutButton {
+  margin-top: 10px;
+}
+
+.profile {
+  hr {
+    /* margin-top: 20px; */
+  /* margin-bottom: 20px; */
+  // margin-left: -20px;
+  // margin-right: -20px;
+  margin: 0px -20px;
+  margin-top: 10px;
+  /* border: 0; */
+  border-top: 1px solid #d6d6d6;
+  }
+}
+
+.teamButtons {
+  margin-top: 10px;
+}
