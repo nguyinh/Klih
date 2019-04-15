@@ -15,7 +15,6 @@ import {
   Modal,
   Paragraph
 } from 'rsuite';
-import to from 'await-to-js';
 
 import { setUserAuth, setAvatar } from '../../redux/actions/index.actions.js';
 import axios from 'axios';
