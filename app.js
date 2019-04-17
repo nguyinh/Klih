@@ -79,6 +79,10 @@ app.get('*', (req, res) => {
 });
 
 const port = process.env.PORT || 8116;
-app.listen(port);
+
+if (process.env.ENV === 'dev') 
+  app.listen(port, '0.0.0.0');
+else 
+  app.listen(port);
 
 logger.info(`[Express] Server listening on ${port}`);
