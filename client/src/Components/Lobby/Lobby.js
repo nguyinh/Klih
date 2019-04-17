@@ -265,18 +265,16 @@ class Lobby extends Component {
                       <Col xs={12}>
                         <Button
                           block
-                          color='yellow'
                           size='lg'
-                          className='roundButton'>
+                          className='roundButton violet'>
                           <Icon icon='random'/> Aléatoire
                         </Button>
                       </Col>
                       <Col xs={12}>
                         <Button
                           block
-                          color='green'
                           size='lg'
-                          className='roundButton'>
+                          className='roundButton green'>
                           Commencer ⚽️
                         </Button>
                       </Col>

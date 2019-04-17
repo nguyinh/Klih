@@ -389,8 +389,8 @@ class Profile extends Component {
                   <Button
                     block="block"
                     type="submit"
-                    value="submit"
                     color='blue'
+                    value="submit"
                     onClick={this.uploadHandler}
                     className='roundButton'>
                     Upload
@@ -408,17 +408,15 @@ class Profile extends Component {
                 <Col xs={12}>
                   <Button
                     block
-                    color='green'
                     onClick={this.openCreateTeamModal}
-                    className='roundButton'>Créer une équipe</Button>
+                    className='roundButton green'>Créer une équipe</Button>
                 </Col>
 
                 <Col xs={12}>
                   <Button
                     block
-                    color='blue'
                     onClick={this.openJoinTeamModal}
-                    className='roundButton'>Rejoindre une équipe</Button>
+                    className='roundButton blue'>Rejoindre une équipe</Button>
                 </Col>
               </Row>
 
@@ -446,8 +444,7 @@ class Profile extends Component {
                   <Button
                     onClick={this.logout}
                     block
-                    color='red'
-                    className='roundButton'>{str.LOGOUT}</Button>
+                    className='roundButton red'>{str.LOGOUT}</Button>
                 </Col>
               </Row>
 
@@ -475,11 +472,10 @@ class Profile extends Component {
 
                   {!this.state.createModal.message && <Button
                     block
-                    color='green'
                     onClick={this.createTeamButton}
                     disabled={this.state.createModal.loading}
                     loading={this.state.createModal.loading}
-                    className='roundButton'>Créer l'équipe</Button>}
+                    className='roundButton green'>Créer l'équipe</Button>}
                 </Modal.Body>
               </Modal>
 
@@ -509,11 +505,10 @@ class Profile extends Component {
                     <><h3 className='searchedTeamTitle'>{this.state.joinModal.searchedTeam.name}</h3>
                     <Button
                       block
-                      color='blue'
                       onClick={this.joinTeamButton}
                       disabled={this.state.joinModal.loading}
                       loading={this.state.joinModal.loading}
-                      className='roundButton'>Rejoindre</Button></>}
+                      className='roundButton blue'>Rejoindre</Button></>}
                 </Modal.Body>
               </Modal>
             </Col>
