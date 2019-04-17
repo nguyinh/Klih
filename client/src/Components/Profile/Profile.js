@@ -391,7 +391,8 @@ class Profile extends Component {
                     type="submit"
                     value="submit"
                     color='blue'
-                    onClick={this.uploadHandler}>
+                    onClick={this.uploadHandler}
+                    className='roundButton'>
                     Upload
                   </Button>
                 </Col>
@@ -408,14 +409,16 @@ class Profile extends Component {
                   <Button
                     block
                     color='green'
-                    onClick={this.openCreateTeamModal}>Créer une équipe</Button>
+                    onClick={this.openCreateTeamModal}
+                    className='roundButton'>Créer une équipe</Button>
                 </Col>
 
                 <Col xs={12}>
                   <Button
                     block
                     color='blue'
-                    onClick={this.openJoinTeamModal}>Rejoindre une équipe</Button>
+                    onClick={this.openJoinTeamModal}
+                    className='roundButton'>Rejoindre une équipe</Button>
                 </Col>
               </Row>
 
@@ -440,7 +443,11 @@ class Profile extends Component {
 
               <Row className='logoutButton'>
                 <Col xsOffset={1} xs={22}>
-                  <Button onClick={this.logout} block color='red'>{str.LOGOUT}</Button>
+                  <Button
+                    onClick={this.logout}
+                    block
+                    color='red'
+                    className='roundButton'>{str.LOGOUT}</Button>
                 </Col>
               </Row>
 
@@ -471,7 +478,8 @@ class Profile extends Component {
                     color='green'
                     onClick={this.createTeamButton}
                     disabled={this.state.createModal.loading}
-                    loading={this.state.createModal.loading}>Créer l'équipe</Button>}
+                    loading={this.state.createModal.loading}
+                    className='roundButton'>Créer l'équipe</Button>}
                 </Modal.Body>
               </Modal>
 
@@ -504,7 +512,8 @@ class Profile extends Component {
                       color='blue'
                       onClick={this.joinTeamButton}
                       disabled={this.state.joinModal.loading}
-                      loading={this.state.joinModal.loading}>Rejoindre</Button></>}
+                      loading={this.state.joinModal.loading}
+                      className='roundButton'>Rejoindre</Button></>}
                 </Modal.Body>
               </Modal>
             </Col>

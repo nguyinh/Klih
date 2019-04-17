@@ -42,15 +42,15 @@
   margin-bottom: 10px;
 
   .selectAnimation {
-    animation: pulse ease-out alternate 0.7s infinite;
+    animation: pulse ease-out alternate 0.5s infinite;
   }
 
   @keyframes pulse {
     0% {
-      box-shadow: 0 0 5px #34ab4444
+      box-shadow: 0 0 0px #248232
     }
     100% {
-      box-shadow: 0 0 15px #34ab44
+      box-shadow: 0 0 12px #248232
     }
   }
 }
@@ -59,15 +59,15 @@
   margin-bottom: 20px;
 }
 
-.container {
-  margin-top: 10px;
-  background: #f9f9f9;
-  border-bottom: 0 none;
-	box-shadow: 0 1px 5px rgba(0, 0, 0, 0.46);
-  border-radius: 6px;
-  padding: 10px 0px;
-  overflow: hidden;
-}
+// .container {
+//   margin-top: 10px;
+//   background: #f9f9f9;
+//   border-bottom: 0 none;
+// 	box-shadow: 0 1px 5px rgba(0, 0, 0, 0.46);
+//   border-radius: 6px;
+//   padding: 10px 0px;
+//   overflow: hidden;
+// }
 
 .versusSeparator {
   position: absolute;

@@ -199,7 +199,7 @@ class Navigation extends Component {
         <Nav vertical="vertical" appearance="subtle" className='mainNavbar'>
 
           <Nav.Item eventKey="match" active={this.props.actualPage === 'Match'} onClick={this.matchPage} componentClass='div'>
-            <Link to={'/match'}>
+            <Link to={'/lobby'}>
               <Button block="block" appearance="subtle">Match</Button>
             </Link>
           </Nav.Item>

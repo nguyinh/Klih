@@ -1,7 +1,13 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './Match.scss';
-import {withRouter, Link} from "react-router-dom";
-import {connect} from 'react-redux';
+import { withRouter, Link } from "react-router-dom";
+import { connect } from 'react-redux';
+import {
+  Button,
+  Grid,
+  Row,
+  Col,
+} from 'rsuite';
 
 class Match extends Component {
   constructor(props) {
@@ -10,11 +16,16 @@ class Match extends Component {
   }
 
   render() {
-    return <div>
-      <h1>Create a match</h1>
-      <span>{this.props.match.params.tableTag}</span>
-      <Link to='/match/test'>hey</Link>
-    </div>;
+    return <Grid>
+      <Row>
+        <Col
+          xs={22}
+          xsOffset={1}
+          className='container'>
+          TROLOLOL
+        </Col>
+      </Row>
+    </Grid>;
   }
 }
 export default withRouter(connect(null, null)(Match));

@@ -26,7 +26,9 @@ ReactDOM.render(<Provider store={store}>
           <App/>
         </div>}/>
 
-      <Route path="/match/:tableTag?" component={Lobby}/>
+      <Route path="/lobby/:tableTag?" component={Lobby}/>
+
+      <Route path="/match" component={Match}/>
 
       <Route path="/history" component={History}/>
 

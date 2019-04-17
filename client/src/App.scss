@@ -50,3 +50,32 @@ html, body {
 .rs-modal-body {
   padding-bottom: 0px !important;
 }
+
+.container {
+  margin-top: 10px;
+  background: #f9f9f9;
+  border-bottom: 0 none;
+	box-shadow: 0 1px 5px rgba(0, 0, 0, 0.46);
+  border-radius: 25px;
+  padding: 10px 0px;
+  overflow: hidden;
+}
+
+button.roundButton {
+  border-radius: 30px !important;
+  // font-weight: 1000 !important;
+  box-shadow: 0 0 5px 0px rgba(0, 0, 0, 0.35);
+}
+
+@keyframes buttonPress {
+  0% {
+    transform: scale(0.95);
+  }
+  100%{
+    transform: scale(1);
+  }
+}
+
+button.roundButton:active{
+  animation: buttonPress 0.125s ease-in;
+}

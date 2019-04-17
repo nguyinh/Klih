@@ -263,10 +263,22 @@ class Lobby extends Component {
                   <Grid>
                     <Row>
                       <Col xs={12}>
-                        <Button block color='yellow' size='lg'><Icon icon='random'/> Aléatoire</Button>
+                        <Button
+                          block
+                          color='yellow'
+                          size='lg'
+                          className='roundButton'>
+                          <Icon icon='random'/> Aléatoire
+                        </Button>
                       </Col>
                       <Col xs={12}>
-                        <Button block color='green' size='lg'>Commencer ⚽️</Button>
+                        <Button
+                          block
+                          color='green'
+                          size='lg'
+                          className='roundButton'>
+                          Commencer ⚽️
+                        </Button>
                       </Col>
                     </Row>
                   </Grid>
