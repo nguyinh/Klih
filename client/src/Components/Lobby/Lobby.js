@@ -68,7 +68,8 @@ class Lobby extends Component {
 
     this.state = {
       playersData: undefined,
-      selectedPlayer: ''
+      selectedPlayer: '',
+      isMatchReady: false
     }
   }
 
@@ -216,14 +217,18 @@ class Lobby extends Component {
 
                     <Grid>
                       <Row>
-                        <Col xs={12} onClick={this.player1Click}>
+                        <Col
+                          xs={12}
+                          onClick={this.player1Click}>
                           <PlayerChoose
                             name={selectedP1.name}
                             image={selectedP1.image}
                             score={selectedP1.score}
                             selected={selectedPlayer === 'P1'}/>
                         </Col>
-                        <Col xs={12} onClick={this.player2Click}>
+                        <Col
+                          xs={12}
+                          onClick={this.player2Click}>
                           <PlayerChoose
                             name={selectedP2.name}
                             image={selectedP2.image}
@@ -239,14 +244,18 @@ class Lobby extends Component {
 
                     <Grid>
                       <Row>
-                        <Col xs={12} onClick={this.player3Click}>
+                        <Col
+                          xs={12}
+                          onClick={this.player3Click}>
                           <PlayerChoose
                             name={selectedP3.name}
                             image={selectedP3.image}
                             score={selectedP3.score}
                             selected={selectedPlayer === 'P3'}/>
                         </Col>
-                        <Col xs={12} onClick={this.player4Click}>
+                        <Col
+                          xs={12}
+                          onClick={this.player4Click}>
                           <PlayerChoose
                             name={selectedP4.name}
                             image={selectedP4.image}
@@ -271,12 +280,16 @@ class Lobby extends Component {
                         </Button>
                       </Col>
                       <Col xs={12}>
-                        <Button
-                          block
-                          size='lg'
-                          className='roundButton green'>
-                          Commencer ⚽️
-                        </Button>
+                        <Link to={'/match'}>
+                          <Button
+                            block
+                            size='lg'
+                            className='roundButton green'
+                            disabled={!this.state.isMatchReady}>
+                            Commencer ⚽️
+
+                          </Button>
+                        </Link>
                       </Col>
                     </Row>
                   </Grid>

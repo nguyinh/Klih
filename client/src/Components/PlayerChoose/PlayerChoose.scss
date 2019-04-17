@@ -1,7 +1,12 @@
- .playerHolder {
+.playerHolder {
   text-align: center;
   margin-bottom: 5px;
   margin-top: 5px;
+
+  &:active,
+  &:hover {
+    animation: playerPress 0.2s ease-in;
+  }
 
   .avatarImage {
     height: 50px;
@@ -13,13 +18,20 @@
   .playerName {
     font-size: 10px;
     font-weight: 500;
-
   }
-
 
   .playerScore {
     font-size: 10px;
     font-weight: 300;
     font-family: sans-serif;
+  }
+}
+@keyframes playerPress {
+  50% {
+    transform: scale(0.75);
+  }
+
+  100% {
+    transform: scale(1);
   }
 }
