@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Lobby.scss';
-import { withRouter, Link } from "react-router-dom";
+import { withRouter, Link, Redirect } from "react-router-dom";
 import Player from '../Player/Player';
 import PlayerChoose from '../PlayerChoose/PlayerChoose';
 import TeamContainer from '../TeamContainer/TeamContainer';
@@ -62,6 +62,8 @@ const noPlayer = {
   score: undefined
 };
 
+const cmp = (o1, o2) => JSON.stringify(o1) === JSON.stringify(o2);
+
 class Lobby extends Component {
   constructor(props) {
     super(props);
@@ -69,7 +71,8 @@ class Lobby extends Component {
     this.state = {
       playersData: undefined,
       selectedPlayer: '',
-      isMatchReady: false
+      isMatchReady: false,
+      beginMatch: false
     }
   }
 
@@ -139,14 +142,11 @@ class Lobby extends Component {
     }
   }
 
-  isPlayerTaken = (player) => {
-
-
-    return;
-  }
-
-  onPlayerSelect = (e) => {
-    // console.log(e.target);
+  beginMatch = () => {
+    // TODO: transition logic between lobby and match HERE
+    this.setState({
+      beginMatch: true
+    });
   }
 
   render() {
@@ -157,6 +157,12 @@ class Lobby extends Component {
     let selectedP4 = this.props.P4;
     let selectedPlayer = this.props.playerCursor;
 
+    const P1 = !cmp(selectedP1, noPlayer);
+    const P2 = !cmp(selectedP2, noPlayer);
+    const P3 = !cmp(selectedP3, noPlayer);
+    const P4 = !cmp(selectedP4, noPlayer);
+    const isMatchReady = (P1 || P2) && (P3 || P4);
+
     let fetchedPlayers = [];
     let i = 0;
     for (let team in playersData) {
@@ -165,6 +171,10 @@ class Lobby extends Component {
           name={team}
           players={playersData[team]}
           key={i++}/>)
+    }
+
+    if (this.state.beginMatch) {
+      return <Redirect push to="/match" />;
     }
 
     return <div>
@@ -280,16 +290,16 @@ class Lobby extends Component {
                         </Button>
                       </Col>
                       <Col xs={12}>
-                        <Link to={'/match'}>
+
                           <Button
                             block
                             size='lg'
                             className='roundButton green'
-                            disabled={!this.state.isMatchReady}>
+                            disabled={!isMatchReady}
+                            onClick={this.beginMatch}>
                             Commencer ⚽️
-
                           </Button>
-                        </Link>
+
                       </Col>
                     </Row>
                   </Grid>

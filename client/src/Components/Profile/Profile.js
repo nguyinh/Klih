@@ -364,155 +364,161 @@ class Profile extends Component {
               xs={22}
               xsOffset={1}
               className='container'>
-
               <Row>
-                <Col xs={6} onClick={() => {this.uploaderRef.current.click()}}>
-                  { this.props.avatar ?
-                    <img
-                      src={this.props.avatar}
-                      className='profileAvatarImage' /> :
-                    <img
-                      src={require('./../../profile.png')}
-                      className='profileAvatarImage'
-                      alt='Avatar'></img>
-                  }
-                </Col>
+                <Col
+                  xs={22}
+                  xsOffset={1}>
 
-                <Col xsOffset={2} xs={12}>
-                  <input
-                    type="file"
-                    name="myAvatar"
-                    accept="image/*"
-                    onChange={this.fileChangedHandler}
-                    style={{display: 'none'}}
-                    ref={this.uploaderRef}/>
-                  <Button
-                    block="block"
-                    type="submit"
-                    color='blue'
-                    value="submit"
-                    onClick={this.uploadHandler}
-                    className='roundButton'>
-                    Upload
-                  </Button>
+                  <Row>
+                    <Col xs={6} onClick={() => {this.uploaderRef.current.click()}}>
+                      { this.props.avatar ?
+                        <img
+                          src={this.props.avatar}
+                          className='profileAvatarImage' /> :
+                        <img
+                          src={require('./../../profile.png')}
+                          className='profileAvatarImage'
+                          alt='Avatar'></img>
+                      }
+                    </Col>
+
+                    <Col xsOffset={2} xs={12}>
+                      <input
+                        type="file"
+                        name="myAvatar"
+                        accept="image/*"
+                        onChange={this.fileChangedHandler}
+                        style={{display: 'none'}}
+                        ref={this.uploaderRef}/>
+                      <Button
+                        block="block"
+                        type="submit"
+                        color='blue'
+                        value="submit"
+                        onClick={this.uploadHandler}
+                        className='roundButton'>
+                        Upload
+                      </Button>
+                    </Col>
+                  </Row>
+
+                  <Row>
+
+                  </Row>
+
+                  <hr/>
+
+                  <Row className='teamButtons'>
+                    <Col xs={12}>
+                      <Button
+                        block
+                        onClick={this.openCreateTeamModal}
+                        className='roundButton green'>Créer une équipe</Button>
+                    </Col>
+
+                    <Col xs={12}>
+                      <Button
+                        block
+                        onClick={this.openJoinTeamModal}
+                        className='roundButton blue'>Rejoindre une équipe</Button>
+                    </Col>
+                  </Row>
+
+
+                  <hr/>
+
+                  <Row>
+                    <Col xs={24}>
+                      <h2>Vos équipes 👥</h2>
+                    </Col>
+                  </Row>
+
+                  <Row className='teamsContainer'>
+                    {this.state.teams.map((team) => {
+                      return <Team
+                        name={team.name}
+                        tag={team.teamTag}/>;
+                    })}
+                  </Row>
+
+                  <hr/>
+
+                  <Row className='logoutButton'>
+                    <Col xsOffset={1} xs={22}>
+                      <Button
+                        onClick={this.logout}
+                        block
+                        className='roundButton red'>{str.LOGOUT}</Button>
+                    </Col>
+                  </Row>
+
+
                 </Col>
               </Row>
-
-              <Row>
-
-              </Row>
-
-              <hr/>
-
-              <Row className='teamButtons'>
-                <Col xs={12}>
-                  <Button
-                    block
-                    onClick={this.openCreateTeamModal}
-                    className='roundButton green'>Créer une équipe</Button>
-                </Col>
-
-                <Col xs={12}>
-                  <Button
-                    block
-                    onClick={this.openJoinTeamModal}
-                    className='roundButton blue'>Rejoindre une équipe</Button>
-                </Col>
-              </Row>
-
-
-              <hr/>
-
-              <Row>
-                <Col xs={24}>
-                  <h2>Vos équipes 👥</h2>
-                </Col>
-              </Row>
-
-              <Row className='teamsContainer'>
-                {this.state.teams.map((team) => {
-                  return <Team
-                    name={team.name}
-                    tag={team.teamTag}/>;
-                })}
-              </Row>
-
-              <hr/>
-
-              <Row className='logoutButton'>
-                <Col xsOffset={1} xs={22}>
-                  <Button
-                    onClick={this.logout}
-                    block
-                    className='roundButton red'>{str.LOGOUT}</Button>
-                </Col>
-              </Row>
-
-
-              <Modal
-                show={this.state.createModal.display}
-                onHide={this.closeCreateTeamModal}
-                size='xs'>
-                <Modal.Header>
-                  <Modal.Title>Créer une équipe</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <InputGroup className='createInput'>
-                    <Input
-                      onChange={this.nameHandleChange}
-                      placeholder="Nom de l'équipe"
-                      size="lg"/>
-                    <Input
-                      onChange={this.descriptionHandleChange}
-                      placeholder='Description (falcultatif)'/>
-                  </InputGroup>
-
-                  <span className='errorMessage'>{this.state.createModal.errorMessage}</span>
-                  <span className='createMessage'>{this.state.createModal.message}</span>
-
-                  {!this.state.createModal.message && <Button
-                    block
-                    onClick={this.createTeamButton}
-                    disabled={this.state.createModal.loading}
-                    loading={this.state.createModal.loading}
-                    className='roundButton green'>Créer l'équipe</Button>}
-                </Modal.Body>
-              </Modal>
-
-
-              <Modal
-                show={this.state.joinModal.display}
-                onHide={this.closeJoinTeamModal}
-                size='xs'>
-                <Modal.Header>
-                  <Modal.Title>Rejoindre une équipe</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <InputGroup className='joinInput'>
-                    <Input
-                      onChange={this.joinHandleChange}
-                      placeholder='Team Tag'
-                      size="lg"/>
-                    <InputGroup.Button onClick={this.searchTeamByTagButton}>
-                      <Icon icon="search" />
-                    </InputGroup.Button>
-                  </InputGroup>
-
-                  <span className='errorMessage'>{this.state.joinModal.errorMessage}</span>
-                  <span className='joinMessage'>{this.state.joinModal.message}</span>
-
-                  {Object.size(this.state.joinModal.searchedTeam) != 0 &&
-                    <><h3 className='searchedTeamTitle'>{this.state.joinModal.searchedTeam.name}</h3>
-                    <Button
-                      block
-                      onClick={this.joinTeamButton}
-                      disabled={this.state.joinModal.loading}
-                      loading={this.state.joinModal.loading}
-                      className='roundButton blue'>Rejoindre</Button></>}
-                </Modal.Body>
-              </Modal>
             </Col>
           </Row>
+
+          <Modal
+            show={this.state.createModal.display}
+            onHide={this.closeCreateTeamModal}
+            size='xs'>
+            <Modal.Header>
+              <Modal.Title>Créer une équipe</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <InputGroup className='createInput'>
+                <Input
+                  onChange={this.nameHandleChange}
+                  placeholder="Nom de l'équipe"
+                  size="lg"/>
+                <Input
+                  onChange={this.descriptionHandleChange}
+                  placeholder='Description (falcultatif)'/>
+              </InputGroup>
+
+              <span className='errorMessage'>{this.state.createModal.errorMessage}</span>
+              <span className='createMessage'>{this.state.createModal.message}</span>
+
+              {!this.state.createModal.message && <Button
+                block
+                onClick={this.createTeamButton}
+                disabled={this.state.createModal.loading}
+                loading={this.state.createModal.loading}
+                className='roundButton green'>Créer l'équipe</Button>}
+            </Modal.Body>
+          </Modal>
+
+          <Modal
+                              show={this.state.joinModal.display}
+                              onHide={this.closeJoinTeamModal}
+                              size='xs'>
+                              <Modal.Header>
+                                <Modal.Title>Rejoindre une équipe</Modal.Title>
+                              </Modal.Header>
+                              <Modal.Body>
+                                <InputGroup className='joinInput'>
+                                  <Input
+                                    onChange={this.joinHandleChange}
+                                    placeholder='Team Tag'
+                                    size="lg"/>
+                                  <InputGroup.Button onClick={this.searchTeamByTagButton}>
+                                    <Icon icon="search" />
+                                  </InputGroup.Button>
+                                </InputGroup>
+
+                                <span className='errorMessage'>{this.state.joinModal.errorMessage}</span>
+                                <span className='joinMessage'>{this.state.joinModal.message}</span>
+
+                                {Object.size(this.state.joinModal.searchedTeam) != 0 &&
+                                  <><h3 className='searchedTeamTitle'>{this.state.joinModal.searchedTeam.name}</h3>
+                                  <Button
+                                    block
+                                    onClick={this.joinTeamButton}
+                                    disabled={this.state.joinModal.loading}
+                                    loading={this.state.joinModal.loading}
+                                    className='roundButton blue'>Rejoindre</Button></>}
+                              </Modal.Body>
+                            </Modal>
         </Grid> :
         <Auth/>
     }
