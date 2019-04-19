@@ -113,7 +113,6 @@ class Player extends Component {
 
   render() {
 
-    const isSelected = false;
     const teamColor =
       (cmp(this.props.P1, this.state) || cmp(this.props.P2, this.state)) ?
       'blueTeam ' :
