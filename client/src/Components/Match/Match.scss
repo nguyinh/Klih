@@ -1,19 +1,59 @@
-.test1 {
-  background-color: #96434399;
-}
+.matchContainer {
+  .playerPlacementContainer {
+    text-align: center;
+  }
 
-.test2 {
-  background-color: #92964399;
-}
+  .placementImage {
+    height: 40px;
+    background-color: #c8c8c8;
+    border-radius: 5px;
+  }
 
-.test3 {
-  background-color: #43965399;
-}
+  .swordContainer {
+    margin-top: -5px;
+    padding-bottom: 5px;
+  }
 
-.test4 {
-  background-color: #43629699;
-}
+  .shieldContainer {
+    padding-top: 5px;
+  }
 
-.test5 {
-  background-color: #96439399;
+  .P1Container,
+  .P2Container,
+  .P3Container,
+  .P4Container {
+    border-radius: 10px;
+    padding: 10px 0 5px;
+  }
+
+  .P1Container,
+  .P2Container {
+    &.selected {
+      background: #4c64e288;
+    }
+  }
+
+  .P3Container,
+  .P4Container {
+    &.selected {
+      background: #dba61f88;
+    }
+  }
+
+  .sword {
+    &.selected {
+      background: #4c9ee288;
+    }
+  }
+
+  .shield {
+    &.selected {
+      background: #e2c54c88;
+    }
+  }
+
+  .playersContainer {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }

@@ -54,22 +54,6 @@ class MatchPlayer extends Component {
     }
   }
 
-  // arrayBufferToBase64(buffer) {
-  //   let binary = '';
-  //   let bytes = [].slice.call(new Uint8Array(buffer));
-  //   bytes.forEach((b) => binary += String.fromCharCode(b));
-  //   return window.btoa(binary);
-  // };
-
-  componentDidMount() {
-    let base64Flag = 'data:image/jpeg;base64,';
-    // let imageStr = this.arrayBufferToBase64(this.state.data.avatar.data);
-    // let imageStr = this.state.data.avatar.data;
-    // this.setState({
-    //   image: base64Flag + imageStr
-    // });
-  }
-
   componentWillReceiveProps(nextProps) {
     if (nextProps.data !== this.props.data)
       this.setState({
@@ -120,9 +104,12 @@ class MatchPlayer extends Component {
       (cmp(this.props.P3, this.state) || cmp(this.props.P4, this.state)) ?
       'orangeTeam ' :
       '';
+
+    if (!this.state.name)
+      return null;
+
     return <div
-      className={'playerContainer ' + teamColor}
-      onClick={this.onPlayerClick}>
+      className={'matchPlayerContainer ' + teamColor}>
       <img
         src= {
           !this.state.image ?

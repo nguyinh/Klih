@@ -10,7 +10,7 @@ import {
 } from 'rsuite';
 
 
-const cmp = (o1, o2) => JSON.stringify(o1) === JSON.stringify(o2);
+// const cmp = (o1, o2) => JSON.stringify(o1) === JSON.stringify(o2);
 
 class Team extends Component {
   constructor(props) {

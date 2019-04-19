@@ -12,8 +12,7 @@ import {
   Icon,
   InputGroup,
   Input,
-  Modal,
-  Paragraph
+  Modal
 } from 'rsuite';
 
 import { setUserAuth, setAvatar } from '../../redux/actions/index.actions.js';
@@ -313,7 +312,7 @@ class Profile extends Component {
           loading: true
         }
       });
-      const joinResponse = await axios.post('api/team/join', { teamTag: this.state.joinModal.searchedTeam.teamTag });
+      await axios.post('api/team/join', { teamTag: this.state.joinModal.searchedTeam.teamTag });
       this.setState({
         joinModal: {
           ...this.state.joinModal,
@@ -509,7 +508,7 @@ class Profile extends Component {
                                 <span className='errorMessage'>{this.state.joinModal.errorMessage}</span>
                                 <span className='joinMessage'>{this.state.joinModal.message}</span>
 
-                                {Object.size(this.state.joinModal.searchedTeam) != 0 &&
+                                {Object.size(this.state.joinModal.searchedTeam) !== 0 &&
                                   <><h3 className='searchedTeamTitle'>{this.state.joinModal.searchedTeam.name}</h3>
                                   <Button
                                     block

@@ -8,9 +8,9 @@ import {
   Nav,
   Panel
 } from 'rsuite';
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
-import { setNavigationState, setUserAuth, setAvatar, setAppState } from './../../redux/actions/index.actions.js'
+import { setNavigationState, setUserAuth, setAvatar } from './../../redux/actions/index.actions.js'
 import axios from 'axios';
 require('dotenv').config()
 

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './Lobby.scss';
 import { withRouter, Link, Redirect } from "react-router-dom";
-import Player from '../Player/Player';
 import PlayerChoose from '../PlayerChoose/PlayerChoose';
 import TeamContainer from '../TeamContainer/TeamContainer';
 import { connect } from 'react-redux';
@@ -19,7 +18,6 @@ import {
   Grid,
   Row,
   Col,
-  Message,
   Input,
   InputGroup,
   Icon
