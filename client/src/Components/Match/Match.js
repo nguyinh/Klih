@@ -51,8 +51,7 @@ class Match extends Component {
         placement: '',
         isSelected: false
       },
-      placement: '',
-      selectedPlayer: ''
+      placement: ''
     }
   }
 
@@ -167,7 +166,7 @@ class Match extends Component {
   }
 
   render() {
-    const { selectedPlayer, P1, P2, P3, P4, placement } = this.state;
+    const { P1, P2, P3, P4, placement } = this.state;
     return <Grid className='matchContainer'>
       <Row>
         <Col
