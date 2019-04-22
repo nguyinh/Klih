@@ -43,17 +43,113 @@
   .sword {
     &.selected {
       background: #4c9ee288;
+      box-shadow: 0 1px 10px rgba(0, 0, 0, 0.3);
     }
   }
 
   .shield {
     &.selected {
       background: #e2c54c88;
+      box-shadow: 0 1px 10px rgba(0, 0, 0, 0.3);
     }
   }
 
   .playersContainer {
     padding-left: 0;
     padding-right: 0;
+  }
+
+  hr {
+    margin: 5px -20px;
+    border-top: 1px solid #d6d6d6;
+  }
+
+  .pointsSelector {
+    text-align: center;
+
+    .minusImage,
+    .plusImage {
+      width: 25px;
+    }
+
+    .verticalHelper {
+      display: inline-block;
+      height: 100%;
+      vertical-align: middle;
+    }
+    $buttonMargin: 5px 10px;
+    $buttonRadius: 50px;
+    $buttonHeight: 70px;
+    $buttonShadow: 0 1px 10px rgba(0, 0, 0, 0.3);
+
+    .removeButton {
+      margin: $buttonMargin;
+      background: #c64b4b;
+      background: #ff512f !important;
+      background: -webkit-linear-gradient(
+        to right,
+        #ec4a2a,
+        #dd2476
+      ) !important;
+      background: linear-gradient(to right, #ec4a2a, #dd2476) !important;
+      border-radius: $buttonRadius;
+      height: $buttonHeight;
+      box-shadow: $buttonShadow;
+    }
+
+    .addButton {
+      margin: $buttonMargin;
+      background: #88c64b;
+      background: #00b09b !important;
+      background: -webkit-linear-gradient(
+        to right,
+        #96c93d,
+        #00b09b
+      ) !important;
+      background: linear-gradient(to right, #96c93d, #00b09b) !important;
+      border-radius: $buttonRadius;
+      height: $buttonHeight;
+      box-shadow: $buttonShadow;
+    }
+
+    .changingScore {
+      font-size: 34px;
+      font-weight: 1000;
+      text-align: center;
+      height: 100%;
+      line-height: 5rem;
+    }
+  }
+
+  .versusSelector {
+    $buttonShadow: 0 0px 5px rgba(0, 0, 0, 0.3);
+    margin-top: 10px;
+
+    .versusTeam1 {
+      border-radius: 50px;
+      background-color: #f1f1f1;
+      padding-top: 5px;
+      padding-bottom: 3px;
+      padding-left: 12px;
+      padding-right: 12px;
+      box-shadow: $buttonShadow;
+
+      &.selected {
+        background-color: #4c64e288;
+      }
+    }
+
+    .versusTeam2 {
+      border-radius: 50px;
+      background-color: #f1f1f1;
+      padding-top: 5px;
+      padding-bottom: 3px;
+      padding-left: 12px;
+      padding-right: 12px;
+      box-shadow: $buttonShadow;
+      &.selected {
+        background-color: #dba61f88;
+      }
+    }
   }
 }
