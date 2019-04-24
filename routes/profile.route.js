@@ -11,7 +11,8 @@ const upload = multer({
     fileSize: 20000000
   },
   dest: './uploads/'
-})
+});
+const sharp = require('sharp');
 
 require("dotenv").config()
 
@@ -27,8 +28,12 @@ module.exports = (() => {
             return res.status(400).send({error: 'MISSING_FILE'})
           }
           if (user) { // User exists
-            const encImg = fs.readFileSync(req.file.path).toString('base64');
-            user.avatar.data = Buffer.from(encImg, 'base64');
+            // const encImg = fs.readFileSync(req.file.path).toString('base64');
+            const resizedImg = await sharp(req.file.path).resize(300, 300).toBuffer();
+            // console.log(fs.readFileSync(req.file.path));
+            // console.log(data);
+            user.avatar.data = Buffer.from(resizedImg.toString('base64'), 'base64');
+            // user.avatar.data = Buffer.from(encImg, 'base64');
             user.avatar.contentType = req.file.mimetype;
             await user.save();
             fs.unlink(req.file.path, (err) => {
