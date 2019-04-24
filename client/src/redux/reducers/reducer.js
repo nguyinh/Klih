@@ -26,6 +26,12 @@ const initialState = {
     name: '',
     image: plusImage,
     score: undefined
+  },
+  match: {
+    score1: 0,
+    score2: 0,
+    history: {},
+    minutesElapsed: 0
   }
 }
 
@@ -47,6 +53,8 @@ function rootReducer(state = initialState, action) {
       return Object.assign({}, state, {P3: action.payload});
     case act.SET_P4:
       return Object.assign({}, state, {P4: action.payload});
+    case act.SET_MATCH:
+      return Object.assign({}, state, {match: action.payload});
     default:
       return state;
   }

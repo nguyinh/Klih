@@ -1,2 +1,81 @@
 .matchHistoryContainer {
+  text-align: center;
+
+  // .col1 {
+  //   background-color: #ff000088;
+  // }
+  // .col2 {
+  //   background-color: #ffed0088;
+  // }
+  // .col3 {
+  //   background-color: #1cff0088;
+  // }
+  // .col4 {
+  //   background-color: #0047ff88;
+  // }
+  // .col5 {
+  //   background-color: #00f7ff88;
+  // }
+
+  .avatarImage {
+    height: 50px;
+    width: 50px;
+    border-radius: 100px;
+    box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.5);
+  }
+
+  // .imageP2,
+  // .imageP4 {
+  //
+  // }
+
+  .translateTop {
+    transform: translateY(-60%);
+  }
+
+  .team1,
+  .team2 {
+    height: 75px;
+  }
+
+  .scoreContainer {
+    height: 75px;
+    padding: 0 !important;
+
+    .score1,
+    .score2 {
+      font-size: 40px;
+      font-family: sans-serif;
+    }
+  }
+
+  .timerContainer {
+    height: 60px;
+
+    .timer {
+      background-color: #5cbc72;
+      color: white;
+      font-family: sans-serif;
+      padding: 3px 12px;
+      border-radius: 20px;
+    }
+  }
+
+  .verticalHelper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+  }
+
+  .history {
+    margin-top: 10px;
+
+    .team1History {
+      text-align: left;
+    }
+
+    .team2History {
+      text-align: right;
+    }
+  }
 }

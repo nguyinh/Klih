@@ -15,3 +15,5 @@ export const setP2 = content => ({type: action.SET_P2, payload: content});
 export const setP3 = content => ({type: action.SET_P3, payload: content});
 
 export const setP4 = content => ({type: action.SET_P4, payload: content});
+
+export const setMatch = content => ({type: action.SET_MATCH, payload: content});

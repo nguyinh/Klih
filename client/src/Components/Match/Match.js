@@ -5,6 +5,7 @@ import shieldImage from '../../shield.png';
 import plusImage from '../../plus-sign.png';
 import minusImage from '../../minus-sign.png';
 import MatchPlayer from '../MatchPlayer/MatchPlayer';
+import MatchHistory from '../MatchHistory/MatchHistory';
 import { withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
 import {
@@ -14,13 +15,23 @@ import {
   Col,
   Checkbox
 } from 'rsuite';
+import { setMatch } from './../../redux/actions/index.actions.js';
+
+const mapDispatchToProps = dispatch => {
+  return ({
+    setMatch: (value) => {
+      dispatch(setMatch(value))
+    }
+  })
+}
 
 const mapStateToProps = state => {
   return {
     P1: state.P1,
     P2: state.P2,
     P3: state.P3,
-    P4: state.P4
+    P4: state.P4,
+    match: state.match
   };
 };
 
@@ -212,7 +223,7 @@ class Match extends Component {
 
   // ====== Adding score to history ======
   onAddButtonTouch = async () => {
-    const { P1, P2, P3, P4 } = this.state;
+    const { P1, P2, P3, P4, changingScore, betrayPoint } = this.state;
 
     await this.setState({
       playersMissing: (!P1.isSelected && !P2.isSelected && !P3.isSelected && !P4.isSelected),
@@ -223,6 +234,24 @@ class Match extends Component {
       return;
 
     // Save in history
+    this.props.setMatch({
+      ...this.props.match,
+      score1: (
+        ((changingScore > 0 && !betrayPoint && (P1.isSelected || P2.isSelected)) ||
+          (changingScore > 0 && betrayPoint && (P3.isSelected || P4.isSelected)) ||
+          (changingScore < 0 && !betrayPoint && (P3.isSelected || P4.isSelected)) ||
+          (changingScore < 0 && betrayPoint && (P1.isSelected || P2.isSelected))) ?
+        this.props.match.score1 + changingScore :
+        this.props.match.score1
+      ),
+      score2: (
+        ((changingScore > 0 && !betrayPoint && (P3.isSelected || P4.isSelected)) ||
+          (changingScore > 0 && betrayPoint && (P1.isSelected || P2.isSelected)) ||
+          (changingScore < 0 && !betrayPoint && (P1.isSelected || P2.isSelected)) ||
+          (changingScore < 0 && betrayPoint && (P3.isSelected || P4.isSelected))) ?
+        this.props.match.score2 + changingScore : this.props.match.score2
+      )
+    })
 
     this.resetPointState();
   }
@@ -455,17 +484,16 @@ class Match extends Component {
           xsOffset={1}
           className='container'>
 
-          <Row>
-            <Col
-              xs={22}
-              xsOffset={1}>
-              History
-            </Col>
-          </Row>
+          <MatchHistory
+            imageP1={this.state.P1.image}
+            imageP2={this.state.P2.image}
+            imageP3={this.state.P3.image}
+            imageP4={this.state.P4.image}
+            recordTime/>          
 
         </Col>
       </Row>
     </Grid>;
   }
 }
-export default withRouter(connect(mapStateToProps, null)(Match));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Match));

@@ -6,5 +6,6 @@ module.exports = {
   SET_P1: 'SET_P1',
   SET_P2: 'SET_P2',
   SET_P3: 'SET_P3',
-  SET_P4: 'SET_P4'
+  SET_P4: 'SET_P4',
+  SET_MATCH: 'SET_MATCH'
 }
