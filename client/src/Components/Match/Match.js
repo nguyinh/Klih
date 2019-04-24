@@ -43,25 +43,21 @@ class Match extends Component {
     this.state = {
       P1: {
         ...this.props.P1,
-        name: 'debug man',
         placement: '',
         isSelected: false
       },
       P2: {
         ...this.props.P2,
-        name: 'hello you',
         placement: '',
         isSelected: false
       },
       P3: {
         ...this.props.P3,
-        name: 'debug woman',
         placement: '',
         isSelected: false
       },
       P4: {
         ...this.props.P4,
-        name: 'coucou toi',
         placement: '',
         isSelected: false
       },
@@ -233,6 +229,17 @@ class Match extends Component {
     if (this.state.playersMissing || this.state.pointMissing)
       return;
 
+    // const selectedPlayer = [P1, P2, P3, P4].filter(player => player.isSelected)[0];
+    // console.log(selectedPlayer);
+    const getPlayer = ({ data, name, placement }) => {
+      return {
+        _id: data._id,
+        fullName: name,
+        placement: placement
+      };
+    };
+    const selectedPlayer = getPlayer([P1, P2, P3, P4].filter(player => player.isSelected)[0]);
+
     // Save in history
     this.props.setMatch({
       ...this.props.match,
@@ -250,7 +257,23 @@ class Match extends Component {
           (changingScore < 0 && !betrayPoint && (P1.isSelected || P2.isSelected)) ||
           (changingScore < 0 && betrayPoint && (P3.isSelected || P4.isSelected))) ?
         this.props.match.score2 + changingScore : this.props.match.score2
-      )
+      ),
+      history: [
+        ...this.props.match.history,
+        {
+          goalTime: this.props.match.minutesElapsed,
+          deltaScore: this.state.changingScore,
+          byPlayer: selectedPlayer._id,
+          placement: selectedPlayer.placement,
+          fullName: selectedPlayer.fullName,
+          isBetray: this.state.betrayPoint,
+          team: (
+            (P1.isSelected || P2.isSelected) && !this.state.betrayPoint ?
+            'Team1' :
+            'Team2'
+          )
+        }
+      ]
     })
 
     this.resetPointState();
@@ -421,11 +444,13 @@ class Match extends Component {
                   className='minusImage'/>
               </div>
             </Col>
+
             <Col
               xs={6}>
               <span className="verticalHelper"></span>
               <span className='changingScore'>{this.state.changingScore}</span>
             </Col>
+
             <Col
               xs={9}>
               <div
@@ -437,10 +462,6 @@ class Match extends Component {
                   alt='plus'
                   className='plusImage'/>
               </div>
-            </Col>
-
-            <Col
-            xs={9}>
             </Col>
 
 
@@ -485,11 +506,11 @@ class Match extends Component {
           className='container'>
 
           <MatchHistory
-            imageP1={this.state.P1.image}
-            imageP2={this.state.P2.image}
-            imageP3={this.state.P3.image}
-            imageP4={this.state.P4.image}
-            recordTime/>          
+            imageP1={this.state.P1.name !== '' ? this.state.P1.image : ''}
+            imageP2={this.state.P2.name !== '' ? this.state.P2.image : ''}
+            imageP3={this.state.P3.name !== '' ? this.state.P3.image : ''}
+            imageP4={this.state.P4.name !== '' ? this.state.P4.image : ''}
+            recordTime/>
 
         </Col>
       </Row>

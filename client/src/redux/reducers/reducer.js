@@ -30,7 +30,7 @@ const initialState = {
   match: {
     score1: 0,
     score2: 0,
-    history: {},
+    history: [],
     minutesElapsed: 0
   }
 }

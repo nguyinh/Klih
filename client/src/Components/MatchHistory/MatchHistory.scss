@@ -1,6 +1,6 @@
 .matchHistoryContainer {
   text-align: center;
-
+  margin-top: 10px;
   // .col1 {
   //   background-color: #ff000088;
   // }
@@ -53,7 +53,7 @@
     height: 60px;
 
     .timer {
-      background-color: #5cbc72;
+      background-color: #adadadc9;
       color: white;
       font-family: sans-serif;
       padding: 3px 12px;
@@ -70,12 +70,54 @@
   .history {
     margin-top: 10px;
 
+    .goalEventContainer {
+      margin-top: 3px;
+    }
+
     .team1History {
       text-align: left;
     }
 
     .team2History {
       text-align: right;
+    }
+
+    .goalTime {
+      color: #bdbdbd;
+      font-family: sans-serif;
+      font-weight: 1000;
+      margin: 0px 2px;
+    }
+
+    .goalScoreContainer {
+      border-radius: 15px;
+      text-align: center;
+      color: white;
+
+      &.plus {
+        background: #00cc00;
+      }
+
+      &.minus {
+        background: #da0000;
+      }
+    }
+
+    .goalScore {
+      font-family: sans-serif;
+
+      &.plus {
+        background: #00cc00;
+      }
+
+      &.minus {
+        background: #da0000;
+      }
+    }
+
+    .goalPlayer {
+      margin: 2px 2px;
+      font-weight: 1000;
     }
   }
 }

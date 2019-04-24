@@ -4,8 +4,8 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const matchEventScheme = mongoose.Schema({
   _id: ObjectId,
-  createdAt: {
-    type: Date,
+  goalTime: {
+    type: Number,
     required: true
   },
   deltaScore: {
@@ -16,9 +16,12 @@ const matchEventScheme = mongoose.Schema({
     type: ObjectId,
     required: true
   },
-  opponentTeam: {
-    type: Number,
+  isBetray: {
+    type: Boolean,
     required: true
+  },
+  placement: {
+    type: String
   }
 });
 

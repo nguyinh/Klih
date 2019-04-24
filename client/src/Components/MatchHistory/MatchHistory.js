@@ -47,7 +47,7 @@ class MatchHistory extends Component {
       imageP2: props.imageP2,
       imageP3: props.imageP3,
       imageP4: props.imageP4,
-      matchTimer: props.recordTime && setInterval(this.updateTime, 3000),
+      matchTimer: props.recordTime && setInterval(this.updateTime, 10000),
       startedAt: Date.now()
     }
   }
@@ -147,19 +147,49 @@ class MatchHistory extends Component {
         <Col
           xs={12}
           className='team1History'>
-
-{/*
-  time (minutes)
-  delta
-  player
-  placement
-  */}
+          {
+            this.props.match.history.map(goal => {
+              if (goal.team === 'Team2') {
+                return <Row className='goalEventContainer'>
+                  <Col xs={3}>
+                    <span className='goalTime'>{goal.goalTime}&rsquo;</span>
+                  </Col>
+                  <Col xs={4} className={'goalScoreContainer ' + (goal.deltaScore > 0 ? 'plus ' : 'minus ')}>
+                    <span className={'goalScore'}> {
+                        (goal.deltaScore > 0 ? '+' : '') + goal.deltaScore
+                      }</span>
+                  </Col>
+                  <Col xs={17}>
+                    <span className='goalPlayer'>{goal.fullName}</span>
+                  </Col>
+                </Row>;
+              }
+            })
+          }
         </Col>
 
         <Col
           xs={12}
           className='team2History'>
-azeazea
+          {
+            this.props.match.history.map(goal => {
+              if (goal.team === 'Team1') {
+                return <Row className='goalEventContainer'>
+                  <Col xs={17}>
+                    <span className='goalPlayer'>{goal.fullName}</span>
+                  </Col>
+                  <Col xs={4} className={'goalScoreContainer ' + (goal.deltaScore > 0 ? 'plus ' : 'minus ')}>
+                    <span className={'goalScore'}> {
+                        (goal.deltaScore > 0 ? '+' : '') + goal.deltaScore
+                      }</span>
+                  </Col>
+                  <Col xs={3}>
+                    <span className='goalTime'>{goal.goalTime}&rsquo;</span>
+                  </Col>
+                </Row>;
+              }
+            })
+          }
         </Col>
       </Row>
 
