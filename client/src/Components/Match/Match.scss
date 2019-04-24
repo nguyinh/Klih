@@ -24,6 +24,12 @@
   .P4Container {
     border-radius: 10px;
     padding: 10px 0 5px;
+
+    &.error {
+      img {
+        box-shadow: 0 0px 10px #ff0000;
+      }
+    }
   }
 
   .P1Container,
@@ -81,6 +87,7 @@
     $buttonRadius: 50px;
     $buttonHeight: 70px;
     $buttonShadow: 0 1px 10px rgba(0, 0, 0, 0.3);
+    $buttonShadowError: 0 1px 10px rgba(255, 0, 0, 1);
 
     .removeButton {
       margin: $buttonMargin;
@@ -95,6 +102,10 @@
       border-radius: $buttonRadius;
       height: $buttonHeight;
       box-shadow: $buttonShadow;
+
+      &.error {
+        box-shadow: $buttonShadowError;
+      }
     }
 
     .addButton {
@@ -110,6 +121,10 @@
       border-radius: $buttonRadius;
       height: $buttonHeight;
       box-shadow: $buttonShadow;
+
+      &.error {
+        box-shadow: $buttonShadowError;
+      }
     }
 
     .changingScore {
@@ -118,6 +133,43 @@
       text-align: center;
       height: 100%;
       line-height: 5rem;
+    }
+
+    .betrayToggle {
+      margin-top: 5px;
+      font-weight: 600;
+      padding: 7px;
+      font-size: 12px;
+      background: #e0eafc; /* fallback for old browsers */
+      background: -webkit-linear-gradient(
+        to right,
+        #c0cee2,
+        #d0e1ff
+      ); /* Chrome 10-25, Safari 5.1-6 */
+      background: linear-gradient(
+        to right,
+        #c0cee2,
+        #d0e1ff
+      ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+      border-radius: $buttonRadius;
+      box-shadow: 0 0px 7px rgba(0, 0, 0, 0.2);
+
+      &.active {
+        color: white;
+        box-shadow: 0 0px 5px rgba(0, 0, 0, 0.5);
+        background: #a73737; /* fallback for old browsers */
+        background: -webkit-linear-gradient(
+          to right,
+          #c14747,
+          #a73737
+        ); /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(
+          to right,
+          #c14747,
+          #a73737
+        ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+      }
     }
   }
 
@@ -150,6 +202,17 @@
       &.selected {
         background-color: #dba61f88;
       }
+    }
+  }
+
+  .addButtonContainer {
+    margin-top: 20px;
+    margin-bottom: 10px;
+
+    .addButton {
+      padding: 10px 10px;
+      font-weight: 1000;
+      font-size: 20px;
     }
   }
 }

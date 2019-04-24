@@ -12,6 +12,7 @@ import {
   Grid,
   Row,
   Col,
+  Checkbox
 } from 'rsuite';
 
 const mapStateToProps = state => {
@@ -55,12 +56,16 @@ class Match extends Component {
       },
       placement: '',
       changingScore: 0,
-      versusTeam: ''
+      betrayPoint: false,
+      playersMissing: false,
+      pointMissing: false
     }
   }
 
   // ====== Player and Placement ======
   deselectPlayers = async () => {
+    this.resetErrors();
+
     await this.setState({
       P1: {
         ...this.state.P1,
@@ -134,6 +139,8 @@ class Match extends Component {
   }
 
   onPlacementChange = (placementType) => {
+    this.resetErrors();
+
     const { P1, P2, P3, P4 } = this.state;
     if (this.state.P1.isSelected) {
       this.setState({
@@ -173,6 +180,8 @@ class Match extends Component {
 
   // ====== Adding/removing points ======
   addPoint = () => {
+    this.resetErrors();
+
     this.setState((state, props) => {
       return {
         changingScore: state.changingScore + 1
@@ -181,6 +190,8 @@ class Match extends Component {
   }
 
   removePoint = () => {
+    this.resetErrors();
+
     this.setState((state, props) => {
       return {
         changingScore: state.changingScore - 1
@@ -188,13 +199,63 @@ class Match extends Component {
     });
   }
 
+  onBetrayButtonTouch = () => {
+    this.resetErrors();
 
-  onTeam1Touch = () => {
-    this.setState({ versusTeam: 'T1' });
+    this.setState((state, props) => {
+      return {
+        betrayPoint: !state.betrayPoint
+      }
+    });
   }
 
-  onTeam2Touch = () => {
-    this.setState({ versusTeam: 'T2' });
+
+  // ====== Adding score to history ======
+  onAddButtonTouch = async () => {
+    const { P1, P2, P3, P4 } = this.state;
+
+    await this.setState({
+      playersMissing: (!P1.isSelected && !P2.isSelected && !P3.isSelected && !P4.isSelected),
+      pointMissing: this.state.changingScore === 0,
+    });
+
+    if (this.state.playersMissing || this.state.pointMissing)
+      return;
+
+    // Save in history
+
+    this.resetPointState();
+  }
+
+  resetPointState = () => {
+    this.setState({
+      P1: {
+        ...this.state.P1,
+        isSelected: false,
+      },
+      P2: {
+        ...this.state.P2,
+        isSelected: false,
+      },
+      P3: {
+        ...this.state.P3,
+        isSelected: false,
+      },
+      P4: {
+        ...this.state.P4,
+        isSelected: false,
+      },
+      placement: '',
+      changingScore: 0,
+      betrayPoint: false
+    });
+  }
+
+  resetErrors = () => {
+    this.setState({
+      playersMissing: false,
+      pointMissing: false
+    });
   }
 
   render() {
@@ -225,7 +286,9 @@ class Match extends Component {
                     {this.state.P1.name &&
                       <Col
                         xs={12}
-                        className={'P1Container ' + (this.state.P1.isSelected ? 'selected' : '')}
+                        className={'P1Container ' +
+                          (this.state.P1.isSelected ? 'selected ' : '') +
+                          (this.state.playersMissing ? 'error ' : '')}
                         onClick={this.onP1Touch}>
                         <MatchPlayer
                           name={this.state.P1.name}
@@ -237,7 +300,9 @@ class Match extends Component {
                     {this.state.P2.name &&
                       <Col
                         xs={12}
-                        className={'P2Container ' + (this.state.P2.isSelected ? 'selected' : '')}
+                        className={'P2Container ' +
+                          (this.state.P2.isSelected ? 'selected ' : '') +
+                          (this.state.playersMissing ? 'error ' : '')}
                         onClick={this.onP2Touch}>
                         <MatchPlayer
                           name={this.state.P2.name}
@@ -277,7 +342,9 @@ class Match extends Component {
                     {this.state.P3.name &&
                       <Col
                         xs={12}
-                        className={'P3Container ' + (this.state.P3.isSelected ? 'selected' : '')}
+                        className={'P3Container ' +
+                          (this.state.P3.isSelected ? 'selected ' : '') +
+                          (this.state.playersMissing ? 'error ' : '')}
                         onClick={this.onP3Touch}>
                         <MatchPlayer
                           name={this.state.P3.name}
@@ -289,7 +356,9 @@ class Match extends Component {
                     {this.state.P4.name &&
                       <Col
                         xs={12}
-                        className={'P4Container ' + (this.state.P4.isSelected ? 'selected' : '')}
+                        className={'P4Container ' +
+                          (this.state.P4.isSelected ? 'selected ' : '') +
+                          (this.state.playersMissing ? 'error ' : '')}
                         onClick={this.onP4Touch}>
                         <MatchPlayer
                           name={this.state.P4.name}
@@ -314,7 +383,7 @@ class Match extends Component {
             <Col
               xs={9}>
               <div
-                className='removeButton'
+                className={'removeButton ' + (this.state.pointMissing ? 'error ' : '')}
                 onClick={this.removePoint}>
                 <span className="verticalHelper"></span>
                 <img
@@ -331,7 +400,7 @@ class Match extends Component {
             <Col
               xs={9}>
               <div
-                className='addButton'
+                className={'addButton ' + (this.state.pointMissing ? 'error ' : '')}
                 onClick={this.addPoint}>
                 <span className="verticalHelper"></span>
                 <img
@@ -340,71 +409,40 @@ class Match extends Component {
                   className='plusImage'/>
               </div>
             </Col>
+
+            <Col
+            xs={9}>
+            </Col>
+
+
+            <Col
+              xs={10} xsOffset={7}>
+              <div
+                className={'betrayToggle ' + (this.state.betrayPoint ? 'active' : '')}
+                onClick={this.onBetrayButtonTouch}>
+                {this.state.betrayPoint ?
+                  <>
+                    <span>BOUH </span>
+                    <span role='img' style={{fontSize: '12px'}}>👎</span>
+                  </>
+                  :
+                  <span> Contre son camp</span>
+                }
+              </div>
+            </Col>
+
           </Row>
 
-          <hr/>
-
-          {/* Chooser versus team */}
-          <Row className='versusSelector'>
+          {/* Add score button */}
+          <Row className='addButtonContainer'>
             <Col xs={22} xsOffset={1}>
-              <h2 style={{margin: '0', marginBottom: '5px'}}>Contre</h2>
-            </Col>
-
-            <Col
-              xs={12}
-              onClick={this.onTeam1Touch}>
-
-              <Col
-                xsOffset={1}
-                xs={21}
-                className={'versusTeam1 ' + (this.state.versusTeam === 'T1' ? 'selected' : '')}>
-
-                {this.state.P1.name &&
-                  <Col xs={12}>
-                    <MatchPlayer
-                      name={this.state.P1.name}
-                      image={this.state.P1.image}/>
-                  </Col>
-                }
-
-
-                {this.state.P2.name &&
-                  <Col xs={12}>
-                    <MatchPlayer
-                      name={this.state.P2.name}
-                      image={this.state.P2.image}/>
-                  </Col>
-                }
-
-              </Col>
-            </Col>
-            <Col
-              xs={12}
-              onClick={this.onTeam2Touch}>
-
-              <Col
-                xsOffset={1}
-                xs={21}
-                className={'versusTeam2 ' + (this.state.versusTeam === 'T2' ? 'selected' : '')}>
-
-                {this.state.P3.name &&
-                  <Col xs={12}>
-                    <MatchPlayer
-                      name={this.state.P3.name}
-                      image={this.state.P3.image}/>
-                  </Col>
-                }
-
-
-                {this.state.P4.name &&
-                  <Col xs={12}>
-                    <MatchPlayer
-                      name={this.state.P4.name}
-                      image={this.state.P4.image}/>
-                  </Col>
-                }
-
-              </Col>
+              <Button
+                className='roundButton blue addButton'
+                block
+                size='lg'
+                onClick={this.onAddButtonTouch}>
+                Ajouter
+              </Button>
             </Col>
           </Row>
 
