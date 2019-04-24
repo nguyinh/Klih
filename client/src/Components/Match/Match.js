@@ -268,7 +268,8 @@ class Match extends Component {
           fullName: selectedPlayer.fullName,
           isBetray: this.state.betrayPoint,
           team: (
-            (P1.isSelected || P2.isSelected) && !this.state.betrayPoint ?
+            ((P1.isSelected || P2.isSelected) && !this.state.betrayPoint) ||
+            ((P3.isSelected || P4.isSelected) && this.state.betrayPoint) ?
             'Team1' :
             'Team2'
           )
@@ -503,15 +504,32 @@ class Match extends Component {
         <Col
           xs={22}
           xsOffset={1}
-          className='container'>
+          className='container historyContainer'>
 
-          <MatchHistory
-            imageP1={this.state.P1.name !== '' ? this.state.P1.image : ''}
-            imageP2={this.state.P2.name !== '' ? this.state.P2.image : ''}
-            imageP3={this.state.P3.name !== '' ? this.state.P3.image : ''}
-            imageP4={this.state.P4.name !== '' ? this.state.P4.image : ''}
-            recordTime/>
+          <Row>
+            <Col
+              xs={24}>
+              <MatchHistory
+                imageP1={this.state.P1.name !== '' ? this.state.P1.image : ''}
+                imageP2={this.state.P2.name !== '' ? this.state.P2.image : ''}
+                imageP3={this.state.P3.name !== '' ? this.state.P3.image : ''}
+                imageP4={this.state.P4.name !== '' ? this.state.P4.image : ''}
+                recordTime/>
+            </Col>
+          </Row>
 
+          <Row>
+            <Col
+              xs={22}
+              xsOffset={1}>
+              <Button
+                size='lg'
+                block
+                className='roundButton green matchValidation'>
+                Valider
+              </Button>
+            </Col>
+          </Row>
         </Col>
       </Row>
     </Grid>;
