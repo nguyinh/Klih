@@ -15,13 +15,25 @@ import {
   Col,
   Checkbox
 } from 'rsuite';
-import { setMatch } from './../../redux/actions/index.actions.js';
+import { setMatch, setScore1, setScore2, setHistory, addGoalTeam1 } from './../../redux/actions/index.actions.js';
 
 const mapDispatchToProps = dispatch => {
   return ({
     setMatch: (value) => {
       dispatch(setMatch(value))
-    }
+    },
+    setScore1: (value) => {
+      dispatch(setScore1(value))
+    },
+    setScore2: (value) => {
+      dispatch(setScore2(value))
+    },
+    setHistory: (value) => {
+      dispatch(setHistory(value))
+    },
+    addGoalTeam1: (value) => {
+      dispatch(addGoalTeam1(value))
+    },
   })
 }
 
@@ -31,7 +43,10 @@ const mapStateToProps = state => {
     P2: state.P2,
     P3: state.P3,
     P4: state.P4,
-    match: state.match
+    match: state.match,
+    score1: state.score1,
+    score2: state.score2,
+    history: state.history
   };
 };
 
@@ -218,19 +233,19 @@ class Match extends Component {
 
 
   // ====== Adding score to history ======
-  onAddButtonTouch = async () => {
+  onAddButtonTouch = () => {
     const { P1, P2, P3, P4, changingScore, betrayPoint } = this.state;
 
-    await this.setState({
+    this.setState({
       playersMissing: (!P1.isSelected && !P2.isSelected && !P3.isSelected && !P4.isSelected),
       pointMissing: this.state.changingScore === 0,
     });
 
-    if (this.state.playersMissing || this.state.pointMissing)
+    // If error, don't save goal
+    if ((!P1.isSelected && !P2.isSelected && !P3.isSelected && !P4.isSelected) ||
+      this.state.changingScore === 0)
       return;
 
-    // const selectedPlayer = [P1, P2, P3, P4].filter(player => player.isSelected)[0];
-    // console.log(selectedPlayer);
     const getPlayer = ({ data, name, placement }) => {
       return {
         _id: data._id,
@@ -240,42 +255,130 @@ class Match extends Component {
     };
     const selectedPlayer = getPlayer([P1, P2, P3, P4].filter(player => player.isSelected)[0]);
 
+    const beginTime = Date.now();
+    // console.log('save begin');
+    // console.log(beginTime);
+
+    // let newScore1 = 0;
+    // if (((changingScore > 0 && !betrayPoint && (P1.isSelected || P2.isSelected)) ||
+    //   (changingScore > 0 && betrayPoint && (P3.isSelected || P4.isSelected)) ||
+    //   (changingScore < 0 && !betrayPoint && (P3.isSelected || P4.isSelected)) ||
+    //   (changingScore < 0 && betrayPoint && (P1.isSelected || P2.isSelected))))
+    // const newScore1 =
+
     // Save in history
-    this.props.setMatch({
-      ...this.props.match,
-      score1: (
-        ((changingScore > 0 && !betrayPoint && (P1.isSelected || P2.isSelected)) ||
-          (changingScore > 0 && betrayPoint && (P3.isSelected || P4.isSelected)) ||
-          (changingScore < 0 && !betrayPoint && (P3.isSelected || P4.isSelected)) ||
-          (changingScore < 0 && betrayPoint && (P1.isSelected || P2.isSelected))) ?
-        this.props.match.score1 + changingScore :
-        this.props.match.score1
-      ),
-      score2: (
-        ((changingScore > 0 && !betrayPoint && (P3.isSelected || P4.isSelected)) ||
-          (changingScore > 0 && betrayPoint && (P1.isSelected || P2.isSelected)) ||
-          (changingScore < 0 && !betrayPoint && (P1.isSelected || P2.isSelected)) ||
-          (changingScore < 0 && betrayPoint && (P3.isSelected || P4.isSelected))) ?
-        this.props.match.score2 + changingScore : this.props.match.score2
-      ),
-      history: [
-        ...this.props.match.history,
-        {
-          goalTime: this.props.match.minutesElapsed,
-          deltaScore: this.state.changingScore,
-          byPlayer: selectedPlayer._id,
-          placement: selectedPlayer.placement,
-          fullName: selectedPlayer.fullName,
-          isBetray: this.state.betrayPoint,
-          team: (
-            ((P1.isSelected || P2.isSelected) && !this.state.betrayPoint) ||
-            ((P3.isSelected || P4.isSelected) && this.state.betrayPoint) ?
-            'Team1' :
-            'Team2'
-          )
-        }
-      ]
-    })
+    let { match, score1, score2, history } = this.props;
+    // let newScore1,
+
+    // Method #1
+    // history.push({
+    //   goalTime: match.minutesElapsed,
+    //   deltaScore: this.state.changingScore,
+    //   byPlayer: selectedPlayer._id,
+    //   placement: selectedPlayer.placement,
+    //   fullName: selectedPlayer.fullName,
+    //   isBetray: this.state.betrayPoint,
+    //   team: (
+    //     ((P1.isSelected || P2.isSelected) && !this.state.betrayPoint) ||
+    //     ((P3.isSelected || P4.isSelected) && this.state.betrayPoint) ?
+    //     'Team1' :
+    //     'Team2'
+    //   )
+    // });
+    // Method #2
+    // this.props.setHistory(history);
+    // Method #3
+    this.props.setHistory([...history, {
+      goalTime: match.minutesElapsed,
+      deltaScore: this.state.changingScore,
+      byPlayer: selectedPlayer._id,
+      placement: selectedPlayer.placement,
+      fullName: selectedPlayer.fullName,
+      isBetray: this.state.betrayPoint,
+      team: (
+        ((P1.isSelected || P2.isSelected) && !this.state.betrayPoint) ||
+        ((P3.isSelected || P4.isSelected) && this.state.betrayPoint) ?
+        'Team1' :
+        'Team2'
+      )
+    }]);
+
+    // this.props.addGoalTeam1({
+    //   goalTime: match.minutesElapsed,
+    //   deltaScore: this.state.changingScore,
+    //   byPlayer: selectedPlayer._id,
+    //   placement: selectedPlayer.placement,
+    //   fullName: selectedPlayer.fullName,
+    //   isBetray: this.state.betrayPoint
+    // });
+
+
+    if (((changingScore > 0 && !betrayPoint && (P1.isSelected || P2.isSelected)) ||
+        (changingScore > 0 && betrayPoint && (P3.isSelected || P4.isSelected)) ||
+        (changingScore < 0 && !betrayPoint && (P3.isSelected || P4.isSelected)) ||
+        (changingScore < 0 && betrayPoint && (P1.isSelected || P2.isSelected))))
+      this.props.setScore1(score1 + changingScore);
+    else if ((changingScore > 0 && !betrayPoint && (P3.isSelected || P4.isSelected)) ||
+      (changingScore > 0 && betrayPoint && (P1.isSelected || P2.isSelected)) ||
+      (changingScore < 0 && !betrayPoint && (P1.isSelected || P2.isSelected)) ||
+      (changingScore < 0 && betrayPoint && (P3.isSelected || P4.isSelected)))
+      this.props.setScore2(score2 + changingScore);
+
+
+    // console.log('save end');
+    // console.log('time : ' + (Date.now() - beginTime));
+    // this.props.setHistory(history);
+    // this.props.setHistory(history.push({
+    //   goalTime: match.minutesElapsed,
+    //   deltaScore: this.state.changingScore,
+    //   byPlayer: selectedPlayer._id,
+    //   placement: selectedPlayer.placement,
+    //   fullName: selectedPlayer.fullName,
+    //   isBetray: this.state.betrayPoint,
+    //   team: (
+    //     ((P1.isSelected || P2.isSelected) && !this.state.betrayPoint) ||
+    //     ((P3.isSelected || P4.isSelected) && this.state.betrayPoint) ?
+    //     'Team1' :
+    //     'Team2'
+    //   )
+    // }));
+
+    // this.props.setMatch({
+    //   ...match,
+    //   score1: (
+    //     ((changingScore > 0 && !betrayPoint && (P1.isSelected || P2.isSelected)) ||
+    //       (changingScore > 0 && betrayPoint && (P3.isSelected || P4.isSelected)) ||
+    //       (changingScore < 0 && !betrayPoint && (P3.isSelected || P4.isSelected)) ||
+    //       (changingScore < 0 && betrayPoint && (P1.isSelected || P2.isSelected))) ?
+    //     match.score1 + changingScore :
+    //     match.score1
+    //   ),
+    //   score2: (
+    //     ((changingScore > 0 && !betrayPoint && (P3.isSelected || P4.isSelected)) ||
+    //       (changingScore > 0 && betrayPoint && (P1.isSelected || P2.isSelected)) ||
+    //       (changingScore < 0 && !betrayPoint && (P1.isSelected || P2.isSelected)) ||
+    //       (changingScore < 0 && betrayPoint && (P3.isSelected || P4.isSelected))) ?
+    //     match.score2 + changingScore :
+    //     match.score2
+    //   ),
+    //   history: [
+    //     ...match.history,
+    //     {
+    //       goalTime: match.minutesElapsed,
+    //       deltaScore: this.state.changingScore,
+    //       byPlayer: selectedPlayer._id,
+    //       placement: selectedPlayer.placement,
+    //       fullName: selectedPlayer.fullName,
+    //       isBetray: this.state.betrayPoint,
+    //       team: (
+    //         ((P1.isSelected || P2.isSelected) && !this.state.betrayPoint) ||
+    //         ((P3.isSelected || P4.isSelected) && this.state.betrayPoint) ?
+    //         'Team1' :
+    //         'Team2'
+    //       )
+    //     }
+    //   ]
+    // });
 
     this.resetPointState();
   }
@@ -371,19 +474,19 @@ class Match extends Component {
 
                   <div
                     className='swordContainer'
-                    onClick={() => this.onPlacementChange(swordImage)}>
+                    onClick={() => this.onPlacementChange('Attack')}>
                     <img
                       src={swordImage}
-                      className={'placementImage sword ' + (cmp(placement, swordImage) ? 'selected' : '')}
+                      className={'placementImage sword ' + (cmp(placement, 'Attack') ? 'selected' : '')}
                       alt='attack'/>
                   </div>
 
                   <div
                     className='shieldContainer'
-                    onClick={() => this.onPlacementChange(shieldImage)}>
+                    onClick={() => this.onPlacementChange('Defense')}>
                   <img
                     src={shieldImage}
-                    className={'placementImage shield ' + (cmp(placement, shieldImage) ? 'selected' : '')}
+                    className={'placementImage shield ' + (cmp(placement, 'Defense') ? 'selected' : '')}
                     alt='defense'/>
                   </div>
 

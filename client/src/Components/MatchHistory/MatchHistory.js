@@ -30,7 +30,12 @@ const mapStateToProps = state => {
     P2: state.P2,
     P3: state.P3,
     P4: state.P4,
-    match: state.match
+    match: state.match,
+    score1: state.score1,
+    score2: state.score2,
+    history: state.history,
+    team1: state.team1,
+    team2: state.team2
   };
 };
 
@@ -42,7 +47,7 @@ class MatchHistory extends Component {
     this.state = {
       score1: props.score1 || 0,
       score2: props.score2 || 0,
-      history: props.history || {},
+      history: props.history || [],
       imageP1: props.imageP1,
       imageP2: props.imageP2,
       imageP3: props.imageP3,
@@ -53,7 +58,7 @@ class MatchHistory extends Component {
   }
 
   componentDidMount() {
-    // setInterval(this.updateTime, 3000)
+
   }
 
   componentWillUnmount() {
@@ -64,13 +69,16 @@ class MatchHistory extends Component {
     this.props.setMatch({
       ...this.props.match,
       minutesElapsed: parseInt((Date.now() - this.state.startedAt) / 60000)
-    })
+    });
   }
 
-  componentWillReceiveProps(nextProps) {
+  async componentWillReceiveProps(nextProps) {
     if (nextProps !== this.props) {
-      this.setState({
-        ...nextProps.match
+      await this.setState({
+        // ...nextProps
+        score1: nextProps.score1,
+        score2: nextProps.score2,
+        history: nextProps.history
       });
     }
   }
@@ -79,6 +87,7 @@ class MatchHistory extends Component {
 
 
   render() {
+    // console.log(this.state.history);
 
     return <Grid className='matchHistoryContainer'>
       <Row>
@@ -148,9 +157,9 @@ class MatchHistory extends Component {
           xs={12}
           className='team1History'>
           {
-            this.props.match.history.map(goal => {
+            this.props.history.map((goal, i) => {
               if (goal.team === 'Team2') {
-                return <Row className='goalEventContainer'>
+                return <Row className='goalEventContainer' key={i}>
                   <Col xs={3}>
                     <span className='goalTime'>{goal.goalTime}&rsquo;</span>
                   </Col>
@@ -172,9 +181,9 @@ class MatchHistory extends Component {
           xs={12}
           className='team2History'>
           {
-            this.props.match.history.map(goal => {
+            this.props.history.map((goal, i) => {
               if (goal.team === 'Team1') {
-                return <Row className='goalEventContainer'>
+                return <Row className='goalEventContainer' key={i}>
                   <Col xs={17}>
                     <span className='goalPlayer'>{goal.fullName}</span>
                   </Col>

@@ -32,7 +32,14 @@ const initialState = {
     score2: 0,
     history: [],
     minutesElapsed: 0
-  }
+  },
+  score1: 0,
+  score2: 0,
+  history: [],
+  // history2: {
+  team1: [],
+  team2: []
+  // }
 }
 
 function rootReducer(state = initialState, action) {
@@ -55,6 +62,22 @@ function rootReducer(state = initialState, action) {
       return Object.assign({}, state, {P4: action.payload});
     case act.SET_MATCH:
       return Object.assign({}, state, {match: action.payload});
+    case act.SET_SCORE1:
+      return Object.assign({}, state, {score1: action.payload});
+    case act.SET_SCORE2:
+      return Object.assign({}, state, {score2: action.payload});
+    case act.SET_HISTORY:
+      return Object.assign({}, state, {history: action.payload});
+    case act.ADD_GOAL_TEAM1:
+      return Object.assign({}, state, {
+        // history2: {
+        //   ...state.history2,
+        team1: [
+          ...state.team1,
+          action.payload
+        ]
+        // }
+      });
     default:
       return state;
   }

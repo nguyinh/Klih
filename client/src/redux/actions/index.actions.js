@@ -17,3 +17,11 @@ export const setP3 = content => ({type: action.SET_P3, payload: content});
 export const setP4 = content => ({type: action.SET_P4, payload: content});
 
 export const setMatch = content => ({type: action.SET_MATCH, payload: content});
+
+export const setScore1 = content => ({type: action.SET_SCORE1, payload: content});
+
+export const setScore2 = content => ({type: action.SET_SCORE2, payload: content});
+
+export const setHistory = content => ({type: action.SET_HISTORY, payload: content});
+
+export const addGoalTeam1 = content => ({type: action.ADD_GOAL_TEAM1, payload: content});
