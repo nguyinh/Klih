@@ -36,7 +36,8 @@ const mapStateToProps = state => {
     P1: state.P1,
     P2: state.P2,
     P3: state.P3,
-    P4: state.P4
+    P4: state.P4,
+    playerCursor: state.playerCursor
   };
 };
 
@@ -119,8 +120,9 @@ class Player extends Component {
       (cmp(this.props.P3, this.state) || cmp(this.props.P4, this.state)) ?
       'orangeTeam ' :
       '';
+    console.log(this.props.highlight);
     return <div
-      className={'playerContainer ' + teamColor}
+      className={'playerContainer ' + (teamColor ? teamColor : (this.props.playerCursor ? 'highlight ' : ''))}
       onClick={this.onPlayerClick}>
       <img
         src= {

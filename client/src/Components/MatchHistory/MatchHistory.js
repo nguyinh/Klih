@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import './MatchHistory.scss';
 import swordImage from '../../sword.png';
 import shieldImage from '../../shield.png';
@@ -15,6 +15,7 @@ import {
   Col,
   Checkbox
 } from 'rsuite';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 const mapDispatchToProps = dispatch => {
   return ({
@@ -40,6 +41,8 @@ const mapStateToProps = state => {
 };
 
 const cmp = (o1, o2) => JSON.stringify(o1) === JSON.stringify(o2);
+
+// const [showMessage, setShowMessage] = useState(false);
 
 class MatchHistory extends Component {
   constructor(props) {
@@ -156,49 +159,63 @@ class MatchHistory extends Component {
         <Col
           xs={12}
           className='team1History'>
-          {
-            this.props.history.map((goal, i) => {
-              if (goal.team === 'Team2') {
-                return <Row className='goalEventContainer' key={i}>
-                  <Col xs={3}>
-                    <span className='goalTime'>{goal.goalTime}&rsquo;</span>
-                  </Col>
-                  <Col xs={4} className={'goalScoreContainer ' + (goal.deltaScore > 0 ? 'plus ' : 'minus ')}>
-                    <span className={'goalScore'}> {
-                        (goal.deltaScore > 0 ? '+' : '') + goal.deltaScore
-                      }</span>
-                  </Col>
-                  <Col xs={17}>
-                    <span className='goalPlayer'>{goal.fullName}</span>
-                  </Col>
-                </Row>;
-              }
-            })
-          }
+          <TransitionGroup component={null}>
+            {
+              this.props.history.map((goal, i) => {
+                if (goal.team === 'Team2') {
+                  return  <CSSTransition
+                            timeout={300}
+                            classNames="team2Anim"
+                            key={i}>
+                            <Row className='goalEventContainer'>
+                              <Col xs={3}>
+                                <span className='goalTime'>{goal.goalTime}&rsquo;</span>
+                              </Col>
+                              <Col xs={4} className={'goalScoreContainer ' + (goal.deltaScore > 0 ? 'plus ' : 'minus ')}>
+                                <span className={'goalScore'}> {
+                                    (goal.deltaScore > 0 ? '+' : '') + goal.deltaScore
+                                  }</span>
+                              </Col>
+                              <Col xs={17}>
+                                <span className='goalPlayer'>{goal.fullName}</span>
+                              </Col>
+                            </Row>
+                          </CSSTransition>;
+                }
+              })
+            }
+          </TransitionGroup>
         </Col>
 
         <Col
           xs={12}
           className='team2History'>
-          {
-            this.props.history.map((goal, i) => {
-              if (goal.team === 'Team1') {
-                return <Row className='goalEventContainer' key={i}>
-                  <Col xs={17}>
-                    <span className='goalPlayer'>{goal.fullName}</span>
-                  </Col>
-                  <Col xs={4} className={'goalScoreContainer ' + (goal.deltaScore > 0 ? 'plus ' : 'minus ')}>
-                    <span className={'goalScore'}> {
-                        (goal.deltaScore > 0 ? '+' : '') + goal.deltaScore
-                      }</span>
-                  </Col>
-                  <Col xs={3}>
-                    <span className='goalTime'>{goal.goalTime}&rsquo;</span>
-                  </Col>
-                </Row>;
-              }
-            })
-          }
+          <TransitionGroup component={null}>
+            {
+              this.props.history.map((goal, i) => {
+                if (goal.team === 'Team1') {
+                  return <CSSTransition
+                            timeout={300}
+                            classNames="team1Anim"
+                            key={i}>
+                            <Row className='goalEventContainer' key={i}>
+                              <Col xs={17}>
+                                <span className='goalPlayer'>{goal.fullName}</span>
+                              </Col>
+                              <Col xs={4} className={'goalScoreContainer ' + (goal.deltaScore > 0 ? 'plus ' : 'minus ')}>
+                                <span className={'goalScore'}> {
+                                    (goal.deltaScore > 0 ? '+' : '') + goal.deltaScore
+                                  }</span>
+                              </Col>
+                              <Col xs={3}>
+                                <span className='goalTime'>{goal.goalTime}&rsquo;</span>
+                              </Col>
+                            </Row>
+                          </CSSTransition>;
+                }
+              })
+            }
+          </TransitionGroup>
         </Col>
       </Row>
 

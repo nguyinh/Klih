@@ -1,9 +1,9 @@
 .tableTagContainer {
   // border: 1px solid black;
-  background: #E9F5FE;
+  background: #e9f5fe;
   // box-shadow: 0 1px #FFFFFF inset, 0 1px 3px rgba(34, 25, 25, 0.4);
   border-bottom: 0 none;
-  box-shadow: 0 2px 14px 0 rgba(0,0,0,0.06), 0 4px 8px 0 rgba(0,0,0,0.06);
+  box-shadow: 0 2px 14px 0 rgba(0, 0, 0, 0.06), 0 4px 8px 0 rgba(0, 0, 0, 0.06);
   border-radius: 6px;
   padding: 10px 5px;
   // font-size: 30px
@@ -25,11 +25,12 @@
   }
 
   .rs-btn {
-    background: #2196f3CC !important;
+    background: #2196f3cc !important;
   }
 }
 
-.tableTagSearch {}
+.tableTagSearch {
+}
 
 .playersPlaceholder {
   position: relative;
@@ -70,8 +71,14 @@
   position: absolute;
   width: 100%;
   height: 300px;
-  background: linear-gradient(to top, #2360c700 5%, #2360c777 50%, #d9892b77 50%, #d9892b00 95%);
-  transform: rotate(96deg) translate(-50px,7px);
+  background: linear-gradient(
+    to top,
+    #2360c700 5%,
+    #2360c777 50%,
+    #d9892b77 50%,
+    #d9892b00 95%
+  );
+  transform: rotate(96deg) translate(-50px, 7px);
 
   hr {
     margin-top: 150px;
@@ -81,4 +88,10 @@
     border-top: 1px solid #ccc;
     padding: 0;
   }
+
+  // .highlightPlayers {
+  //   .playerContainer {
+  //     background: red;
+  //   }
+  // }
 }

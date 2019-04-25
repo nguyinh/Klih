@@ -38,7 +38,6 @@ class Navigation extends Component {
     this.state = {
       isStarting: true,
       retryCount: 0,
-      intervalId: null,
       expanded: undefined,
       image: null,
       playerName: ''
@@ -62,73 +61,40 @@ class Navigation extends Component {
 
   async componentDidMount() {
     // Fetch user session with token in cookies
+    this.tryConnect();
+  }
+
+  // DEBUG
+  async tryConnect() {
     axios.defaults.withCredentials = true;
-    await axios.post('/api/connect', {}).then(async (res) => {
+    try {
+      const res = await axios.post('/api/connect', {})
+
       this.props.setUserAuth(true);
       this.setState({
         playerName: res.data.fullName
       });
 
-      try {
-        const avatarResponse = await axios.get('/api/profile/avatar', {});
-        var base64Flag = 'data:image/jpeg;base64,';
-        var imageStr = this.arrayBufferToBase64(avatarResponse.data.avatar.data.data);
-        this.setState({
-          image: base64Flag + imageStr
-        });
-        this.props.setAvatar(base64Flag + imageStr);
-      } catch (err) {
-        console.log(err);
-      }
-
-      this.setState({ isStarting: false })
-    }).catch((err) => {
-      console.error(err.response);
-      this.props.setUserAuth(false);
-    });
-
-    if (this.state.isStarting && process.env.NODE_ENV === 'development') {
-      var intervalId = setInterval(this.timer.bind(this), 500);
-      this.setState({ intervalId: intervalId });
-    }
-  }
-
-  // DEBUG
-  timer() {
-    if (this.state.isStarting && this.state.retryCount <= 10) {
-      this.setState({ retryCount: this.state.retryCount + 1 });
-      // Fetch user session with token in cookies
-      axios.defaults.withCredentials = true;
-      axios.post('/api/connect', {}).then(async (res) => {
-        this.props.setUserAuth(true);
-        this.setState({
-          playerName: res.data.fullName
-        });
-
-        try {
-          const avatarResponse = await axios.get('/api/profile/avatar', {});
-          var base64Flag = 'data:image/jpeg;base64,';
-          var imageStr = this.arrayBufferToBase64(avatarResponse.data.avatar.data.data);
-          this.setState({
-            image: base64Flag + imageStr
-          });
-          this.props.setAvatar(base64Flag + imageStr);
-        } catch (err) {
-          console.log(err);
-        }
-
-        this.setState({ isStarting: false });
-      }).catch((err) => {
-        console.error(err.response);
-        this.props.setUserAuth(false);
+      const avatarResponse = await axios.get('/api/profile/avatar', {});
+      var base64Flag = 'data:image/jpeg;base64,';
+      var imageStr = this.arrayBufferToBase64(avatarResponse.data.avatar.data.data);
+      this.setState({
+        image: base64Flag + imageStr
       });
-    } else {
-      clearInterval(this.state.intervalId);
-    }
-  }
+      this.props.setAvatar(base64Flag + imageStr);
 
-  componentWillUnmount() {
-    clearInterval(this.state.intervalId);
+
+    } catch (err) {
+      // TODO: handle image error
+      this.props.setUserAuth(false);
+      // DEBUG: if status==500, then back-end not initialized, retry connect until back-end up
+      this.setState({
+        playerName: ''
+      });
+      if (err.response.status === 500) {
+        this.tryConnect();
+      }
+    }
   }
   // DEBUG END
 
