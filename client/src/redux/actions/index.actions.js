@@ -24,4 +24,8 @@ export const setScore2 = content => ({type: action.SET_SCORE2, payload: content}
 
 export const setHistory = content => ({type: action.SET_HISTORY, payload: content});
 
-export const addGoalTeam1 = content => ({type: action.ADD_GOAL_TEAM1, payload: content});
+export const addToMatch = content => ({type: action.ADD_TO_MATCH, payload: content});
+
+export const setElapsedTime = content => ({type: action.SET_ELAPSED_TIME, payload: content});
+
+export const setStartTimestamp = content => ({type: action.SET_START_TIMESTAMP, payload: content});

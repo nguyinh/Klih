@@ -6,7 +6,7 @@ import plusImage from '../../plus-sign.png';
 import minusImage from '../../minus-sign.png';
 import MatchPlayer from '../MatchPlayer/MatchPlayer';
 import MatchHistory from '../MatchHistory/MatchHistory';
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
 import {
   Button,
@@ -15,7 +15,7 @@ import {
   Col,
   Checkbox
 } from 'rsuite';
-import { setMatch, setScore1, setScore2, setHistory, addGoalTeam1 } from './../../redux/actions/index.actions.js';
+import { setMatch, setScore1, setScore2, setHistory, addToMatch } from './../../redux/actions/index.actions.js';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 const mapDispatchToProps = dispatch => {
@@ -32,8 +32,11 @@ const mapDispatchToProps = dispatch => {
     setHistory: (value) => {
       dispatch(setHistory(value))
     },
-    addGoalTeam1: (value) => {
-      dispatch(addGoalTeam1(value))
+    // addGoalTeam1: (value) => {
+    //   dispatch(addGoalTeam1(value))
+    // },
+    addToMatch: (value) => {
+      dispatch(addToMatch(value))
     },
   })
 }
@@ -47,7 +50,8 @@ const mapStateToProps = state => {
     match: state.match,
     score1: state.score1,
     score2: state.score2,
-    history: state.history
+    history: state.history,
+    minutesElapsed: state.minutesElapsed
   };
 };
 
@@ -81,7 +85,8 @@ class Match extends Component {
       changingScore: 0,
       betrayPoint: false,
       playersMissing: false,
-      pointMissing: false
+      pointMissing: false,
+      startedAt: Date.now()
     }
   }
 
@@ -111,53 +116,57 @@ class Match extends Component {
 
   onP1Touch = async () => {
     this.deselectPlayers();
-    const { P1, placement } = this.state;
+    const { P1, placement, changingScore } = this.state;
     await this.setState({
       P1: {
         ...P1,
         placement: (!P1.placement ? '' : P1.placement),
         isSelected: true
       },
-      placement: (!P1.placement ? '' : P1.placement)
+      placement: (!P1.placement ? '' : P1.placement),
+      isGoalValid: (changingScore !== 0)
     });
   }
 
   onP2Touch = async () => {
     this.deselectPlayers();
-    const { P2, placement } = this.state;
+    const { P2, placement, changingScore } = this.state;
     await this.setState({
       P2: {
         ...P2,
         placement: (!P2.placement ? '' : P2.placement),
         isSelected: true
       },
-      placement: (!P2.placement ? '' : P2.placement)
+      placement: (!P2.placement ? '' : P2.placement),
+      isGoalValid: (changingScore !== 0)
     });
   }
 
   onP3Touch = async () => {
     this.deselectPlayers();
-    const { P3, placement } = this.state;
+    const { P3, placement, changingScore } = this.state;
     this.setState({
       P3: {
         ...P3,
         placement: (!P3.placement ? '' : P3.placement),
         isSelected: true
       },
-      placement: (!P3.placement ? '' : P3.placement)
+      placement: (!P3.placement ? '' : P3.placement),
+      isGoalValid: (changingScore !== 0)
     });
   }
 
   onP4Touch = async () => {
     this.deselectPlayers();
-    const { P4, placement } = this.state;
+    const { P4, placement, changingScore } = this.state;
     this.setState({
       P4: {
         ...P4,
         placement: (!P4.placement ? '' : P4.placement),
         isSelected: true
       },
-      placement: (!P4.placement ? '' : P4.placement)
+      placement: (!P4.placement ? '' : P4.placement),
+      isGoalValid: (changingScore !== 0)
     });
   }
 
@@ -238,8 +247,8 @@ class Match extends Component {
 
 
   // ====== Adding score to history ======
-  onAddButtonTouch = () => {
-    const { P1, P2, P3, P4, changingScore, betrayPoint } = this.state;
+  onAddGoalButtonTouch = () => {
+    const { P1, P2, P3, P4, changingScore, betrayPoint, startedAt } = this.state;
 
     this.setState({
       playersMissing: (!P1.isSelected && !P2.isSelected && !P3.isSelected && !P4.isSelected),
@@ -272,7 +281,7 @@ class Match extends Component {
     // const newScore1 =
 
     // Save in history
-    let { match, score1, score2, history } = this.props;
+    let { match, score1, score2, history, minutesElapsed } = this.props;
     // let newScore1,
 
     // Method #1
@@ -294,7 +303,7 @@ class Match extends Component {
     // this.props.setHistory(history);
     // Method #3
     this.props.setHistory([...history, {
-      goalTime: match.minutesElapsed,
+      goalTime: parseInt((Date.now() - startedAt) / 60000),
       deltaScore: this.state.changingScore,
       byPlayer: selectedPlayer._id,
       placement: selectedPlayer.placement,
@@ -307,14 +316,20 @@ class Match extends Component {
         'Team2'
       )
     }]);
-
-    // this.props.addGoalTeam1({
-    //   goalTime: match.minutesElapsed,
+    // Method #4
+    // this.props.addToMatch({
+    //   goalTime: parseInt((Date.now() - startedAt) / 60000),
     //   deltaScore: this.state.changingScore,
     //   byPlayer: selectedPlayer._id,
     //   placement: selectedPlayer.placement,
     //   fullName: selectedPlayer.fullName,
-    //   isBetray: this.state.betrayPoint
+    //   isBetray: this.state.betrayPoint,
+    //   team: (
+    //     ((P1.isSelected || P2.isSelected) && !this.state.betrayPoint) ||
+    //     ((P3.isSelected || P4.isSelected) && this.state.betrayPoint) ?
+    //     'Team1' :
+    //     'Team2'
+    //   )
     // });
 
 
@@ -422,6 +437,10 @@ class Match extends Component {
 
   render() {
     const { P1, P2, P3, P4, placement } = this.state;
+
+    if (!P1.name && !P2.name && !P3.name && !P4.name)
+      return <Redirect push to="/lobby" />;
+
     return <Grid className='matchContainer'>
       <Row>
         <Col
@@ -483,7 +502,7 @@ class Match extends Component {
                     onClick={() => this.onPlacementChange('Attack')}>
                     <img
                       src={swordImage}
-                      className={'placementImage sword ' + (cmp(placement, 'Attack') ? 'selected' : '')}
+                      className={'placementImage sword ' + ((!P1.isSelected && !P2.isSelected && !P3.isSelected && !P4.isSelected) ? 'disabled ' : cmp(placement, 'Attack') ? 'selected' : '')}
                       alt='attack'/>
                   </div>
 
@@ -492,7 +511,7 @@ class Match extends Component {
                     onClick={() => this.onPlacementChange('Defense')}>
                   <img
                     src={shieldImage}
-                    className={'placementImage shield ' + (cmp(placement, 'Defense') ? 'selected' : '')}
+                    className={'placementImage shield ' + ((!P1.isSelected && !P2.isSelected && !P3.isSelected && !P4.isSelected) ? 'disabled ' : cmp(placement, 'Defense') ? 'selected' : '')}
                     alt='defense'/>
                   </div>
 
@@ -574,16 +593,19 @@ class Match extends Component {
               </div>
             </Col>
 
+          </Row>
 
+          <Row className='matchButtonsContainer'>
             <Col
-              xs={10} xsOffset={7}>
+              xs={11}
+              xsOffset={1}>
               <div
                 className={'betrayToggle ' + (this.state.betrayPoint ? 'active' : '')}
                 onClick={this.onBetrayButtonTouch}>
                 {this.state.betrayPoint ?
                   <>
                     <span>BOUH </span>
-                    <span role='img' style={{fontSize: '12px'}}>👎</span>
+                    <span role='img' style={{fontSize: '18px'}}>👎</span>
                   </>
                   :
                   <span> Contre son camp</span>
@@ -591,29 +613,24 @@ class Match extends Component {
               </div>
             </Col>
 
-          </Row>
-
-          {/* Add score button */}
-          <TransitionGroup component={null}>
-            {
-              this.state.isGoalValid &&
-              <CSSTransition
-                        timeout={300}
-                        classNames="addGoalButtonAnim">
-                <Row className='addButtonContainer'>
-                  <Col xs={22} xsOffset={1}>
-                    <Button
-                      className='roundButton blue addGoalButton'
-                      block
-                      size='lg'
-                      onClick={this.onAddButtonTouch}>
-                      Ajouter
-                    </Button>
+            {/* Add score button */}
+            <TransitionGroup component={null}>
+              {
+                this.state.isGoalValid &&
+                <CSSTransition
+                          timeout={300}
+                          classNames="addGoalButtonAnim">
+                  <Col xs={11} className='addButtonContainer'>
+                    <div
+                      className='addGoalButton'
+                      onClick={this.onAddGoalButtonTouch}>
+                      <span>Ajouter</span>
+                    </div>
                   </Col>
-                </Row>
-              </CSSTransition>
-            }
-          </TransitionGroup>
+                </CSSTransition>
+              }
+            </TransitionGroup>
+          </Row>
 
         </Col>
       </Row>
@@ -632,7 +649,8 @@ class Match extends Component {
                 imageP2={this.state.P2.name !== '' ? this.state.P2.image : ''}
                 imageP3={this.state.P3.name !== '' ? this.state.P3.image : ''}
                 imageP4={this.state.P4.name !== '' ? this.state.P4.image : ''}
-                recordTime/>
+                recordTime
+                startedAt={Date.now()}/>
             </Col>
           </Row>
 

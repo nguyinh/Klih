@@ -7,7 +7,7 @@ import minusImage from '../../minus-sign.png';
 import MatchPlayer from '../MatchPlayer/MatchPlayer';
 import { withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
-import { setMatch } from './../../redux/actions/index.actions.js';
+import { setMatch, setElapsedTime } from './../../redux/actions/index.actions.js';
 import {
   Button,
   Grid,
@@ -21,6 +21,9 @@ const mapDispatchToProps = dispatch => {
   return ({
     setMatch: (value) => {
       dispatch(setMatch(value))
+    },
+    setElapsedTime: (value) => {
+      dispatch(setElapsedTime(value))
     }
   })
 }
@@ -36,7 +39,8 @@ const mapStateToProps = state => {
     score2: state.score2,
     history: state.history,
     team1: state.team1,
-    team2: state.team2
+    team2: state.team2,
+    minutesElapsed: state.minutesElapsed
   };
 };
 
@@ -54,23 +58,18 @@ class MatchHistory extends Component {
       imageP3: props.imageP3,
       imageP4: props.imageP4,
       matchTimer: props.recordTime && setInterval(this.updateTime, 10000),
-      startedAt: Date.now()
+      startedAt: props.startedAt
     }
   }
 
-  componentDidMount() {
-
-  }
+  componentDidMount() {}
 
   componentWillUnmount() {
     clearInterval(this.state.matchTimer);
   }
 
   updateTime = () => {
-    this.props.setMatch({
-      ...this.props.match,
-      minutesElapsed: parseInt((Date.now() - this.state.startedAt) / 60000)
-    });
+    this.props.setElapsedTime(parseInt((Date.now() - this.state.startedAt) / 60000));
   }
 
   async componentWillReceiveProps(nextProps) {
@@ -123,7 +122,7 @@ class MatchHistory extends Component {
           className='timerContainer'>
           <span className="verticalHelper"></span>
           <span className='timer'>
-            {this.props.match.minutesElapsed}&rsquo;
+            {this.props.minutesElapsed}&rsquo;
           </span>
         </Col>
 
