@@ -250,7 +250,7 @@ class Profile extends Component {
       }
     });
 
-    if (!this.state.joinModal.inputTeamTag)
+    if (this.state.joinModal.inputTeamTag.length !== 6)
       return;
 
     // Search team on input change
@@ -277,6 +277,7 @@ class Profile extends Component {
       });
       return;
     }
+
     try {
       const teamResponse = await axios.get('api/team/info/' + this.state.joinModal.inputTeamTag, {});
       this.setState({

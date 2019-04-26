@@ -120,7 +120,7 @@ class Player extends Component {
       (cmp(this.props.P3, this.state) || cmp(this.props.P4, this.state)) ?
       'orangeTeam ' :
       '';
-    console.log(this.props.highlight);
+
     return <div
       className={'playerContainer ' + (teamColor ? teamColor : (this.props.playerCursor ? 'highlight ' : ''))}
       onClick={this.onPlayerClick}>

@@ -56,6 +56,22 @@
 
 .buttonsContainer {
   margin-bottom: 20px;
+
+  .beginMatchButton {
+    opacity: 0 !important;
+
+    &.ready {
+      transition-property: opacity;
+      transition-duration: 0.1s;
+      opacity: 1 !important;
+    }
+
+    &:not(.ready) {
+      transition-property: opacity;
+      transition-duration: 0.1s;
+      opacity: 0 !important;
+    }
+  }
 }
 // .container {
 //   margin-top: 10px;

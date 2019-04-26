@@ -16,6 +16,7 @@ import {
   Checkbox
 } from 'rsuite';
 import { setMatch, setScore1, setScore2, setHistory, addGoalTeam1 } from './../../redux/actions/index.actions.js';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 const mapDispatchToProps = dispatch => {
   return ({
@@ -206,7 +207,9 @@ class Match extends Component {
 
     this.setState((state, props) => {
       return {
-        changingScore: state.changingScore + 1
+        changingScore: state.changingScore + 1,
+        isGoalValid: ((state.P1.isSelected || state.P2.isSelected || state.P3.isSelected || state.P4.isSelected) &&
+          (state.changingScore + 1) !== 0)
       }
     });
   }
@@ -216,7 +219,9 @@ class Match extends Component {
 
     this.setState((state, props) => {
       return {
-        changingScore: state.changingScore - 1
+        changingScore: state.changingScore - 1,
+        isGoalValid: ((state.P1.isSelected || state.P2.isSelected || state.P3.isSelected || state.P4.isSelected) &&
+          (state.changingScore - 1) !== 0)
       }
     });
   }
@@ -403,7 +408,8 @@ class Match extends Component {
       },
       placement: '',
       changingScore: 0,
-      betrayPoint: false
+      betrayPoint: false,
+      isGoalValid: false
     });
   }
 
@@ -421,7 +427,7 @@ class Match extends Component {
         <Col
           xs={22}
           xsOffset={1}
-          className='container'>
+          className='container goalSelectionContainer'>
 
           {/* Player and placement selection */}
           <Row>
@@ -533,13 +539,13 @@ class Match extends Component {
           {/* Adding/removing points */}
           <Row className='pointsSelector'>
             <Col xs={22} xsOffset={1}>
-              <h2 style={{margin: '0', textAlign: 'initial'}}>Points</h2>
+              <h2 style={{margin: '0', textAlign: 'initial'}}>Points marqués</h2>
             </Col>
 
             <Col
               xs={9}>
               <div
-                className={'removeButton ' + (this.state.pointMissing ? 'error ' : '')}
+                className={'removePointButton ' + (this.state.pointMissing ? 'error ' : '')}
                 onClick={this.removePoint}>
                 <span className="verticalHelper"></span>
                 <img
@@ -558,7 +564,7 @@ class Match extends Component {
             <Col
               xs={9}>
               <div
-                className={'addButton ' + (this.state.pointMissing ? 'error ' : '')}
+                className={'addPointButton ' + (this.state.pointMissing ? 'error ' : '')}
                 onClick={this.addPoint}>
                 <span className="verticalHelper"></span>
                 <img
@@ -588,17 +594,26 @@ class Match extends Component {
           </Row>
 
           {/* Add score button */}
-          <Row className='addButtonContainer'>
-            <Col xs={22} xsOffset={1}>
-              <Button
-                className='roundButton blue addButton'
-                block
-                size='lg'
-                onClick={this.onAddButtonTouch}>
-                Ajouter
-              </Button>
-            </Col>
-          </Row>
+          <TransitionGroup component={null}>
+            {
+              this.state.isGoalValid &&
+              <CSSTransition
+                        timeout={300}
+                        classNames="addGoalButtonAnim">
+                <Row className='addButtonContainer'>
+                  <Col xs={22} xsOffset={1}>
+                    <Button
+                      className='roundButton blue addGoalButton'
+                      block
+                      size='lg'
+                      onClick={this.onAddButtonTouch}>
+                      Ajouter
+                    </Button>
+                  </Col>
+                </Row>
+              </CSSTransition>
+            }
+          </TransitionGroup>
 
         </Col>
       </Row>

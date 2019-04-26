@@ -292,7 +292,7 @@ class Lobby extends Component {
                           <Button
                             block
                             size='lg'
-                            className='roundButton green'
+                            className={'roundButton green beginMatchButton ' + (isMatchReady ? 'ready ' : '')}
                             disabled={!isMatchReady}
                             onClick={this.beginMatch}>
                             Commencer ⚽️

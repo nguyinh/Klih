@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import './MatchHistory.scss';
 import swordImage from '../../sword.png';
 import shieldImage from '../../shield.png';
@@ -41,8 +41,6 @@ const mapStateToProps = state => {
 };
 
 const cmp = (o1, o2) => JSON.stringify(o1) === JSON.stringify(o2);
-
-// const [showMessage, setShowMessage] = useState(false);
 
 class MatchHistory extends Component {
   constructor(props) {
