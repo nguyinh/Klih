@@ -31,6 +31,9 @@ module.exports = (() => {
             });
           } while (tag === '');
 
+          console.log(player);
+          console.log(decoded);
+
           const team = new Team({
             _id: new mongoose.Types.ObjectId(),
             name: req.body.name,

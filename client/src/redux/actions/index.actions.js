@@ -4,6 +4,8 @@ export const setUserAuth = content => ({type: action.SET_USER_AUTH, payload: con
 
 export const setNavigationState = content => ({type: action.SET_NAVIGATION_STATE, payload: content});
 
+export const setUser = content => ({type: action.SET_USER, payload: content});
+
 export const setAvatar = content => ({type: action.SET_AVATAR, payload: content});
 
 export const setPlayerCursor = content => ({type: action.SET_PLAYER_CURSOR, payload: content});
@@ -29,3 +31,5 @@ export const addToMatch = content => ({type: action.ADD_TO_MATCH, payload: conte
 export const setElapsedTime = content => ({type: action.SET_ELAPSED_TIME, payload: content});
 
 export const setStartTimestamp = content => ({type: action.SET_START_TIMESTAMP, payload: content});
+
+export const resetUserSession = () => ({type: action.RESET_USER_SESSION});

@@ -5,6 +5,7 @@ const initialState = {
   isConnected: undefined,
   actualPage: '',
   avatar: undefined,
+  currentUser: {},
   isStarted: false,
   playerCursor: undefined,
   P1: {
@@ -47,6 +48,39 @@ function rootReducer(state = initialState, action) {
   switch (action.type) {
     case act.SET_USER_AUTH:
       return Object.assign({}, state, {isConnected: action.payload});
+    case act.SET_USER:
+      return Object.assign({}, state, {currentUser: action.payload});
+    case act.RESET_USER_SESSION:
+      return Object.assign({}, state, {
+        isConnected: false,
+        currentUser: {},
+        avatar: undefined,
+        P1: {
+          name: '',
+          image: plusImage,
+          score: undefined
+        },
+        P2: {
+          name: '',
+          image: plusImage,
+          score: undefined
+        },
+        P3: {
+          name: '',
+          image: plusImage,
+          score: undefined
+        },
+        P4: {
+          name: '',
+          image: plusImage,
+          score: undefined
+        },
+        score1: 0,
+        score2: 0,
+        history: [],
+        minutesElapsed: 0,
+        startTimestamp: ''
+      });
     case act.SET_NAVIGATION_STATE:
       return Object.assign({}, state, {actualPage: action.payload});
     case act.SET_AVATAR:

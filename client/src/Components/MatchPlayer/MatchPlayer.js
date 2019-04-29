@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './MatchPlayer.scss';
 import { withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
+import swordImage from '../../sword.png';
+import shieldImage from '../../shield.png';
 import {
   setPlayerCursor,
   setP1,
@@ -50,12 +52,13 @@ class MatchPlayer extends Component {
       name: props.name,
       score: props.score,
       data: props.data,
-      image: props.image
+      image: props.image,
+      placement: props.placement || ''
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.data !== this.props.data)
+    if (nextProps.data !== this.props.data || nextProps.placement !== this.props.placement)
       this.setState({
         ...nextProps
       });
@@ -95,7 +98,9 @@ class MatchPlayer extends Component {
     }
   }
 
-  render() {
+  render() { { /* If player not added, don't render anything */ }
+    if (!this.state.name)
+      return null;
 
     const isSelected = false;
     const teamColor =
@@ -105,8 +110,6 @@ class MatchPlayer extends Component {
       'orangeTeam ' :
       '';
 
-    if (!this.state.name)
-      return null;
 
     return <div
       className={'matchPlayerContainer ' + teamColor}>
@@ -118,6 +121,24 @@ class MatchPlayer extends Component {
         }
         className='avatarImage'
         alt='Avatar'/>
+
+      {this.state.placement &&
+        <div className='placementBadgeContainer'>
+        {this.state.placement === 'Attack' ?
+
+            <img
+              src={swordImage}
+              className='swordBadge'
+              alt='atk'/> :
+            <img
+              src={shieldImage}
+              className='shieldBadge'
+              alt='atk'/>}
+
+          </div>
+
+      }
+
       <br/>
       <div className='playerName'>
         {this.state.name}

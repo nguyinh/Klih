@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
-const fs = require('fs')
+const fs = require('fs');
+const sharp = require('sharp');
+const axios = require('axios');
 
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
@@ -73,10 +75,11 @@ playerScheme.statics.upsertFbUser = function(accessToken, refreshToken, profile,
         data: fs.readFileSync('./image.png'),
         contentType: 'image/png'
       };
-
       let newUser = new that({
         _id: new mongoose.Types.ObjectId(),
-        fullName: profile.displayName,
+        firstName: profile.name.givenName,
+        lastName: profile.name.familyName,
+        fullName: profile.name.givenName + ' ' + profile.name.familyName,
         email: profile.emails[0].value,
         facebookProvider: {
           id: profile.id,
@@ -85,7 +88,7 @@ playerScheme.statics.upsertFbUser = function(accessToken, refreshToken, profile,
         createdAt: Date.now(),
         updatedAt: Date.now(),
         lastConnectionAt: Date.now(),
-        avatar: avatar
+        avatar: avatar // TODO: get Fb avatar
       });
 
       newUser.save(function(error, savedUser) {
@@ -104,33 +107,47 @@ playerScheme.statics.upsertGoogleUser = function(accessToken, refreshToken, prof
   var that = this;
   return this.findOne({
     'googleProvider.id': profile.id
-  }, function(err, user) {
+  }, async function(err, user) {
     // no user was found, lets create a new one
     if (!user) {
       let avatar = {
         data: fs.readFileSync('./image.png'),
         contentType: 'image/png'
       };
-      let newUser = new that({
-        _id: new mongoose.Types.ObjectId(),
-        fullName: profile.displayName,
-        email: profile.emails[0].value,
-        googleProvider: {
-          id: profile.id,
-          token: accessToken
-        },
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-        lastConnectionAt: Date.now(),
-        avatar: avatar
-      });
+      // console.log(profile._json.picture);
+      try {
+        // const imgRes = await axios.get(profile._json.picture, {});
+        // console.log(imgRes);
+        // const resizedImg = await sharp(profile._json.picture).resize(300, 300).toBuffer();
+        let newUser = new that({
+          _id: new mongoose.Types.ObjectId(),
+          firstName: profile.name.givenName,
+          lastName: profile.name.familyName,
+          fullName: profile.displayName,
+          email: profile.emails[0].value,
+          googleProvider: {
+            id: profile.id,
+            token: accessToken
+          },
+          createdAt: Date.now(),
+          updatedAt: Date.now(),
+          lastConnectionAt: Date.now(),
+          avatar: avatar
+          // avatar: {
+          //   data: Buffer.from(resizedImg.toString('base64'), 'base64'),
+          //   contentType: 'image/png'
+          // }
+        });
 
-      newUser.save(function(error, savedUser) {
-        if (error) {
-          console.log(error);
-        }
-        return cb(error, savedUser);
-      });
+        newUser.save(function(error, savedUser) {
+          if (error) {
+            console.log(error);
+          }
+          return cb(error, savedUser);
+        });
+      } catch (err) {
+        console.log(err);
+      }
     } else {
       return cb(err, user);
     }

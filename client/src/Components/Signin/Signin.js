@@ -9,19 +9,29 @@ import {
   FormGroup,
   FormControl,
 } from 'rsuite';
-import { setUserAuth } from '../../redux/actions/index.actions.js';
+import { setUserAuth, setUser } from '../../redux/actions/index.actions.js';
 import str from '../../constants/labels.constants.js'
 
 const mapDispatchToProps = dispatch => {
   return ({
     setUserAuth: (value) => {
       dispatch(setUserAuth(value))
+    },
+    setUser: (value) => {
+      dispatch(setUser(value))
     }
   })
 }
 
 const mapStateToProps = state => {
   return { isConnected: state.isConnected };
+};
+
+const arrayBufferToBase64 = (buffer) => {
+  let binary = '';
+  let bytes = [].slice.call(new Uint8Array(buffer));
+  bytes.forEach((b) => binary += String.fromCharCode(b));
+  return window.btoa(binary);
 };
 
 class Signin extends Component {
@@ -80,18 +90,26 @@ class Signin extends Component {
 
     this.setState({ buttonDisabled: true });
 
-    axios.post('api/signin', {
-      email: email,
-      password: password
-    }).then((res) => {
-      if (res.status === 200) {
+    try {
+      const signRes = await axios.post('api/signin', {
+        email: email,
+        password: password
+      });
+
+      if (signRes.status === 200) {
+        const base64Flag = 'data:image/jpeg;base64,';
+        const imageStr = arrayBufferToBase64(signRes.data.avatar.data.data);
+        this.props.setUser({
+          fullName: signRes.data.fullName,
+          avatar: base64Flag + imageStr,
+          email: signRes.data.email,
+          _id: signRes.data._id,
+        });
         this.props.setUserAuth(true);
-        // this.props.setToken(res.data.token);
       }
       this.setState({ buttonDisabled: false });
-    }).catch((err) => {
-      console.log(err.response);
-      // this.props.setToken('');
+    } catch (err) {
+      console.log(err);
       this.setState({
         errorMessage: str[err.response.data.error] || str.INTERNAL_SERVER_ERROR,
         usernameState: 'error',
@@ -99,7 +117,7 @@ class Signin extends Component {
         buttonDisabled: false
       });
       this.props.setUserAuth(false);
-    });
+    }
   }
 
   render() {
@@ -134,7 +152,7 @@ class Signin extends Component {
           size="lg"
           onClick={this.signInButton}
           disabled={this.state.buttonDisabled}
-          color='green'>
+          className='roundButton green'>
           {str.SIGNIN}
         </Button>
       </FormGroup>

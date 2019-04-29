@@ -13,13 +13,16 @@ import Signup from '../Signup/Signup';
 import FacebookLogin from 'react-facebook-login';
 import { GoogleLogin } from 'react-google-login';
 import config from '../../config/oauth.config.js'
-import { setUserAuth } from '../../redux/actions/index.actions.js'
+import { setUserAuth, setUser } from '../../redux/actions/index.actions.js'
 import str from '../../constants/labels.constants.js'
 
 const mapDispatchToProps = dispatch => {
   return ({
     setUserAuth: (value) => {
       dispatch(setUserAuth(value))
+    },
+    setUser: (value) => {
+      dispatch(setUser(value))
     }
   })
 }
@@ -66,6 +69,12 @@ class Auth extends Component {
     fetch('/api/auth/facebook', options).then(res => {
       const token = res.headers.get('x-auth-token');
       res.json().then(user => {
+        this.props.setUser({
+          fullName: user.fullName,
+          // avatar: base64Flag + imageStr,
+          email: user.email,
+          _id: user._id,
+        });
         if (token) {
           this.setState({ isAuthenticated: true, user, token })
           this.props.setUserAuth(true);
@@ -88,7 +97,16 @@ class Auth extends Component {
     fetch('/api/auth/google', options).then(res => {
       const token = res.headers.get('x-auth-token');
       res.json().then(user => {
+        console.log(user);
+        console.log(token);
+        console.log(res.body);
         if (token) {
+          this.props.setUser({
+            fullName: user.fullName,
+            // avatar: base64Flag + imageStr,
+            email: user.email,
+            _id: user._id,
+          });
           this.setState({ isAuthenticated: true, user, token })
           this.props.setUserAuth(true);
         }

@@ -314,7 +314,6 @@ class Lobby extends Component {
 
               </Grid>
           </Col>
-          <Link to='/match/test'>hey</Link>
         </Row>
       </Grid>
 

@@ -10,7 +10,7 @@ import {
 } from 'rsuite';
 import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
-import { setNavigationState, setUserAuth, setAvatar } from './../../redux/actions/index.actions.js'
+import { setNavigationState, setUserAuth, setAvatar, setUser } from './../../redux/actions/index.actions.js'
 import axios from 'axios';
 require('dotenv').config()
 
@@ -24,12 +24,19 @@ const mapDispatchToProps = dispatch => {
     },
     setAvatar: (value) => {
       dispatch(setAvatar(value))
+    },
+    setUser: (value) => {
+      dispatch(setUser(value))
     }
   })
 }
 
 const mapStateToProps = state => {
-  return { actualPage: state.actualPage, avatar: state.avatar };
+  return {
+    actualPage: state.actualPage,
+    avatar: state.avatar,
+    currentUser: state.currentUser
+  };
 };
 
 class Navigation extends Component {
@@ -37,7 +44,6 @@ class Navigation extends Component {
     super(props);
     this.state = {
       isStarting: true,
-      retryCount: 0,
       expanded: undefined,
       image: null,
       playerName: ''
@@ -68,20 +74,21 @@ class Navigation extends Component {
   async tryConnect() {
     axios.defaults.withCredentials = true;
     try {
-      const res = await axios.post('/api/connect', {})
-
+      const authResponse = await axios.post('/api/connect', {})
       this.props.setUserAuth(true);
-      this.setState({
-        playerName: res.data.fullName
+      const base64Flag = 'data:image/jpeg;base64,';
+      const imageStr = this.arrayBufferToBase64(authResponse.data.avatar.data.data);
+      this.props.setUser({
+        fullName: authResponse.data.fullName,
+        avatar: base64Flag + imageStr,
+        email: authResponse.data.email,
+        _id: authResponse.data._id,
       });
-
-      const avatarResponse = await axios.get('/api/profile/avatar', {});
-      var base64Flag = 'data:image/jpeg;base64,';
-      var imageStr = this.arrayBufferToBase64(avatarResponse.data.avatar.data.data);
       this.setState({
+        playerName: authResponse.data.fullName,
         image: base64Flag + imageStr
       });
-      this.props.setAvatar(base64Flag + imageStr);
+      // this.props.setAvatar(base64Flag + imageStr);
 
 
     } catch (err) {
@@ -91,7 +98,7 @@ class Navigation extends Component {
       this.setState({
         playerName: ''
       });
-      if (err.response.status === 500) {
+      if (err.response.status === 500 && process.env.NODE_ENV === 'development') {
         this.tryConnect();
       }
     }
@@ -144,11 +151,15 @@ class Navigation extends Component {
         <Col xs={16}>
           <div className='playerInfo'>
             <span>
-              {this.state.playerName ? this.state.playerName : 'Se connecter'}
+              {
+                this.props.currentUser.fullName ?
+                  this.props.currentUser.fullName :
+                  'Se connecter'
+              }
             </span>
-            { this.props.avatar ?
+            { this.props.currentUser.avatar ?
               <img
-                src={this.props.avatar}
+                src={this.props.currentUser.avatar}
                 className='avatarImage' /> :
               <img
                 src={require('./../../profile.png')}

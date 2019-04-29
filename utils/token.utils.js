@@ -3,9 +3,11 @@ const express = require('express');
 require("dotenv").config()
 
 const createToken = (auth, user) => {
+  console.log(user);
   return jwt.sign({
     email: user.email,
-    id: auth.id
+    _id: auth.id,
+    fullName: user.fullName
   }, process.env.JWT_SECRET, {expiresIn: '10d'});
 };
 
@@ -20,7 +22,7 @@ module.exports = {
   },
   sendToken: (req, res) => {
     res.setHeader('x-auth-token', req.token);
-
+    console.log({email: req.user.email, fullName: req.user.fullName, _id: req.user._id});
     return res.status(200).send({email: req.user.email, fullName: req.user.fullName, _id: req.user._id});
   }
 };

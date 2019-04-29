@@ -18,6 +18,8 @@ module.exports = (() => {
           if (user) { // User exists
             return res.status(200).json({
               email: decoded.email,
+              avatar: user.avatar,
+              _id: user._id,
               fullName: (
                 user.fullName
                 ? user.fullName
@@ -77,7 +79,14 @@ module.exports = (() => {
                 httpOnly: true
               })
 
-              return res.status(201).json({success: 'New user has been created', token: JWTToken})
+              return res.status(201).json({
+                email: user.email,
+                fullName: (
+                  user.fullName
+                  ? user.fullName
+                  : user.firstName + ' ' + user.lastName),
+                _id: user._id
+              })
             }).catch((error) => {
               console.log(error)
               return res.status(500).json({error: 'INTERNAL_SERVER_ERROR'})
@@ -108,7 +117,15 @@ module.exports = (() => {
               expiresIn: 90000,
               httpOnly: true
             })
-            return res.status(200).json({message: 'Login successful', token: JWTToken})
+            return res.status(200).json({
+              email: user.email,
+              avatar: user.avatar,
+              fullName: (
+                user.fullName
+                ? user.fullName
+                : user.firstName + ' ' + user.lastName),
+              _id: user._id
+            })
           }
           return res.status(401).json({error: 'WRONG_PASSWORD'});
         });

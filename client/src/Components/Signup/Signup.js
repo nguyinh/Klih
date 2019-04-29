@@ -9,13 +9,16 @@ import {
   FormGroup,
   FormControl,
 } from 'rsuite';
-import { setUserAuth } from '../../redux/actions/index.actions.js';
+import { setUserAuth, setUser } from '../../redux/actions/index.actions.js';
 import str from '../../constants/labels.constants.js'
 
 const mapDispatchToProps = dispatch => {
   return ({
     setUserAuth: (value) => {
       dispatch(setUserAuth(value))
+    },
+    setUser: (value) => {
+      dispatch(setUser(value))
     }
   })
 }
@@ -65,10 +68,6 @@ class Signup extends Component {
   async signUpButton() {
     // TODO: Setup inputs security
     const { lastName, firstName, email, password } = this.state.inputs;
-    console.log(lastName);
-    console.log(firstName);
-    console.log(email);
-    console.log(password);
 
     await this.setState((state) => {
       return {
@@ -133,18 +132,26 @@ class Signup extends Component {
 
     this.setState({ buttonDisabled: true });
 
-    axios.post('api/signup', {
-      firstName: this.state.inputs.firstName,
-      lastName: this.state.inputs.lastName,
-      email: this.state.inputs.email,
-      password: this.state.inputs.password
-    }).then((res) => {
-      if (res.status === 201) {
+    try {
+      const signRes = await axios.post('api/signup', {
+        firstName: this.state.inputs.firstName,
+        lastName: this.state.inputs.lastName,
+        email: this.state.inputs.email,
+        password: this.state.inputs.password
+      })
+
+      if (signRes.status === 201) {
+        this.props.setUser({
+          fullName: signRes.data.fullName,
+          email: signRes.data.email,
+          _id: signRes.data._id,
+        });
         this.props.setUserAuth(true);
         // this.props.setToken(res.data.token);
       }
       this.setState({ buttonDisabled: false });
-    }).catch((err) => {
+
+    } catch (err) {
       console.log(err);
       // TODO: Highligh errors
       // this.props.setToken('');
@@ -153,7 +160,7 @@ class Signup extends Component {
         buttonDisabled: false
       });
       this.props.setUserAuth(false);
-    });
+    }
   }
 
   render() {
@@ -202,7 +209,7 @@ class Signup extends Component {
           size="lg"
           onClick={this.signUpButton}
           disabled={this.state.buttonDisabled}
-          color='green'>
+          className='roundButton green'>
           {str.CREATE_ACCOUNT}
         </Button>
       </FormGroup>

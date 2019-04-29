@@ -15,7 +15,7 @@ import {
   Modal
 } from 'rsuite';
 
-import { setUserAuth, setAvatar } from '../../redux/actions/index.actions.js';
+import { setUserAuth, setAvatar, resetUserSession } from '../../redux/actions/index.actions.js';
 import axios from 'axios';
 import str from '../../constants/labels.constants.js'
 
@@ -26,12 +26,18 @@ const mapDispatchToProps = dispatch => {
     },
     setAvatar: (value) => {
       dispatch(setAvatar(value))
+    },
+    resetUserSession: (value) => {
+      dispatch(resetUserSession(value))
     }
   })
 }
 
 const mapStateToProps = state => {
-  return { isConnected: state.isConnected, avatar: state.avatar };
+  return {
+    isConnected: state.isConnected,
+    currentUser: state.currentUser
+  };
 };
 
 class Profile extends Component {
@@ -70,6 +76,7 @@ class Profile extends Component {
     axios.post('/api/logout', { credentials: 'include' }).then((res) => {
       if (res.status === 202) {
         this.props.setUserAuth(false);
+        this.props.resetUserSession(false);
       }
     }).catch((err) => {
       console.error(err);
@@ -79,7 +86,6 @@ class Profile extends Component {
 
   fetchUserTeams = async () => {
     const fetchResponse = await axios.get('/api/teams', {});
-    console.log(fetchResponse);
     this.setState({ teams: fetchResponse.data.teams });
   }
 
@@ -371,9 +377,9 @@ class Profile extends Component {
 
                   <Row>
                     <Col xs={6} onClick={() => {this.uploaderRef.current.click()}}>
-                      { this.props.avatar ?
+                      { this.props.currentUser.avatar ?
                         <img
-                          src={this.props.avatar}
+                          src={this.props.currentUser.avatar}
                           className='profileAvatarImage' /> :
                         <img
                           src={require('./../../profile.png')}

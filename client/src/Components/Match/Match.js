@@ -473,7 +473,8 @@ class Match extends Component {
                         onClick={this.onP1Touch}>
                         <MatchPlayer
                           name={this.state.P1.name}
-                          image={this.state.P1.image}/>
+                          image={this.state.P1.image}
+                          placement={this.state.P1.placement}/>
                       </Col>
                     }
 
@@ -487,7 +488,8 @@ class Match extends Component {
                         onClick={this.onP2Touch}>
                         <MatchPlayer
                           name={this.state.P2.name}
-                          image={this.state.P2.image}/>
+                          image={this.state.P2.image}
+                          placement={this.state.P2.placement}/>
                       </Col>
                     }
                   </Row>
@@ -529,7 +531,8 @@ class Match extends Component {
                         onClick={this.onP3Touch}>
                         <MatchPlayer
                           name={this.state.P3.name}
-                          image={this.state.P3.image}/>
+                          image={this.state.P3.image}
+                          placement={this.state.P3.placement}/>
                       </Col>
                     }
 
@@ -543,7 +546,8 @@ class Match extends Component {
                         onClick={this.onP4Touch}>
                         <MatchPlayer
                           name={this.state.P4.name}
-                          image={this.state.P4.image}/>
+                          image={this.state.P4.image}
+                          placement={this.state.P4.placement}/>
                       </Col>
                     }
                   </Row>

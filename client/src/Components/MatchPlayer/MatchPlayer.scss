@@ -22,4 +22,31 @@
     font-weight: 300;
     font-family: sans-serif;
   }
+
+  .placementBadgeContainer {
+    // background-color: red;
+    position: absolute;
+    top: 0;
+    right: 0;
+    // border-radius: 20px;
+
+    .swordBadge {
+      height: 20px;
+      width: 20px;
+      background: #69b3f1;
+      border-radius: 20px;
+      margin-right: 8px;
+      margin-top: 10px;
+    }
+
+    .shieldBadge {
+      height: 20px;
+      width: 20px;
+      background: #de6b63;
+      border-radius: 20px;
+      margin-right: 8px;
+      margin-top: 10px;
+      padding: 1px 2px;
+    }
+  }
 }

@@ -4,7 +4,6 @@ import swordImage from '../../sword.png';
 import shieldImage from '../../shield.png';
 import plusImage from '../../plus-sign.png';
 import minusImage from '../../minus-sign.png';
-import MatchPlayer from '../MatchPlayer/MatchPlayer';
 import { withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
 import { setMatch, setElapsedTime } from './../../redux/actions/index.actions.js';
