@@ -54,11 +54,20 @@ function rootReducer(state = initialState, action) {
     case act.SET_PLAYER_CURSOR:
       return Object.assign({}, state, {playerCursor: action.payload});
     case act.SET_P1:
-      return Object.assign({}, state, {P1: action.payload});
+      return Object.assign({}, state, {
+        P1: action.payload,
+        playerCursor: 'P2'
+      });
     case act.SET_P2:
-      return Object.assign({}, state, {P2: action.payload});
+      return Object.assign({}, state, {
+        P2: action.payload,
+        playerCursor: 'P3'
+      });
     case act.SET_P3:
-      return Object.assign({}, state, {P3: action.payload});
+      return Object.assign({}, state, {
+        P3: action.payload,
+        playerCursor: 'P4'
+      });
     case act.SET_P4:
       return Object.assign({}, state, {P4: action.payload});
     case act.SET_MATCH:
