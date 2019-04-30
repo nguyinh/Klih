@@ -38,6 +38,8 @@ ReactDOM.render(<Provider store={store}>
 
       <Route path="/profile" component={Profile}/>
 
+      <Route path="/join/:teamTag?" component={Profile}/>
+
     </div>
   </Router>
 </Provider>, document.getElementById('root')); // ReactDOM.render(<App/>, document.getElementById('root'));

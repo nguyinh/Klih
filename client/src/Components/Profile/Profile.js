@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './Profile.scss';
 import Auth from '../Auth/Auth';
 import Team from '../Team/Team';
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
 import {
   Button,
@@ -14,10 +14,10 @@ import {
   Input,
   Modal
 } from 'rsuite';
-
 import { setUserAuth, setAvatar, resetUserSession } from '../../redux/actions/index.actions.js';
 import axios from 'axios';
-import str from '../../constants/labels.constants.js'
+import str from '../../constants/labels.constants.js';
+import QRCode from 'qrcode.react';
 
 const mapDispatchToProps = dispatch => {
   return ({
@@ -40,6 +40,14 @@ const mapStateToProps = state => {
   };
 };
 
+function isEmpty(obj) {
+  for (var key in obj) {
+    if (obj.hasOwnProperty(key))
+      return false;
+  }
+  return true;
+}
+
 class Profile extends Component {
   constructor(props) {
     super(props);
@@ -49,6 +57,7 @@ class Profile extends Component {
       teams: [],
       joinModal: {
         display: false,
+        isJoinInvitation: false,
         inputTeamTag: '',
         searchedTeam: {},
         message: '',
@@ -61,7 +70,8 @@ class Profile extends Component {
         descriptionInput: '',
         errorMessage: '',
         loading: false
-      }
+      },
+      isJoining: ''
     }
     this.uploaderRef = React.createRef();
 
@@ -70,6 +80,33 @@ class Profile extends Component {
 
   componentDidMount() {
     this.fetchUserTeams();
+
+    // Save TeamTag from /join/:teamTag
+    if (this.props.location.state) {
+      this.setState({ isJoining: this.props.location.state.teamTag });
+    }
+  }
+
+  async componentWillReceiveProps(nextProps) {
+    if (nextProps.currentUser !== this.props.currentUser) {
+      this.fetchUserTeams();
+
+      if (nextProps.currentUser && this.state.isJoining) {
+        await this.setState({
+          joinModal: {
+            ...this.state.joinModal,
+            display: true,
+            isJoinInvitation: true,
+            inputTeamTag: this.state.isJoining,
+            errorMessage: '',
+            searchedTeam: {},
+            message: ''
+          }
+        });
+
+        this.searchTeamByTagButton();
+      }
+    }
   }
 
   logout() {
@@ -227,7 +264,8 @@ class Profile extends Component {
     this.setState({
       joinModal: {
         ...this.state.joinModal,
-        display: true
+        display: true,
+        isJoinInvitation: false
       }
     })
   }
@@ -241,7 +279,8 @@ class Profile extends Component {
         inputTeamTag: '',
         message: '',
         errorMessage: ''
-      }
+      },
+      isJoining: ''
     })
   }
 
@@ -351,6 +390,14 @@ class Profile extends Component {
 
 
   render() {
+    // If path is /join, redirect to Profile with extra parameter
+    if (this.props.match.path === '/join/:teamTag?') {
+      return <Redirect push to={{
+        pathname: "/profile",
+        state: { teamTag: this.props.match.params.teamTag }
+      }}/>;
+    }
+
     Object.size = (obj) => {
       let size = 0,
         key;
@@ -443,7 +490,8 @@ class Profile extends Component {
                     {this.state.teams.map((team) => {
                       return <Team
                         name={team.name}
-                        tag={team.teamTag}/>;
+                        tag={team.teamTag}
+                        key={team.name + '-' + team.teamTag}/>;
                     })}
                   </Row>
 
@@ -456,6 +504,20 @@ class Profile extends Component {
                         block
                         className='roundButton red'>{str.LOGOUT}</Button>
                     </Col>
+
+
+                    {/*<QRCode
+                      value={"test"}
+                      size={128}
+                      bgColor={"#ffffff"}
+                      fgColor={"#000000"}
+                      level={"L"}
+                      includeMargin={false}
+                      renderAs={"svg"}
+                      className='test'
+                      viewBox="0 0 100 100"
+                    />*/}
+
                   </Row>
 
 
@@ -495,36 +557,44 @@ class Profile extends Component {
           </Modal>
 
           <Modal
-                              show={this.state.joinModal.display}
-                              onHide={this.closeJoinTeamModal}
-                              size='xs'>
-                              <Modal.Header>
-                                <Modal.Title>Rejoindre une équipe</Modal.Title>
-                              </Modal.Header>
-                              <Modal.Body>
-                                <InputGroup className='joinInput'>
-                                  <Input
-                                    onChange={this.joinHandleChange}
-                                    placeholder='Team Tag'
-                                    size="lg"/>
-                                  <InputGroup.Button onClick={this.searchTeamByTagButton}>
-                                    <Icon icon="search" />
-                                  </InputGroup.Button>
-                                </InputGroup>
+            show={this.state.joinModal.display}
+            onHide={this.closeJoinTeamModal}
+            size='xs'>
+            <Modal.Header>
+              <Modal.Title>{
+                  this.state.joinModal.isJoinInvitation ?
+                    'Vous êtes invité à rejoindre' :
+                    'Rejoindre une équipe'
+                }</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {!this.state.joinModal.isJoinInvitation &&
+                <InputGroup className='joinInput'>
+                  <Input
+                    onChange={this.joinHandleChange}
+                    placeholder='Team Tag'
+                    size="lg"/>
+                  <InputGroup.Button onClick={this.searchTeamByTagButton}>
+                    <Icon icon="search" />
+                  </InputGroup.Button>
+                </InputGroup>
+              }
 
-                                <span className='errorMessage'>{this.state.joinModal.errorMessage}</span>
-                                <span className='joinMessage'>{this.state.joinModal.message}</span>
+              <span className='errorMessage'>{this.state.joinModal.errorMessage}</span>
+              <span className='joinMessage'>{this.state.joinModal.message}</span>
 
-                                {Object.size(this.state.joinModal.searchedTeam) !== 0 &&
-                                  <><h3 className='searchedTeamTitle'>{this.state.joinModal.searchedTeam.name}</h3>
-                                  <Button
-                                    block
-                                    onClick={this.joinTeamButton}
-                                    disabled={this.state.joinModal.loading}
-                                    loading={this.state.joinModal.loading}
-                                    className='roundButton blue'>Rejoindre</Button></>}
-                              </Modal.Body>
-                            </Modal>
+              {Object.size(this.state.joinModal.searchedTeam) !== 0 &&
+                <><h3 className='searchedTeamTitle'>{this.state.joinModal.searchedTeam.name}</h3>
+                <Button
+                  block
+                  onClick={this.joinTeamButton}
+                  disabled={this.state.joinModal.loading}
+                  loading={this.state.joinModal.loading}
+                  className='roundButton blue'>Rejoindre</Button></>}
+            </Modal.Body>
+          </Modal>
+
+
         </Grid> :
         <Auth/>
     }

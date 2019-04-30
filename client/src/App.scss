@@ -27,11 +27,15 @@ a {
 }
 
 .rs-modal-content {
-  background: linear-gradient(45deg, #ECE9E6, #FFFFFF);
+  background: linear-gradient(45deg, #ece9e6, #ffffff);
 }
 
 .rs-modal-body {
   padding-bottom: 0 !important;
+}
+
+.rs-nav-waterline {
+  background: none !important;
 }
 
 .container {
@@ -62,50 +66,82 @@ button {
 
     &.green {
       background: #00b09b !important;
-      background: -webkit-linear-gradient(to right, #96c93d, #00b09b) !important;
+      background: -webkit-linear-gradient(
+        to right,
+        #96c93d,
+        #00b09b
+      ) !important;
       background: linear-gradient(to right, #96c93d, #00b09b) !important;
     }
 
     &.blue {
-      background: #36D1DC !important;
-      background: -webkit-linear-gradient(to right, #5b96e6, #36D1DC) !important;
-      background: linear-gradient(to right, #5b96e6, #36D1DC) !important;
+      background: #36d1dc !important;
+      background: -webkit-linear-gradient(
+        to right,
+        #5b96e6,
+        #36d1dc
+      ) !important;
+      background: linear-gradient(to right, #5b96e6, #36d1dc) !important;
     }
 
     &.lightblue {
-      background: #02AAB0 !important;
-      background: -webkit-linear-gradient(to right, #00CDAC, #02AAB0) !important;
-      background: linear-gradient(to right, #00CDAC, #02AAB0) !important;
+      background: #02aab0 !important;
+      background: -webkit-linear-gradient(
+        to right,
+        #00cdac,
+        #02aab0
+      ) !important;
+      background: linear-gradient(to right, #00cdac, #02aab0) !important;
     }
 
     &.darkblue {
-      background: #5C258D !important;
-      background: -webkit-linear-gradient(to right, #4389A2, #5C258D) !important;
-      background: linear-gradient(to right, #4389A2, #5C258D) !important;
+      background: #5c258d !important;
+      background: -webkit-linear-gradient(
+        to right,
+        #4389a2,
+        #5c258d
+      ) !important;
+      background: linear-gradient(to right, #4389a2, #5c258d) !important;
     }
 
     &.cyan {
-      background-color: #1CD8D2 !important;
-      background: -webkit-linear-gradient(to right, #93EDC7, #1CD8D2) !important;
-      background: linear-gradient(to right, #93EDC7, #1CD8D2) !important;
+      background-color: #1cd8d2 !important;
+      background: -webkit-linear-gradient(
+        to right,
+        #93edc7,
+        #1cd8d2
+      ) !important;
+      background: linear-gradient(to right, #93edc7, #1cd8d2) !important;
     }
 
     &.red {
-      background: #FF512F !important;
-      background: -webkit-linear-gradient(to right, #DD2476, #FF512F) !important;
-      background: linear-gradient(to right, #DD2476, #FF512F) !important;
+      background: #ff512f !important;
+      background: -webkit-linear-gradient(
+        to right,
+        #dd2476,
+        #ff512f
+      ) !important;
+      background: linear-gradient(to right, #dd2476, #ff512f) !important;
     }
 
     &.violet {
-      background: #4776E6 !important;
-      background: -webkit-linear-gradient(to right, #8E54E9, #4776E6) !important;
-      background: linear-gradient(to right, #8E54E9, #4776E6) !important;
+      background: #4776e6 !important;
+      background: -webkit-linear-gradient(
+        to right,
+        #8e54e9,
+        #4776e6
+      ) !important;
+      background: linear-gradient(to right, #8e54e9, #4776e6) !important;
     }
 
     &.orange {
-      background: #F09819 !important;
-      background: -webkit-linear-gradient(to right, #EDDE5D, #F09819) !important;
-      background: linear-gradient(to right, #EDDE5D, #F09819) !important;
+      background: #f09819 !important;
+      background: -webkit-linear-gradient(
+        to right,
+        #edde5d,
+        #f09819
+      ) !important;
+      background: linear-gradient(to right, #edde5d, #f09819) !important;
     }
 
     &:disabled {
