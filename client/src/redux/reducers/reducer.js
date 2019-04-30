@@ -84,7 +84,12 @@ function rootReducer(state = initialState, action) {
     case act.SET_NAVIGATION_STATE:
       return Object.assign({}, state, {actualPage: action.payload});
     case act.SET_AVATAR:
-      return Object.assign({}, state, {avatar: action.payload});
+      return Object.assign({}, state, {
+        currentUser: {
+          ...state.currentUser,
+          avatar: action.payload
+        }
+      });
     case act.SET_PLAYER_CURSOR:
       return Object.assign({}, state, {playerCursor: action.payload});
     case act.SET_P1:

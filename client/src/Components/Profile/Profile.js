@@ -152,14 +152,10 @@ class Profile extends Component {
       const avatarResponse = await axios.post('api/profile/avatar', formData, config);
       var base64Flag = 'data:image/jpeg;base64,';
       var imageStr = this.arrayBufferToBase64(avatarResponse.data.data.data);
-      this.setState({
-        image: base64Flag + imageStr
-      });
       this.props.setAvatar(base64Flag + imageStr);
     } catch (err) {
       console.log(err);
     }
-    // TODO: Save avatar to redux and display in Navigation + Profile
   }
 
 
