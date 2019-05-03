@@ -66,8 +66,7 @@ const playingMatchScheme = mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    required: true,
-    default: Date.now()
+    required: true
   },
   table: {
     type: ObjectId

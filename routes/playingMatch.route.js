@@ -70,6 +70,7 @@ module.exports = (() => {
           player4: mongoose.Types.ObjectId(req.body.player4),
           publisher: mongoose.Types.ObjectId(decoded._id),
           history: [],
+          createdAt: Date.now(),
           score1: 0,
           score2: 0
         });
