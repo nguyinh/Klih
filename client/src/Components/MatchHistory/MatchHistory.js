@@ -15,6 +15,7 @@ import {
   Checkbox
 } from 'rsuite';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import { socket } from './../../socket';
 
 const mapDispatchToProps = dispatch => {
   return ({
@@ -36,10 +37,11 @@ const mapStateToProps = state => {
     match: state.match,
     score1: state.score1,
     score2: state.score2,
-    history: state.history,
+    history: state.matchHistory,
     team1: state.team1,
     team2: state.team2,
-    minutesElapsed: state.minutesElapsed
+    minutesElapsed: state.minutesElapsed,
+    currentMatchId: state.currentMatchId
   };
 };
 
@@ -57,29 +59,55 @@ class MatchHistory extends Component {
       imageP3: props.imageP3,
       imageP4: props.imageP4,
       matchTimer: props.recordTime && setInterval(this.updateTime, 10000),
-      startedAt: props.startedAt
+      startedAt: props.startedAt,
+      createdAt: '',
+      minutesElapsed: 0
     }
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    socket.emit('joinMatch', this.props.currentMatchId);
+
+    socket.on('goalEvent', (data) => {
+      console.log(data);
+      this.setState({
+        // ...nextProps
+        score1: data.score1,
+        score2: data.score2,
+        history: data.history
+      });
+    });
+
+    socket.on('joinMatch', (data) => {
+      this.setState({
+        score1: data.score1,
+        score2: data.score2,
+        history: data.history,
+        createdAt: Date.parse(data.createdAt)
+      });
+
+      this.updateTime();
+    });
+  }
 
   componentWillUnmount() {
     clearInterval(this.state.matchTimer);
   }
 
   updateTime = () => {
-    this.props.setElapsedTime(parseInt((Date.now() - this.state.startedAt) / 60000));
+    this.setState({ minutesElapsed: parseInt((Date.now() - this.state.createdAt) / 60000) })
+    // this.props.setElapsedTime(parseInt((Date.now() - this.state.startedAt) / 60000));
   }
 
   async componentWillReceiveProps(nextProps) {
-    if (nextProps !== this.props) {
-      await this.setState({
-        // ...nextProps
-        score1: nextProps.score1,
-        score2: nextProps.score2,
-        history: nextProps.history
-      });
-    }
+    // if (nextProps !== this.props) {
+    //   await this.setState({
+    //     // ...nextProps
+    //     score1: nextProps.score1,
+    //     score2: nextProps.score2,
+    //     history: nextProps.history
+    //   });
+    // }
   }
 
   // ====== Player and Placement ======
@@ -121,7 +149,7 @@ class MatchHistory extends Component {
           className='timerContainer'>
           <span className="verticalHelper"></span>
           <span className='timer'>
-            {this.props.minutesElapsed}&rsquo;
+            {this.state.minutesElapsed}&rsquo;
           </span>
         </Col>
 
@@ -157,7 +185,7 @@ class MatchHistory extends Component {
           className='team1History'>
           <TransitionGroup component={null}>
             {
-              this.props.history.map((goal, i) => {
+              this.state.history.map((goal, i) => {
                 if (goal.team === 'Team2') {
                   return  <CSSTransition
                             timeout={300}
@@ -188,7 +216,7 @@ class MatchHistory extends Component {
           className='team2History'>
           <TransitionGroup component={null}>
             {
-              this.props.history.map((goal, i) => {
+              this.state.history.map((goal, i) => {
                 if (goal.team === 'Team1') {
                   return <CSSTransition
                             timeout={300}

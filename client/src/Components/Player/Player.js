@@ -51,7 +51,8 @@ class Player extends Component {
       name: props.name,
       score: props.score,
       data: props.data,
-      image: undefined
+      image: undefined,
+      _id: props._id
     }
   }
 

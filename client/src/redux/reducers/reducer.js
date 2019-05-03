@@ -11,22 +11,26 @@ const initialState = {
   P1: {
     name: '',
     image: plusImage,
-    score: undefined
+    score: undefined,
+    _id: undefined
   },
   P2: {
     name: '',
     image: plusImage,
-    score: undefined
+    score: undefined,
+    _id: undefined
   },
   P3: {
     name: '',
     image: plusImage,
-    score: undefined
+    score: undefined,
+    _id: undefined
   },
   P4: {
     name: '',
     image: plusImage,
-    score: undefined
+    score: undefined,
+    _id: undefined
   },
   // match: {
   //   score1: 0,
@@ -37,11 +41,12 @@ const initialState = {
   // },
   // team1: [],
   // team2: [],
-  score1: 0,
-  score2: 0,
-  history: [],
-  minutesElapsed: 0,
-  startTimestamp: ''
+  // score1: 0,
+  // score2: 0,
+  // matchHistory: [],
+  // minutesElapsed: 0,
+  // startTimestamp: '',
+  currentMatchId: ''
 }
 
 function rootReducer(state = initialState, action) {
@@ -55,6 +60,7 @@ function rootReducer(state = initialState, action) {
         isConnected: false,
         currentUser: {},
         avatar: undefined,
+        playerCursor: '',
         P1: {
           name: '',
           image: plusImage,
@@ -75,11 +81,12 @@ function rootReducer(state = initialState, action) {
           image: plusImage,
           score: undefined
         },
-        score1: 0,
-        score2: 0,
-        history: [],
-        minutesElapsed: 0,
-        startTimestamp: ''
+        // score1: 0,
+        // score2: 0,
+        // matchHistory: [],
+        // minutesElapsed: 0,
+        // startTimestamp: '',
+        currentMatchId: ''
       });
     case act.SET_NAVIGATION_STATE:
       return Object.assign({}, state, {actualPage: action.payload});
@@ -116,11 +123,13 @@ function rootReducer(state = initialState, action) {
     case act.SET_SCORE2:
       return Object.assign({}, state, {score2: action.payload});
     case act.SET_HISTORY:
-      return Object.assign({}, state, {history: action.payload});
+      return Object.assign({}, state, {matchHistory: action.payload});
     case act.SET_ELAPSED_TIME:
       return Object.assign({}, state, {minutesElapsed: action.payload});
     case act.SET_START_TIMESTAMP:
       return Object.assign({}, state, {startTimestamp: action.payload});
+    case act.SET_MATCH_ID:
+      return Object.assign({}, state, {currentMatchId: action.payload});
       // case act.ADD_TO_MATCH:
       //   return Object.assign({}, state, {
       //     ...state,

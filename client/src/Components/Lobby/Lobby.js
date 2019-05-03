@@ -9,7 +9,8 @@ import {
   setP1,
   setP2,
   setP3,
-  setP4
+  setP4,
+  setCurrentMatchId
 } from '../../redux/actions/index.actions.js'
 import axios from 'axios';
 import plusImage from './../../plus.png';
@@ -22,6 +23,7 @@ import {
   InputGroup,
   Icon
 } from 'rsuite';
+
 
 const mapDispatchToProps = dispatch => {
   return ({
@@ -39,6 +41,9 @@ const mapDispatchToProps = dispatch => {
     },
     setP4: (value) => {
       dispatch(setP4(value))
+    },
+    setCurrentMatchId: (value) => {
+      dispatch(setCurrentMatchId(value))
     }
   })
 }
@@ -50,7 +55,9 @@ const mapStateToProps = state => {
     P1: state.P1,
     P2: state.P2,
     P3: state.P3,
-    P4: state.P4
+    P4: state.P4,
+    currentUser: state.currentUser,
+    currentMatchId: state.currentMatchId
   };
 };
 
@@ -62,6 +69,22 @@ const noPlayer = {
 
 const cmp = (o1, o2) => JSON.stringify(o1) === JSON.stringify(o2);
 
+function isEmpty(obj) {
+  for (var key in obj) {
+    if (obj.hasOwnProperty(key))
+      return false;
+  }
+  return true;
+};
+
+const arrayBufferToBase64 = (buffer) => {
+  let binary = '';
+  let bytes = [].slice.call(new Uint8Array(buffer));
+  bytes.forEach((b) => binary += String.fromCharCode(b));
+  return window.btoa(binary);
+};
+
+
 class Lobby extends Component {
   constructor(props) {
     super(props);
@@ -70,13 +93,99 @@ class Lobby extends Component {
       playersData: undefined,
       selectedPlayer: '',
       isMatchReady: false,
-      beginMatch: false
+      beginMatch: false,
+      matchId: ''
     }
   }
 
   async componentDidMount() {
-    const players = await axios('/api/team/getAllPlayers', {});
-    this.setState({ playersData: players.data });
+    // const socket = io('http://localhost:8117/match');
+
+    try {
+      const response = await axios.get('/api/playingMatch', {});
+      // if response, load state
+      // const playersTofetch = [response.data.player1, response.data.player2, response.data.player3, response.data.player4];
+      if (response.data.player1) {
+        const resP1 = await axios.get('/api/players/' + response.data.player1, {});
+        this.props.setP1({
+          name: resP1.data.firstName + ' ' + resP1.data.lastName,
+          score: resP1.data.score,
+          data: resP1.data,
+          image: 'data:image/jpeg;base64,' + arrayBufferToBase64(resP1.data.avatar.data.data),
+          _id: resP1.data._id
+        });
+      }
+
+      if (response.data.player2) {
+        const resP2 = await axios.get('/api/players/' + response.data.player2, {});
+        this.props.setP2({
+          name: resP2.data.firstName + ' ' + resP2.data.lastName,
+          score: resP2.data.score,
+          data: resP2.data,
+          image: 'data:image/jpeg;base64,' + arrayBufferToBase64(resP2.data.avatar.data.data),
+          _id: resP2.data._id
+        });
+      }
+
+      if (response.data.player3) {
+        const resP3 = await axios.get('/api/players/' + response.data.player3, {});
+        this.props.setP3({
+          name: resP3.data.firstName + ' ' + resP3.data.lastName,
+          score: resP3.data.score,
+          data: resP3.data,
+          image: 'data:image/jpeg;base64,' + arrayBufferToBase64(resP3.data.avatar.data.data),
+          _id: resP3.data._id
+        });
+      }
+
+      if (response.data.player4) {
+        const resP4 = await axios.get('/api/players/' + response.data.player4, {});
+        this.props.setP4({
+          name: resP4.data.firstName + ' ' + resP4.data.lastName,
+          score: resP4.data.score,
+          data: resP4.data,
+          image: 'data:image/jpeg;base64,' + arrayBufferToBase64(resP4.data.avatar.data.data),
+          _id: resP4.data._id
+        });
+      }
+
+      this.props.setCurrentMatchId(response.data._id);
+    } catch (err) {
+      console.log(err);
+    }
+
+    // TODO: on Match componentDidMount
+    // TODO: send all player data
+    // socket.emit('createMatch', 'test');
+
+    // socket.on('isMatchPlaying', (matchData) => {
+    //   // if data not empty, match is playing, go on match with data
+    //   console.log(matchData);
+    //   this.setState({ matchId: matchData });
+    //   console.log('setState ' + this.state.matchId);
+    //   socket.emit('join', { matchId: this.state.matchId })
+    //   // socket.emit('goalEvent', { matchId: this.state.matchId });
+    // });
+
+    // socket.on('goalEvent', (data) => {
+    //   console.log(data);
+    // });
+    //
+    // socket.on('matchJoin', (data) => {
+    //   console.log('matchJoin ' + data);
+    // });
+
+    try {
+      const players = await axios('/api/team/getAllPlayers', {});
+      this.setState({ playersData: players.data });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  componentWillUnmount() {
+    // socket.off('isMatchPlaying');
+    // socket.off('goalEvent');
   }
 
   // DEBUG
@@ -140,11 +249,30 @@ class Lobby extends Component {
     }
   }
 
-  beginMatch = () => {
+  onRandomButtonTouch = async () => {
+    // socket.emit('goalEvent', this.state.matchId);
+    console.log(await axios.post('/api/playingMatch', {}));
+  }
+
+  beginMatch = async () => {
     // TODO: transition logic between lobby and match HERE
-    this.setState({
-      beginMatch: true
-    });
+
+    try {
+      const response = await axios.post('/api/playingMatch', {
+        player1: this.props.P1._id || '',
+        player2: this.props.P2._id || '',
+        player3: this.props.P3._id || '',
+        player4: this.props.P4._id || ''
+        // table: TODO
+      });
+      this.props.setCurrentMatchId(response.data._id);
+    } catch (err) {
+      console.log(err);
+    }
+
+    // this.setState({
+    //   beginMatch: true
+    // });
   }
 
   render() {
@@ -171,7 +299,7 @@ class Lobby extends Component {
           key={i++}/>)
     }
 
-    if (this.state.beginMatch) {
+    if (this.state.beginMatch || this.props.currentMatchId) {
       return <Redirect push to="/match" />;
     }
 
@@ -283,7 +411,8 @@ class Lobby extends Component {
                         <Button
                           block
                           size='lg'
-                          className='roundButton violet'>
+                          className='roundButton violet'
+                          onClick={this.onRandomButtonTouch}>
                           <Icon icon='random'/> Aléatoire
                         </Button>
                       </Col>

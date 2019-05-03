@@ -33,3 +33,5 @@ export const setElapsedTime = content => ({type: action.SET_ELAPSED_TIME, payloa
 export const setStartTimestamp = content => ({type: action.SET_START_TIMESTAMP, payload: content});
 
 export const resetUserSession = () => ({type: action.RESET_USER_SESSION});
+
+export const setCurrentMatchId = content => ({type: action.SET_MATCH_ID, payload: content});

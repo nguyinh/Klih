@@ -17,6 +17,7 @@ import store from "./redux/store.js";
 // import 'rsuite/dist/styles/rsuite.min.css';
 import 'rsuite/dist/styles/rsuite.css';
 
+
 ReactDOM.render(<Provider store={store}>
   <Router>
     <div>

@@ -32,7 +32,8 @@ class TeamContainer extends Component {
               name={player.fullName ? player.fullName : player.firstName + ' ' + player.lastName}
               score={player.score}
               image={player.avatar}
-              data={player}/>
+              data={player}
+              _id={player._id}/>
           </Col>
         )}
 
