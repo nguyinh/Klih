@@ -50,6 +50,7 @@ class MatchPlayer extends Component {
 
     this.state = {
       name: props.name,
+      firstName: props.firstName,
       score: props.score,
       data: props.data,
       image: props.image,
@@ -141,7 +142,7 @@ class MatchPlayer extends Component {
 
       <br/>
       <div className='playerName'>
-        {this.state.name}
+        {this.state.firstName}
       </div>
 
       {

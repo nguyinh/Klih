@@ -98,7 +98,6 @@ class Match extends Component {
       return;
 
     socket.on('onConnectedPlayersChange', ({ playersArray }) => {
-      console.log(playersArray);
       if ((playersArray.includes('P1') || playersArray.includes('P2')) &&
         (playersArray.includes('P3') || playersArray.includes('P4'))) {
         const userID = this.props.currentUser._id;
@@ -108,9 +107,7 @@ class Match extends Component {
         const player4ID = this.state.P4._id;
         if (userID === player1ID ||
           userID === player2ID) {
-          // display team 1 only
           this.setState({ teamToDisplay: 'Team1' });
-          console.log('team1');
         } else if (userID === player3ID ||
           userID === player4ID) {
           this.setState({ teamToDisplay: 'Team2' });
@@ -118,9 +115,6 @@ class Match extends Component {
       } else {
         this.setState({ teamToDisplay: '' });
       }
-      console.log('P1 P2');
-      console.log(this.props.currentUser._id);
-      console.log(this.state.P1._id);
     });
   }
 
@@ -313,7 +307,7 @@ class Match extends Component {
       this.state.changingScore === 0 ||
       this.state.saveInProgress)
       return;
-    console.log('saving');
+
     const getPlayer = ({ data, name, placement }) => {
       return {
         _id: data._id,
@@ -324,64 +318,9 @@ class Match extends Component {
     const selectedPlayer = getPlayer([P1, P2, P3, P4].filter(player => player.isSelected)[0]);
 
     const beginTime = Date.now();
-    // console.log('save begin');
-    // console.log(beginTime);
-
-    // let newScore1 = 0;
-    // if (((changingScore > 0 && !betrayPoint && (P1.isSelected || P2.isSelected)) ||
-    //   (changingScore > 0 && betrayPoint && (P3.isSelected || P4.isSelected)) ||
-    //   (changingScore < 0 && !betrayPoint && (P3.isSelected || P4.isSelected)) ||
-    //   (changingScore < 0 && betrayPoint && (P1.isSelected || P2.isSelected))))
-    // const newScore1 =
 
     // Save in history
     let { match, score1, score2, history, minutesElapsed } = this.props;
-    // let newScore1,
-
-    // Method #3
-    // this.props.setHistory([...history, {
-    //   goalTime: parseInt((Date.now() - startedAt) / 60000),
-    //   deltaScore: this.state.changingScore,
-    //   byPlayer: selectedPlayer._id,
-    //   placement: selectedPlayer.placement,
-    //   fullName: selectedPlayer.fullName,
-    //   isBetray: this.state.betrayPoint,
-    //   team: (
-    //     ((P1.isSelected || P2.isSelected) && !this.state.betrayPoint) ||
-    //     ((P3.isSelected || P4.isSelected) && this.state.betrayPoint) ?
-    //     'Team1' :
-    //     'Team2'
-    //   )
-    // }]);
-    //
-    //
-    // if (((changingScore > 0 && !betrayPoint && (P1.isSelected || P2.isSelected)) ||
-    //     (changingScore > 0 && betrayPoint && (P3.isSelected || P4.isSelected)) ||
-    //     (changingScore < 0 && !betrayPoint && (P3.isSelected || P4.isSelected)) ||
-    //     (changingScore < 0 && betrayPoint && (P1.isSelected || P2.isSelected))))
-    //   this.props.setScore1(score1 + changingScore);
-    // else if ((changingScore > 0 && !betrayPoint && (P3.isSelected || P4.isSelected)) ||
-    //   (changingScore > 0 && betrayPoint && (P1.isSelected || P2.isSelected)) ||
-    //   (changingScore < 0 && !betrayPoint && (P1.isSelected || P2.isSelected)) ||
-    //   (changingScore < 0 && betrayPoint && (P3.isSelected || P4.isSelected)))
-    //   this.props.setScore2(score2 + changingScore);
-
-
-
-
-
-    // goalTime: parseInt((Date.now() - startedAt) / 60000),
-    // deltaScore: this.state.changingScore,
-    // byPlayer: selectedPlayer._id,
-    // placement: selectedPlayer.placement,
-    // fullName: selectedPlayer.fullName,
-    // isBetray: this.state.betrayPoint,
-    // team: (
-    //   ((P1.isSelected || P2.isSelected) && !this.state.betrayPoint) ||
-    //   ((P3.isSelected || P4.isSelected) && this.state.betrayPoint) ?
-    //   'Team1' :
-    //   'Team2'
-    // )
 
     this.setState({
       saveInProgress: true
@@ -423,8 +362,6 @@ class Match extends Component {
     }, () => {
       this.resetPointState();
     });
-
-    // this.resetPointState();
   }
 
   resetPointState = () => {
@@ -500,6 +437,7 @@ class Match extends Component {
                           onClick={this.onP1Touch}>
                           <MatchPlayer
                             name={this.state.P1.name}
+                            firstName={this.state.P1.firstName}
                             image={this.state.P1.image}
                             placement={this.state.P1.placement}/>
                         </Col>
@@ -515,6 +453,7 @@ class Match extends Component {
                           onClick={this.onP2Touch}>
                           <MatchPlayer
                             name={this.state.P2.name}
+                            firstName={this.state.P2.firstName}
                             image={this.state.P2.image}
                             placement={this.state.P2.placement}/>
                         </Col>
@@ -561,6 +500,7 @@ class Match extends Component {
                           onClick={this.onP3Touch}>
                           <MatchPlayer
                             name={this.state.P3.name}
+                            firstName={this.state.P3.firstName}
                             image={this.state.P3.image}
                             placement={this.state.P3.placement}/>
                         </Col>
@@ -576,6 +516,7 @@ class Match extends Component {
                           onClick={this.onP4Touch}>
                           <MatchPlayer
                             name={this.state.P4.name}
+                            firstName={this.state.P4.firstName}
                             image={this.state.P4.image}
                             placement={this.state.P4.placement}/>
                         </Col>

@@ -10,24 +10,32 @@ const initialState = {
   playerCursor: undefined,
   P1: {
     name: '',
+    firstName: '',
+    lastName: '',
     image: plusImage,
     score: undefined,
     _id: undefined
   },
   P2: {
     name: '',
+    firstName: '',
+    lastName: '',
     image: plusImage,
     score: undefined,
     _id: undefined
   },
   P3: {
     name: '',
+    firstName: '',
+    lastName: '',
     image: plusImage,
     score: undefined,
     _id: undefined
   },
   P4: {
     name: '',
+    firstName: '',
+    lastName: '',
     image: plusImage,
     score: undefined,
     _id: undefined
@@ -63,21 +71,29 @@ function rootReducer(state = initialState, action) {
         playerCursor: '',
         P1: {
           name: '',
+          firstName: '',
+          lastName: '',
           image: plusImage,
           score: undefined
         },
         P2: {
           name: '',
+          firstName: '',
+          lastName: '',
           image: plusImage,
           score: undefined
         },
         P3: {
           name: '',
+          firstName: '',
+          lastName: '',
           image: plusImage,
           score: undefined
         },
         P4: {
           name: '',
+          firstName: '',
+          lastName: '',
           image: plusImage,
           score: undefined
         },

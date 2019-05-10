@@ -90,22 +90,10 @@ class MatchHistory extends Component {
 
       this.updateTime();
     });
-
-    socket.on('updateConnectedUsers', ({ matchId }) => {
-      socket.emit('updateConnectedUsers', {
-        playerId: this.props.currentUser._id,
-        matchId
-      });
-    });
-
-    socket.on('usersUpdated', (connectedUsers) => {
-      console.log(connectedUsers);
-    });
   }
 
   componentWillUnmount() {
     clearInterval(this.state.matchTimer);
-
   }
 
   shouldComponentUpdate(prevProps, prevState) {
@@ -136,8 +124,6 @@ class MatchHistory extends Component {
 
 
   render() {
-    // console.log(this.state.history);
-
     return <Grid className='matchHistoryContainer'>
       <Row>
         <Col

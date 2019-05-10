@@ -30,6 +30,8 @@ class TeamContainer extends Component {
           <Col xs={6} key={i}>
             <Player
               name={player.fullName ? player.fullName : player.firstName + ' ' + player.lastName}
+              firstName={player.firstName}
+              lastName={player.lastName}
               score={player.score}
               image={player.avatar}
               data={player}

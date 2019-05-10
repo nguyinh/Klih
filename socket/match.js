@@ -93,7 +93,7 @@ module.exports = (io) => {
     });
 
     // On goal event
-    socket.on('goalEvent', async (data, ackn) => {
+    socket.on('goalEvent', async (data, onSaved) => {
       try {
         const match = await PlayingMatch.findOne({_id: data.currentMatchId}).exec();
 
@@ -112,10 +112,11 @@ module.exports = (io) => {
 
           // Return new match state to subscribers
           matchIO.to(data.currentMatchId).emit('goalEvent', match);
-          ackn();
+          onSaved();
           // TODO: Send here restricted data to Table viewers
         } else {
           console.log('not found');
+          // onSaved('NOT_FOUND');
         }
       } catch (err) {
         logger.error(err)

@@ -49,11 +49,13 @@ class Player extends Component {
 
     this.state = {
       name: props.name,
+      firstName: props.firstName,
+      lastName: props.lastName,
       score: props.score,
       data: props.data,
       image: undefined,
       _id: props._id
-    }
+    };
   }
 
   arrayBufferToBase64(buffer) {

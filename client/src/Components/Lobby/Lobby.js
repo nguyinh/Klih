@@ -99,8 +99,6 @@ class Lobby extends Component {
   }
 
   async componentDidMount() {
-    // const socket = io('/match');
-
     try {
       const response = await axios.get('/api/playingMatch', {});
       // if response, load state
@@ -109,6 +107,8 @@ class Lobby extends Component {
         const resP1 = await axios.get('/api/players/' + response.data.player1, {});
         this.props.setP1({
           name: resP1.data.firstName + ' ' + resP1.data.lastName,
+          firstName: resP1.data.firstName,
+          lastName: resP1.data.lastName,
           score: resP1.data.score,
           data: resP1.data,
           image: 'data:image/jpeg;base64,' + arrayBufferToBase64(resP1.data.avatar.data.data),
@@ -120,6 +120,8 @@ class Lobby extends Component {
         const resP2 = await axios.get('/api/players/' + response.data.player2, {});
         this.props.setP2({
           name: resP2.data.firstName + ' ' + resP2.data.lastName,
+          firstName: resP2.data.firstName,
+          lastName: resP2.data.lastName,
           score: resP2.data.score,
           data: resP2.data,
           image: 'data:image/jpeg;base64,' + arrayBufferToBase64(resP2.data.avatar.data.data),
@@ -131,6 +133,8 @@ class Lobby extends Component {
         const resP3 = await axios.get('/api/players/' + response.data.player3, {});
         this.props.setP3({
           name: resP3.data.firstName + ' ' + resP3.data.lastName,
+          firstName: resP3.data.firstName,
+          lastName: resP3.data.lastName,
           score: resP3.data.score,
           data: resP3.data,
           image: 'data:image/jpeg;base64,' + arrayBufferToBase64(resP3.data.avatar.data.data),
@@ -142,6 +146,8 @@ class Lobby extends Component {
         const resP4 = await axios.get('/api/players/' + response.data.player4, {});
         this.props.setP4({
           name: resP4.data.firstName + ' ' + resP4.data.lastName,
+          firstName: resP4.data.firstName,
+          lastName: resP4.data.lastName,
           score: resP4.data.score,
           data: resP4.data,
           image: 'data:image/jpeg;base64,' + arrayBufferToBase64(resP4.data.avatar.data.data),
@@ -156,24 +162,6 @@ class Lobby extends Component {
 
     // TODO: on Match componentDidMount
     // TODO: send all player data
-    // socket.emit('createMatch', 'test');
-
-    // socket.on('isMatchPlaying', (matchData) => {
-    //   // if data not empty, match is playing, go on match with data
-    //   console.log(matchData);
-    //   this.setState({ matchId: matchData });
-    //   console.log('setState ' + this.state.matchId);
-    //   socket.emit('join', { matchId: this.state.matchId })
-    //   // socket.emit('goalEvent', { matchId: this.state.matchId });
-    // });
-
-    // socket.on('goalEvent', (data) => {
-    //   console.log(data);
-    // });
-    //
-    // socket.on('matchJoin', (data) => {
-    //   console.log('matchJoin ' + data);
-    // });
 
     try {
       const players = await axios('/api/team/getAllPlayers', {});
