@@ -11,9 +11,7 @@ module.exports = (io) => {
   const tableIO = io.of('/table');
 
   matchIO.on('connection', (socket) => {
-    logger.debug('socket connected');
-
-    socket.emit('ready', {hello: 'world'});
+    logger.debug('[Socket.io] Client connected');
 
     // User is joining Match
     socket.on('joinMatch', async (data) => {
@@ -57,7 +55,27 @@ module.exports = (io) => {
     // On goal event
     socket.on('goalEvent', async (data, onSaved) => {
       try {
-        const match = await PlayingMatch.findOne({_id: data.currentMatchId}).exec();
+        const match = await PlayingMatch.findOne({
+          $and: [
+            {
+              _id: data.matchId
+            }, {
+              $or: [
+                {
+                  player1: data.playerId
+                }, {
+                  player2: data.playerId
+                }, {
+                  player3: data.playerId
+                }, {
+                  player4: data.playerId
+                }, {
+                  publisher: data.playerId
+                }
+              ]
+            }
+          ]
+        }).exec();
 
         if (match) {
           match.score1 += data.match.score1;
@@ -73,7 +91,7 @@ module.exports = (io) => {
           await match.save();
 
           // Return new match state to subscribers
-          matchIO.to(data.currentMatchId).emit('goalEvent', match);
+          matchIO.to(data.matchId).emit('goalEvent', match);
           onSaved();
           // TODO: Send here restricted data to Table viewers
         } else {

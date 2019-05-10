@@ -353,7 +353,8 @@ class Match extends Component {
     });
 
     socket.emit('goalEvent', {
-      currentMatchId: this.props.currentMatchId,
+      matchId: this.props.currentMatchId,
+      playerId: this.props.currentUser._id,
       match: {
         score1: (
           ((changingScore > 0 && !betrayPoint && (P1.isSelected || P2.isSelected)) ||
@@ -597,7 +598,7 @@ class Match extends Component {
             <Col
               xs={6}>
               <span className="verticalHelper"></span>
-              <span className='changingScore'>{this.state.changingScore}</span>
+              <span className='changingScore'>{(this.state.changingScore > 0 ? '+' : '') + this.state.changingScore}</span>
             </Col>
 
             <Col

@@ -62,14 +62,6 @@ const mapStateToProps = state => {
   };
 };
 
-const noPlayer = {
-  name: '',
-  firstName: '',
-  lastName: '',
-  image: plusImage,
-  score: undefined
-};
-
 const cmp = (o1, o2) => JSON.stringify(o1) === JSON.stringify(o2);
 
 function isEmpty(obj) {
