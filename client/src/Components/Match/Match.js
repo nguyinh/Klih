@@ -116,6 +116,16 @@ class Match extends Component {
         this.setState({ teamToDisplay: '' });
       }
     });
+
+    socket.on('matchEnded', (data) => {
+      console.log('match ended');
+      // TODO: some things on match end
+    });
+
+    socket.on('matchCancelled', (data) => {
+      console.log('match ended');
+      // TODO: some things on match end
+    });
   }
 
   componentWillUnmount() {
@@ -397,6 +407,22 @@ class Match extends Component {
     });
   }
 
+  onSaveButton = () => {
+    socket.emit('saveMatch', {
+      matchId: this.props.currentMatchId,
+      playerId: this.props.currentUser._id
+    });
+  }
+
+  onCancelButton = () => {
+    // TODO: add some security
+    socket.emit('cancelMatch', {
+      matchId: this.props.currentMatchId,
+      playerId: this.props.currentUser._id
+    });
+  }
+
+
   render() {
     const { P1, P2, P3, P4, placement } = this.state;
 
@@ -640,14 +666,26 @@ class Match extends Component {
             </Col>
           </Row>
 
-          <Row>
+          <Row className='matchValidation'>
             <Col
-              xs={22}
+              xs={11}
               xsOffset={1}>
               <Button
                 size='lg'
                 block
-                className='roundButton green matchValidation'>
+                className='roundButton red'
+                onClick={this.onCancelButton}>
+                Annuler
+              </Button>
+            </Col>
+
+            <Col
+              xs={11}>
+              <Button
+                size='lg'
+                block
+                className='roundButton green'
+                onClick={this.onSaveButton}>
                 Valider
               </Button>
             </Col>

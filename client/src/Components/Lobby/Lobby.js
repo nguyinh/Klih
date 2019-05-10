@@ -101,8 +101,7 @@ class Lobby extends Component {
   async componentDidMount() {
     try {
       const response = await axios.get('/api/playingMatch', {});
-      // if response, load state
-      // const playersTofetch = [response.data.player1, response.data.player2, response.data.player3, response.data.player4];
+      // TODO: if response, load Lobby state
       if (response.data.player1) {
         const resP1 = await axios.get('/api/players/' + response.data.player1, {});
         this.props.setP1({

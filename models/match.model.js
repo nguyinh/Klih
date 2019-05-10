@@ -51,20 +51,20 @@ const matchScheme = mongoose.Schema({
     type: ObjectId,
     required: false
   },
+  publisher: {
+    type: ObjectId,
+    required: false
+  },
+  history: {
+    type: [matchEventScheme],
+    required: true
+  },
   createdAt: {
     type: Date,
     required: true
   },
   duration: {
     type: Number,
-    required: true
-  },
-  history: {
-    type: [matchEventScheme],
-    required: true
-  },
-  team: {
-    type: ObjectId,
     required: true
   },
   table: {
