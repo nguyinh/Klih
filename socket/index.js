@@ -32,7 +32,6 @@ matchIO.on('connection', (socket) => {
       }).exec();
 
       if (match) { // match is being played
-        console.log(match._id);
         socket.emit('isMatchPlaying', match._id);
         socket.join(match._id);
         // on front, send match state
@@ -50,15 +49,33 @@ matchIO.on('connection', (socket) => {
     // socket.disconnect();
   });
 
-  // On joinMatch if Match is playing
-  socket.on('joinMatch', async (matchId) => {
-
+  // User is joining Match
+  socket.on('joinMatch', async (data) => {
     try {
-      const match = await PlayingMatch.findOne({_id: matchId}).exec();
+      const match = await PlayingMatch.findOne({_id: data.matchId}).exec();
+
+      if (match.player1 == data.playerId) {
+        socket.player = 'P1';
+      } else if (match.player2 == data.playerId) {
+        socket.player = 'P2';
+      } else if (match.player3 == data.playerId) {
+        socket.player = 'P3';
+      } else if (match.player4 == data.playerId) {
+        socket.player = 'P4';
+      }
 
       if (match) { // Match is being played
-        socket.join(matchId); // Socket join room 'matchId'
+        socket.join(data.matchId); // Socket join room 'matchId'
+
+        let playersSet = new Set();
+        for (socketID in matchIO.adapter.rooms[data.matchId].sockets) {
+          const soc = matchIO.connected[socketID];
+          playersSet.add(soc.player);
+        }
+        console.log(playersSet);
+
         socket.emit('joinMatch', match); // Return actual match data
+        matchIO.to(data.matchId).emit('onConnectedPlayersChange', {playersArray: Array.from(playersSet)});
         // on front, send match state
       } else {
         logger.debug('Match not found');
@@ -73,7 +90,6 @@ matchIO.on('connection', (socket) => {
 
   // On goal event
   socket.on('goalEvent', async (data) => {
-    console.log(data.match);
     try {
       const match = await PlayingMatch.findOne({_id: data.currentMatchId}).exec();
 
@@ -102,6 +118,63 @@ matchIO.on('connection', (socket) => {
     }
   });
 
+  // Update connected Users
+  // socket.on('updateConnectedUsers', async ({playerId, matchId}) => {
+  //   try {
+  //     const match = await PlayingMatch.findOne({_id: matchId}).exec();
+  //
+  //     if (match) {
+  //       let connectedPlayersSet = new Set(match.connectedUsers);
+  //
+  //       if (match.player1 == playerId)
+  //         connectedPlayersSet.add('P1');  match.connectedUsers.push('P1');
+  //       else if (match.player2 == playerId)
+  //         connectedPlayersSet.add('P2');  match.connectedUsers.push('P2');
+  //       else if (match.player3 == playerId)
+  //         connectedPlayersSet.add('P3');  match.connectedUsers.push('P3');
+  //       else if (match.player4 == playerId)
+  //         connectedPlayersSet.add('P4');
+  //
+  //       match.connectedUsers = Array.from(connectedPlayersSet);
+  //
+  //       await match.save();
+  //
+  //       matchIO.to(matchId).emit('usersUpdated', {connectedUsers: match.connectedUsers});
+  //        cb(match.connectedUsers);
+  //     } else {
+  //       console.log('not found');
+  //     }
+  //   } catch (err) {
+  //     logger.error(err)
+  //   }
+  //
+  //   console.log(playerId, matchId);
+  // });
+
+  // On User disconnecting
+  socket.on('disconnecting', async () => {
+    // Refresh connected players sockets in matchId room
+
+    try {
+      // Get matchId
+      const matchId = Object.values(socket.rooms)[1];
+      console.log('player disconneting is : ' + socket.player);
+      let playersSet = new Set();
+      for (socketID in matchIO.adapter.rooms[matchId].sockets) {
+        const soc = matchIO.connected[socketID];
+        console.log(soc.player);
+        playersSet.add(soc.player);
+      }
+      playersSet.delete(socket.player);
+      // console.log(playersSet);
+      matchIO.to(matchId).emit('onConnectedPlayersChange', {playersArray: Array.from(playersSet)});
+    } catch (err) {
+      logger.error(err)
+    }
+
+  });
+
+  // On disconnect
   socket.on('disconnect', (reason) => {
     logger.debug('socket disconnected: ' + reason);
   });

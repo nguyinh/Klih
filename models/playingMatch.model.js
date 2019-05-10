@@ -70,6 +70,9 @@ const playingMatchScheme = mongoose.Schema({
   },
   table: {
     type: ObjectId
+  },
+  connectedUsers: {
+    type: [String]
   }
 });
 

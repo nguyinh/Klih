@@ -50,7 +50,8 @@ const mapStateToProps = state => {
     score2: state.score2,
     history: state.matchHistory,
     minutesElapsed: state.minutesElapsed,
-    currentMatchId: state.currentMatchId
+    currentMatchId: state.currentMatchId,
+    currentUser: state.currentUser
   };
 };
 
@@ -94,20 +95,35 @@ class Match extends Component {
     if (!this.props.currentMatchId)
       return;
 
-    // socket.emit('joinMatch', this.props.currentMatchId);
-
-    // socket.on('joinMatch', (data) => {
-    //   console.log(data);
-    //   console.log(this.props);
-    // });
-
-    // socket.on('goalEvent', (data) => {
-    //   console.log(data);
-    // });
+    socket.on('onConnectedPlayersChange', ({ playersArray }) => {
+      console.log(playersArray);
+      if ((playersArray.includes('P1') || playersArray.includes('P2')) &&
+        (playersArray.includes('P3') || playersArray.includes('P4'))) {
+        const userID = this.props.currentUser._id;
+        const player1ID = this.state.P1._id;
+        const player2ID = this.state.P2._id;
+        const player3ID = this.state.P3._id;
+        const player4ID = this.state.P4._id;
+        if (userID === player1ID ||
+          userID === player2ID) {
+          // display team 1 only
+          this.setState({ teamToDisplay: 'Team1' });
+          console.log('team1');
+        } else if (userID === player3ID ||
+          userID === player4ID) {
+          this.setState({ teamToDisplay: 'Team2' });
+        }
+      } else {
+        this.setState({ teamToDisplay: '' });
+      }
+      console.log('P1 P2');
+      console.log(this.props.currentUser._id);
+      console.log(this.state.P1._id);
+    });
   }
 
   componentWillUnmount() {
-
+    socket.off('onConnectedPlayersChange');
   }
 
   // ====== Player and Placement ======
@@ -435,7 +451,7 @@ class Match extends Component {
           {/* Player and placement selection */}
           <Row>
             <Col xs={22} xsOffset={1}>
-              <h2 style={{margin: '0'}}>Buteur</h2>
+              <h2 style={{margin: '0', marginBottom: '10px'}}>Selectionnez le buteur</h2>
             </Col>
 
             <Col
@@ -444,40 +460,43 @@ class Match extends Component {
               className='playersContainer'>
 
               <Row gutter={0}>
-                <Col
-                  xs={10}>
+                {
+                  this.state.teamToDisplay !== 'Team2' &&
+                  <Col
+                    xs={this.state.teamToDisplay === 'Team1' ? 20 : 10}>
 
-                  <Row gutter={0}>
-                    {this.state.P1.name &&
-                      <Col
-                        xs={12}
-                        className={'P1Container ' +
-                          (this.state.P1.isSelected ? 'selected ' : '') +
-                          (this.state.playersMissing ? 'error ' : '')}
-                        onClick={this.onP1Touch}>
-                        <MatchPlayer
-                          name={this.state.P1.name}
-                          image={this.state.P1.image}
-                          placement={this.state.P1.placement}/>
-                      </Col>
-                    }
+                    <Row gutter={0}>
+                      {this.state.P1.name &&
+                        <Col
+                          xs={12}
+                          className={'P1Container ' +
+                            (this.state.P1.isSelected ? 'selected ' : '') +
+                            (this.state.playersMissing ? 'error ' : '')}
+                          onClick={this.onP1Touch}>
+                          <MatchPlayer
+                            name={this.state.P1.name}
+                            image={this.state.P1.image}
+                            placement={this.state.P1.placement}/>
+                        </Col>
+                      }
 
 
-                    {this.state.P2.name &&
-                      <Col
-                        xs={12}
-                        className={'P2Container ' +
-                          (this.state.P2.isSelected ? 'selected ' : '') +
-                          (this.state.playersMissing ? 'error ' : '')}
-                        onClick={this.onP2Touch}>
-                        <MatchPlayer
-                          name={this.state.P2.name}
-                          image={this.state.P2.image}
-                          placement={this.state.P2.placement}/>
-                      </Col>
-                    }
-                  </Row>
-                </Col>
+                      {this.state.P2.name &&
+                        <Col
+                          xs={12}
+                          className={'P2Container ' +
+                            (this.state.P2.isSelected ? 'selected ' : '') +
+                            (this.state.playersMissing ? 'error ' : '')}
+                          onClick={this.onP2Touch}>
+                          <MatchPlayer
+                            name={this.state.P2.name}
+                            image={this.state.P2.image}
+                            placement={this.state.P2.placement}/>
+                        </Col>
+                      }
+                    </Row>
+                  </Col>
+                }
 
                 <Col
                   xs={4}
@@ -503,39 +522,42 @@ class Match extends Component {
 
                 </Col>
 
-                <Col
-                  xs={10}>
-                  <Row gutter={0}>
-                    {this.state.P3.name &&
-                      <Col
-                        xs={12}
-                        className={'P3Container ' +
-                          (this.state.P3.isSelected ? 'selected ' : '') +
-                          (this.state.playersMissing ? 'error ' : '')}
-                        onClick={this.onP3Touch}>
-                        <MatchPlayer
-                          name={this.state.P3.name}
-                          image={this.state.P3.image}
-                          placement={this.state.P3.placement}/>
-                      </Col>
-                    }
+                {
+                  this.state.teamToDisplay !== 'Team1' &&
+                  <Col
+                    xs={this.state.teamToDisplay === 'Team2' ? 20 : 10}>
+                    <Row gutter={0}>
+                      {this.state.P3.name &&
+                        <Col
+                          xs={12}
+                          className={'P3Container ' +
+                            (this.state.P3.isSelected ? 'selected ' : '') +
+                            (this.state.playersMissing ? 'error ' : '')}
+                          onClick={this.onP3Touch}>
+                          <MatchPlayer
+                            name={this.state.P3.name}
+                            image={this.state.P3.image}
+                            placement={this.state.P3.placement}/>
+                        </Col>
+                      }
 
 
-                    {this.state.P4.name &&
-                      <Col
-                        xs={12}
-                        className={'P4Container ' +
-                          (this.state.P4.isSelected ? 'selected ' : '') +
-                          (this.state.playersMissing ? 'error ' : '')}
-                        onClick={this.onP4Touch}>
-                        <MatchPlayer
-                          name={this.state.P4.name}
-                          image={this.state.P4.image}
-                          placement={this.state.P4.placement}/>
-                      </Col>
-                    }
-                  </Row>
-                </Col>
+                      {this.state.P4.name &&
+                        <Col
+                          xs={12}
+                          className={'P4Container ' +
+                            (this.state.P4.isSelected ? 'selected ' : '') +
+                            (this.state.playersMissing ? 'error ' : '')}
+                          onClick={this.onP4Touch}>
+                          <MatchPlayer
+                            name={this.state.P4.name}
+                            image={this.state.P4.image}
+                            placement={this.state.P4.placement}/>
+                        </Col>
+                      }
+                    </Row>
+                  </Col>
+                }
               </Row>
 
             </Col>

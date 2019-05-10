@@ -41,7 +41,8 @@ const mapStateToProps = state => {
     team1: state.team1,
     team2: state.team2,
     minutesElapsed: state.minutesElapsed,
-    currentMatchId: state.currentMatchId
+    currentMatchId: state.currentMatchId,
+    currentUser: state.currentUser
   };
 };
 
@@ -66,12 +67,13 @@ class MatchHistory extends Component {
   }
 
   componentDidMount() {
-    socket.emit('joinMatch', this.props.currentMatchId);
+    socket.emit('joinMatch', {
+      matchId: this.props.currentMatchId,
+      playerId: this.props.currentUser._id
+    });
 
     socket.on('goalEvent', (data) => {
-      console.log(data);
       this.setState({
-        // ...nextProps
         score1: data.score1,
         score2: data.score2,
         history: data.history
@@ -88,10 +90,30 @@ class MatchHistory extends Component {
 
       this.updateTime();
     });
+
+    socket.on('updateConnectedUsers', ({ matchId }) => {
+      socket.emit('updateConnectedUsers', {
+        playerId: this.props.currentUser._id,
+        matchId
+      });
+    });
+
+    socket.on('usersUpdated', (connectedUsers) => {
+      console.log(connectedUsers);
+    });
   }
 
   componentWillUnmount() {
     clearInterval(this.state.matchTimer);
+
+  }
+
+  shouldComponentUpdate(prevProps, prevState) {
+    // Increase performance
+    return prevState.score1 !== this.state.score1 ||
+      prevState.score2 !== this.state.score2 ||
+      prevState.history !== this.state.history ||
+      prevState.minutesElapsed !== this.state.minutesElapsed;
   }
 
   updateTime = () => {

@@ -11,7 +11,6 @@ module.exports = (() => {
   router.get('/api/playingMatch', (req, res) => {
     jwt.verify(req.cookies.token, process.env.JWT_SECRET, async (err, decoded) => {
       if (decoded) {
-        console.log(decoded);
 
         try {
           const currentMatch = await PlayingMatch.findOne({
@@ -31,7 +30,6 @@ module.exports = (() => {
           }).exec();
 
           if (currentMatch) { // match is being played
-            console.log(currentMatch._id);
 
             return res.status(200).send(currentMatch);
             // on front, send match state
@@ -59,21 +57,27 @@ module.exports = (() => {
   router.post('/api/playingMatch', (req, res) => {
     jwt.verify(req.cookies.token, process.env.JWT_SECRET, (err, decoded) => {
       if (decoded) {
-        console.log(decoded);
-        console.log(req.body);
-        const matchId = new mongoose.Types.ObjectId();
-        const match = new PlayingMatch({
-          _id: matchId,
-          player1: mongoose.Types.ObjectId(req.body.player1),
-          player2: mongoose.Types.ObjectId(req.body.player2),
-          player3: mongoose.Types.ObjectId(req.body.player3),
-          player4: mongoose.Types.ObjectId(req.body.player4),
+        let match = new PlayingMatch({
+          _id: new mongoose.Types.ObjectId(),
           publisher: mongoose.Types.ObjectId(decoded._id),
           history: [],
           createdAt: Date.now(),
           score1: 0,
           score2: 0
         });
+
+        if (req.body.player1) 
+          match.player1 = mongoose.Types.ObjectId(req.body.player1);
+        
+        if (req.body.player2) 
+          match.player2 = mongoose.Types.ObjectId(req.body.player2);
+        
+        if (req.body.player3) 
+          match.player3 = mongoose.Types.ObjectId(req.body.player3);
+        
+        if (req.body.player4) 
+          match.player4 = mongoose.Types.ObjectId(req.body.player4);
+        
         match.save().then((result) => {
           logger.debug('Match begin');
           logger.debug(result);
