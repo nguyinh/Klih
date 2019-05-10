@@ -10,7 +10,6 @@ module.exports = (() => {
   router.get('/api/players/:playerId', (req, res) => {
     jwt.verify(req.cookies.token, process.env.JWT_SECRET, async (err, decoded) => {
       if (decoded) {
-        console.log(req.params.playerId);
 
         try {
           const player = await Player.findOne({_id: req.params.playerId}).exec();

@@ -5,11 +5,12 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const bodyParser = require("body-parser");
-const log4js = require('log4js');
-const cors = require('cors');
-// const io = require('socket.io')(8117)
-const {io} = require('./socket');
 
+const cors = require('cors');
+const app = express();
+const server = require('http').Server(app);
+const io = require('./socket')(server);
+const {logger} = require('./middlewares');
 const authRoute = require('./routes/auth.route.js');
 const matchRoute = require('./routes/match.route.js');
 const teamRoute = require('./routes/team.route.js');
@@ -18,7 +19,6 @@ const profileRoute = require('./routes/profile.route.js');
 const playingRoute = require('./routes/playingMatch.route.js');
 const playerRoute = require('./routes/player.route.js');
 
-const app = express();
 require("dotenv").config()
 
 const corsOption = {
@@ -44,9 +44,6 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Credentials", true);
   next();
 });
-
-const logger = log4js.getLogger();
-logger.level = 'all';
 
 const mongoURL = process.env.MONGODB_URI || "mongodb://localhost/klih"
 mongoose.connect(mongoURL, {
@@ -87,8 +84,8 @@ app.get('*', (req, res) => {
 const port = process.env.PORT || 8116;
 
 if (process.env.ENV === 'dev') 
-  app.listen(port, '0.0.0.0');
+  server.listen(port, '0.0.0.0'); // app.listen(port, '0.0.0.0');
 else 
-  app.listen(port);
+  server.listen(port);
 
 logger.info(`[Express] Server listening on ${port}`);
