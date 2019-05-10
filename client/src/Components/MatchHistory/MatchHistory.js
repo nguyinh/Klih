@@ -12,7 +12,8 @@ import {
   Grid,
   Row,
   Col,
-  Checkbox
+  Checkbox,
+  Icon
 } from 'rsuite';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { socket } from './../../socket';
@@ -157,7 +158,7 @@ class MatchHistory extends Component {
           className='timerContainer'>
           <span className="verticalHelper"></span>
           <span className='timer'>
-            {this.state.minutesElapsed}&rsquo;
+            <Icon icon='clock-o'/> {this.state.minutesElapsed}
           </span>
         </Col>
 
@@ -200,7 +201,7 @@ class MatchHistory extends Component {
                             classNames="team2Anim"
                             key={i}>
                             <Row className='goalEventContainer'>
-                              <Col xs={3}>
+                              <Col xs={4}>
                                 <span className='goalTime'>{goal.goalTime}&rsquo;</span>
                               </Col>
                               <Col xs={4} className={'goalScoreContainer ' + (goal.deltaScore > 0 ? 'plus ' : 'minus ')}>
@@ -208,7 +209,7 @@ class MatchHistory extends Component {
                                     (goal.deltaScore > 0 ? '+' : '') + goal.deltaScore
                                   }</span>
                               </Col>
-                              <Col xs={17}>
+                              <Col xs={16}>
                                 <span className='goalPlayer'>{goal.fullName}</span>
                               </Col>
                             </Row>
@@ -231,7 +232,7 @@ class MatchHistory extends Component {
                             classNames="team1Anim"
                             key={i}>
                             <Row className='goalEventContainer' key={i}>
-                              <Col xs={17}>
+                              <Col xs={16}>
                                 <span className='goalPlayer'>{goal.fullName}</span>
                               </Col>
                               <Col xs={4} className={'goalScoreContainer ' + (goal.deltaScore > 0 ? 'plus ' : 'minus ')}>
@@ -239,7 +240,7 @@ class MatchHistory extends Component {
                                     (goal.deltaScore > 0 ? '+' : '') + goal.deltaScore
                                   }</span>
                               </Col>
-                              <Col xs={3}>
+                              <Col xs={4}>
                                 <span className='goalTime'>{goal.goalTime}&rsquo;</span>
                               </Col>
                             </Row>

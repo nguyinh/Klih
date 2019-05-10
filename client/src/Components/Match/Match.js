@@ -222,6 +222,10 @@ class Match extends Component {
           ...this.state.P1,
           placement: (P1.placement === placementType ? '' : placementType)
         },
+        P2: {
+          ...this.state.P2,
+          placement: (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : ''))
+        },
         placement: (P1.placement === placementType ? '' : placementType)
       });
     } else if (this.state.P2.isSelected) {
@@ -229,6 +233,10 @@ class Match extends Component {
         P2: {
           ...this.state.P2,
           placement: (P2.placement === placementType ? '' : placementType)
+        },
+        P1: {
+          ...this.state.P1,
+          placement: (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : ''))
         },
         placement: (P2.placement === placementType ? '' : placementType)
       });
@@ -238,6 +246,10 @@ class Match extends Component {
           ...this.state.P3,
           placement: (P3.placement === placementType ? '' : placementType)
         },
+        P4: {
+          ...this.state.P4,
+          placement: (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : ''))
+        },
         placement: (P3.placement === placementType ? '' : placementType)
       });
     } else if (this.state.P4.isSelected) {
@@ -245,6 +257,10 @@ class Match extends Component {
         P4: {
           ...this.state.P4,
           placement: (P4.placement === placementType ? '' : placementType)
+        },
+        P3: {
+          ...this.state.P3,
+          placement: (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : ''))
         },
         placement: (P4.placement === placementType ? '' : placementType)
       });
