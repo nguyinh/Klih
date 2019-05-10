@@ -248,37 +248,52 @@ class Match extends Component {
 
   // ====== Adding/removing points ======
   addPoint = () => {
-    this.resetErrors();
+    if (this.state.P1.isSelected ||
+      this.state.P2.isSelected ||
+      this.state.P3.isSelected ||
+      this.state.P4.isSelected) {
+      this.resetErrors();
 
-    this.setState((state, props) => {
-      return {
-        changingScore: state.changingScore + 1,
-        isGoalValid: ((state.P1.isSelected || state.P2.isSelected || state.P3.isSelected || state.P4.isSelected) &&
-          (state.changingScore + 1) !== 0)
-      }
-    });
+      this.setState((state, props) => {
+        return {
+          changingScore: state.changingScore + 1,
+          isGoalValid: ((state.P1.isSelected || state.P2.isSelected || state.P3.isSelected || state.P4.isSelected) &&
+            (state.changingScore + 1) !== 0)
+        }
+      });
+    }
   }
 
   removePoint = () => {
-    this.resetErrors();
+    if (this.state.P1.isSelected ||
+      this.state.P2.isSelected ||
+      this.state.P3.isSelected ||
+      this.state.P4.isSelected) {
+      this.resetErrors();
 
-    this.setState((state, props) => {
-      return {
-        changingScore: state.changingScore - 1,
-        isGoalValid: ((state.P1.isSelected || state.P2.isSelected || state.P3.isSelected || state.P4.isSelected) &&
-          (state.changingScore - 1) !== 0)
-      }
-    });
+      this.setState((state, props) => {
+        return {
+          changingScore: state.changingScore - 1,
+          isGoalValid: ((state.P1.isSelected || state.P2.isSelected || state.P3.isSelected || state.P4.isSelected) &&
+            (state.changingScore - 1) !== 0)
+        }
+      });
+    }
   }
 
   onBetrayButtonTouch = () => {
-    this.resetErrors();
+    if (this.state.P1.isSelected ||
+      this.state.P2.isSelected ||
+      this.state.P3.isSelected ||
+      this.state.P4.isSelected) {
+      this.resetErrors();
 
-    this.setState((state, props) => {
-      return {
-        betrayPoint: !state.betrayPoint
-      }
-    });
+      this.setState((state, props) => {
+        return {
+          betrayPoint: !state.betrayPoint
+        }
+      });
+    }
   }
 
 
@@ -574,7 +589,9 @@ class Match extends Component {
             <Col
               xs={9}>
               <div
-                className={'removePointButton ' + (this.state.pointMissing ? 'error ' : '')}
+                className={'removePointButton ' +
+                  (P1.isSelected || P2.isSelected || P3.isSelected || P4.isSelected ? '' : 'disabled ') +
+                  (this.state.pointMissing ? 'error ' : '')}
                 onClick={this.removePoint}>
                 <span className="verticalHelper"></span>
                 <img
@@ -593,7 +610,9 @@ class Match extends Component {
             <Col
               xs={9}>
               <div
-                className={'addPointButton ' + (this.state.pointMissing ? 'error ' : '')}
+                className={'addPointButton ' +
+                  (P1.isSelected || P2.isSelected || P3.isSelected || P4.isSelected ? '' : 'disabled ') +
+                  (this.state.pointMissing ? 'error ' : '')}
                 onClick={this.addPoint}>
                 <span className="verticalHelper"></span>
                 <img
@@ -610,7 +629,9 @@ class Match extends Component {
               xs={11}
               xsOffset={1}>
               <div
-                className={'betrayToggle ' + (this.state.betrayPoint ? 'active' : '')}
+                className={'betrayToggle ' +
+                  (P1.isSelected || P2.isSelected || P3.isSelected || P4.isSelected ? '' : 'disabled ') +
+                  (this.state.betrayPoint ? 'active' : '')}
                 onClick={this.onBetrayButtonTouch}>
                 {this.state.betrayPoint ?
                   <>
@@ -618,7 +639,7 @@ class Match extends Component {
                     <span role='img' style={{fontSize: '18px'}}>👎</span>
                   </>
                   :
-                  <span> Contre son camp</span>
+                  <span>Contre son camp</span>
                 }
               </div>
             </Col>

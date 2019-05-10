@@ -99,7 +99,7 @@
 
       .removePointButton {
         margin: $buttonMargin;
-        background: #c64b4b;
+        // background: #c64b4b;
         background: #ff512f !important;
         background: -webkit-linear-gradient(
           to right,
@@ -114,11 +114,17 @@
         &.error {
           box-shadow: $buttonShadowError;
         }
+
+        &.disabled {
+          box-shadow: 0 1px 10px rgba(0, 0, 0, 0);
+          background: #c2c2c2 !important;
+          opacity: 0.3;
+        }
       }
 
       .addPointButton {
         margin: $buttonMargin;
-        background: #88c64b;
+        // background: #88c64b;
         background: #00b09b !important;
         background: -webkit-linear-gradient(
           to right,
@@ -132,6 +138,12 @@
 
         &.error {
           box-shadow: $buttonShadowError;
+        }
+
+        &.disabled {
+          box-shadow: 0 1px 10px rgba(0, 0, 0, 0);
+          background: #c2c2c2 !important;
+          opacity: 0.3;
         }
       }
 
@@ -177,6 +189,12 @@
             #c14747,
             #a73737
           ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        }
+
+        &.disabled {
+          box-shadow: 0 1px 10px rgba(0, 0, 0, 0);
+          background: #c2c2c2 !important;
+          opacity: 0.3;
         }
       }
 
