@@ -57,12 +57,15 @@ const mapStateToProps = state => {
     P3: state.P3,
     P4: state.P4,
     currentUser: state.currentUser,
-    currentMatchId: state.currentMatchId
+    currentMatchId: state.currentMatchId,
+    noPlayer: state.noPlayer
   };
 };
 
 const noPlayer = {
   name: '',
+  firstName: '',
+  lastName: '',
   image: plusImage,
   score: undefined
 };
@@ -187,7 +190,7 @@ class Lobby extends Component {
   player1Click = () => {
     // If cursor already on P1
     if (this.props.playerCursor === 'P1') {
-      this.props.setP1(noPlayer);
+      this.props.setP1(this.props.noPlayer);
     } else {
       this.setState({
         selectedPlayer: 'P1'
@@ -200,7 +203,7 @@ class Lobby extends Component {
   player2Click = () => {
     // If cursor already on P2
     if (this.props.playerCursor === 'P2') {
-      this.props.setP2(noPlayer);
+      this.props.setP2(this.props.noPlayer);
     } else {
       this.setState({
         selectedPlayer: 'P2'
@@ -213,7 +216,7 @@ class Lobby extends Component {
   player3Click = () => {
     // If cursor already on P3
     if (this.props.playerCursor === 'P3') {
-      this.props.setP3(noPlayer);
+      this.props.setP3(this.props.noPlayer);
     } else {
       this.setState({
         selectedPlayer: 'P3'
@@ -226,7 +229,7 @@ class Lobby extends Component {
   player4Click = () => {
     // If cursor already on P4
     if (this.props.playerCursor === 'P4') {
-      this.props.setP4(noPlayer);
+      this.props.setP4(this.props.noPlayer);
     } else {
       this.setState({
         selectedPlayer: 'P4'
@@ -270,11 +273,7 @@ class Lobby extends Component {
     let selectedP4 = this.props.P4;
     let selectedPlayer = this.props.playerCursor;
 
-    const P1 = !cmp(selectedP1, noPlayer);
-    const P2 = !cmp(selectedP2, noPlayer);
-    const P3 = !cmp(selectedP3, noPlayer);
-    const P4 = !cmp(selectedP4, noPlayer);
-    const isMatchReady = (P1 || P2) && (P3 || P4);
+    const isMatchReady = (selectedP1.name || selectedP2.name) && (selectedP3.name || selectedP4.name);
 
     let fetchedPlayers = [];
     let i = 0;

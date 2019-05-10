@@ -8,6 +8,14 @@ const initialState = {
   currentUser: {},
   isStarted: false,
   playerCursor: undefined,
+  noPlayer: {
+    name: '',
+    firstName: '',
+    lastName: '',
+    image: plusImage,
+    score: undefined,
+    _id: undefined
+  },
   P1: {
     name: '',
     firstName: '',
