@@ -99,7 +99,7 @@ class Lobby extends Component {
   }
 
   async componentDidMount() {
-    // const socket = io('http://localhost:8117/match');
+    // const socket = io('/match');
 
     try {
       const response = await axios.get('/api/playingMatch', {});
