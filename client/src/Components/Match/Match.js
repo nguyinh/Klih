@@ -13,7 +13,8 @@ import {
   Grid,
   Row,
   Col,
-  Checkbox
+  Checkbox,
+  Icon
 } from 'rsuite';
 import { setMatch, setScore1, setScore2, setHistory, addToMatch } from './../../redux/actions/index.actions.js';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
@@ -51,7 +52,8 @@ const mapStateToProps = state => {
     history: state.matchHistory,
     minutesElapsed: state.minutesElapsed,
     currentMatchId: state.currentMatchId,
-    currentUser: state.currentUser
+    currentUser: state.currentUser,
+    saveInProgress: false
   };
 };
 
@@ -308,9 +310,10 @@ class Match extends Component {
 
     // If error, don't save goal
     if ((!P1.isSelected && !P2.isSelected && !P3.isSelected && !P4.isSelected) ||
-      this.state.changingScore === 0)
+      this.state.changingScore === 0 ||
+      this.state.saveInProgress)
       return;
-
+    console.log('saving');
     const getPlayer = ({ data, name, placement }) => {
       return {
         _id: data._id,
@@ -380,6 +383,10 @@ class Match extends Component {
     //   'Team2'
     // )
 
+    this.setState({
+      saveInProgress: true
+    });
+
     socket.emit('goalEvent', {
       currentMatchId: this.props.currentMatchId,
       match: {
@@ -413,9 +420,11 @@ class Match extends Component {
           )
         }
       }
+    }, () => {
+      this.resetPointState();
     });
 
-    this.resetPointState();
+    // this.resetPointState();
   }
 
   resetPointState = () => {
@@ -439,7 +448,8 @@ class Match extends Component {
       placement: '',
       changingScore: 0,
       betrayPoint: false,
-      isGoalValid: false
+      isGoalValid: false,
+      saveInProgress: false
     });
   }
 
@@ -655,7 +665,11 @@ class Match extends Component {
                     <div
                       className='addGoalButton'
                       onClick={this.onAddGoalButtonTouch}>
-                      <span>Ajouter</span>
+                      {
+                        this.state.saveInProgress ?
+                        <Icon icon='circle-o-notch' spin size="lg"/> :
+                        <span>Ajouter</span>
+                      }
                     </div>
                   </Col>
                 </CSSTransition>

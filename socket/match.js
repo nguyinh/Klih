@@ -93,7 +93,7 @@ module.exports = (io) => {
     });
 
     // On goal event
-    socket.on('goalEvent', async (data) => {
+    socket.on('goalEvent', async (data, ackn) => {
       try {
         const match = await PlayingMatch.findOne({_id: data.currentMatchId}).exec();
 
@@ -112,7 +112,7 @@ module.exports = (io) => {
 
           // Return new match state to subscribers
           matchIO.to(data.currentMatchId).emit('goalEvent', match);
-
+          ackn();
           // TODO: Send here restricted data to Table viewers
         } else {
           console.log('not found');
