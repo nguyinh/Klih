@@ -109,6 +109,9 @@ class Player extends Component {
         });
         break;
       default:
+        this.props.setP1({
+          ...this.state
+        });
         break;
     }
   }
