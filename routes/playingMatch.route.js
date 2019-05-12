@@ -62,6 +62,7 @@ module.exports = (() => {
           publisher: mongoose.Types.ObjectId(decoded._id),
           history: [],
           createdAt: Date.now(),
+          lastUpdateAt: Date.now(),
           score1: 0,
           score2: 0
         });

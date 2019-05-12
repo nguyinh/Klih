@@ -124,6 +124,7 @@ class Match extends Component {
 
     socket.on('matchCancelled', (data) => {
       console.log('match ended');
+      console.log(data.reason);
       // TODO: some things on match end
     });
   }

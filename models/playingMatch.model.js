@@ -70,6 +70,10 @@ const playingMatchScheme = mongoose.Schema({
   },
   table: {
     type: ObjectId
+  },
+  lastUpdateAt: {
+    type: Date,
+    required: true
   }
 });
 

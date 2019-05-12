@@ -4,6 +4,8 @@ module.exports = (io) => {
   const PlayingMatch = require('./../models/playingMatch.model.js')
   const Match = require('./../models/match.model.js')
   const mongoose = require('mongoose');
+  const MATCH_TIMEOUT = 10 * (60 * 1000); // (milliseconds) Timeout for matchs inactive for 10 minutes
+  const REFRESH_TIMEOUT = 2 * (60 * 1000); // (milliseconds) Search for inactive matchs every 2 minutes
 
   logger.info('[Socket.io] Initialization');
 
@@ -36,7 +38,9 @@ module.exports = (io) => {
             const soc = matchIO.connected[socketID];
             playersSet.add(soc.player);
           }
-          console.log(playersSet);
+
+          match.lastUpdateAt = Date.now();
+          await match.save();
 
           socket.emit('joinMatch', match); // Return actual match data
           matchIO.to(data.matchId).emit('onConnectedPlayersChange', {playersArray: Array.from(playersSet)});
@@ -86,6 +90,7 @@ module.exports = (io) => {
               goalTime: parseInt((Date.now() - match.createdAt) / 60000)
             }
           ];
+          match.lastUpdateAt = Date.now();
 
           // Save new match state
           await match.save();
@@ -188,7 +193,7 @@ module.exports = (io) => {
         if (currentMatch) {
           await PlayingMatch.deleteOne({_id: data.matchId}).exec();
 
-          matchIO.to(data.matchId).emit('matchCancelled', {});
+          matchIO.to(data.matchId).emit('matchCancelled', {reason: 'ENDED_BY_USER'});
 
           // Each socket leave MatchId room
           for (socketID in matchIO.adapter.rooms[data.matchId].sockets) {
@@ -205,39 +210,6 @@ module.exports = (io) => {
       }
     });
 
-    // Update connected Users
-    // socket.on('updateConnectedUsers', async ({playerId, matchId}) => {
-    //   try {
-    //     const match = await PlayingMatch.findOne({_id: matchId}).exec();
-    //
-    //     if (match) {
-    //       let connectedPlayersSet = new Set(match.connectedUsers);
-    //
-    //       if (match.player1 == playerId)
-    //         connectedPlayersSet.add('P1');  match.connectedUsers.push('P1');
-    //       else if (match.player2 == playerId)
-    //         connectedPlayersSet.add('P2');  match.connectedUsers.push('P2');
-    //       else if (match.player3 == playerId)
-    //         connectedPlayersSet.add('P3');  match.connectedUsers.push('P3');
-    //       else if (match.player4 == playerId)
-    //         connectedPlayersSet.add('P4');
-    //
-    //       match.connectedUsers = Array.from(connectedPlayersSet);
-    //
-    //       await match.save();
-    //
-    //       matchIO.to(matchId).emit('usersUpdated', {connectedUsers: match.connectedUsers});
-    //        cb(match.connectedUsers);
-    //     } else {
-    //       console.log('not found');
-    //     }
-    //   } catch (err) {
-    //     logger.error(err)
-    //   }
-    //
-    //   console.log(playerId, matchId);
-    // });
-
     // On User disconnecting
     socket.on('disconnecting', async () => {
       // Refresh connected players sockets in matchId room
@@ -245,15 +217,16 @@ module.exports = (io) => {
       try {
         // Get matchId
         const matchId = Object.values(socket.rooms)[1];
-        console.log('player disconneting is : ' + socket.player);
+
+        // Refresh set of connected players
         let playersSet = new Set();
         for (socketID in matchIO.adapter.rooms[matchId].sockets) {
           const soc = matchIO.connected[socketID];
-          console.log(soc.player);
           playersSet.add(soc.player);
         }
+        // Delete current leaving player
         playersSet.delete(socket.player);
-        // console.log(playersSet);
+
         matchIO.to(matchId).emit('onConnectedPlayersChange', {playersArray: Array.from(playersSet)});
       } catch (err) {
         logger.error(err)
@@ -266,6 +239,22 @@ module.exports = (io) => {
       logger.debug('socket disconnected: ' + reason);
     });
   });
+
+  // Interval to search for inactive matchs
+  setInterval(async () => {
+    const inactiveMatchs = await PlayingMatch.find({
+      lastUpdateAt: {
+        "$lte": new Date(Date.now() - MATCH_TIMEOUT)
+      }
+    }).exec();
+
+    inactiveMatchs.forEach(async ({_id}) => {
+      // Delete match from DB
+      await PlayingMatch.deleteOne({_id}).exec();
+      // Emit match cancelled to matchId room
+      matchIO.to(_id).emit('matchCancelled', {reason: 'MATCH_TIMEOUT'});
+    });
+  }, REFRESH_TIMEOUT);
 
   return io;
 };
