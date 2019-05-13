@@ -92,10 +92,6 @@ class MatchHistory extends Component {
 
       this.updateTime();
     });
-
-    // socket.on('playerHasJoined', (data) => {
-    //   Alert.info('Un joueur a rejoint la partie');
-    // });
   }
 
   componentWillUnmount() {
@@ -113,22 +109,21 @@ class MatchHistory extends Component {
   }
 
   updateTime = () => {
-    this.setState({ minutesElapsed: parseInt((Date.now() - this.state.createdAt) / 60000) })
-    // this.props.setElapsedTime(parseInt((Date.now() - this.state.startedAt) / 60000));
+    this.setState({
+      minutesElapsed: parseInt((Date.now() - this.state.createdAt) / 60000)
+    });
   }
 
-  async componentWillReceiveProps(nextProps) {
-    // if (nextProps !== this.props) {
-    //   await this.setState({
-    //     // ...nextProps
-    //     score1: nextProps.score1,
-    //     score2: nextProps.score2,
-    //     history: nextProps.history
-    //   });
-    // }
-  }
-
-  // ====== Player and Placement ======
+  // async componentWillReceiveProps(nextProps) {
+  // if (nextProps !== this.props) {
+  //   await this.setState({
+  //     // ...nextProps
+  //     score1: nextProps.score1,
+  //     score2: nextProps.score2,
+  //     history: nextProps.history
+  //   });
+  // }
+  // }
 
 
   render() {
