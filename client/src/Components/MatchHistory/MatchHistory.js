@@ -95,6 +95,8 @@ class MatchHistory extends Component {
 
   componentWillUnmount() {
     clearInterval(this.state.matchTimer);
+    socket.off('goalEvent');
+    socket.off('joinMatch');
   }
 
   shouldComponentUpdate(prevProps, prevState) {

@@ -14,7 +14,8 @@ import {
   Row,
   Col,
   Checkbox,
-  Icon
+  Icon,
+  Alert
 } from 'rsuite';
 import { setMatch, setScore1, setScore2, setHistory, addToMatch } from './../../redux/actions/index.actions.js';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
@@ -119,18 +120,26 @@ class Match extends Component {
 
     socket.on('matchEnded', (data) => {
       console.log('match ended');
+      Alert.success('Le match a bien été enregistré',
+        0);
       // TODO: some things on match end
     });
 
     socket.on('matchCancelled', (data) => {
       console.log('match ended');
       console.log(data.reason);
+      Alert.warning('Ce match a été annulé par un joueur',
+        0);
       // TODO: some things on match end
     });
+
+
   }
 
   componentWillUnmount() {
     socket.off('onConnectedPlayersChange');
+    socket.off('matchEnded');
+    socket.off('matchCancelled');
   }
 
   // ====== Player and Placement ======

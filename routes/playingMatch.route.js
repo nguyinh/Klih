@@ -55,39 +55,115 @@ module.exports = (() => {
 
   // Create match
   router.post('/api/playingMatch', (req, res) => {
-    jwt.verify(req.cookies.token, process.env.JWT_SECRET, (err, decoded) => {
+    jwt.verify(req.cookies.token, process.env.JWT_SECRET, async (err, decoded) => {
       if (decoded) {
-        let match = new PlayingMatch({
-          _id: new mongoose.Types.ObjectId(),
-          publisher: mongoose.Types.ObjectId(decoded._id),
-          history: [],
-          createdAt: Date.now(),
-          lastUpdateAt: Date.now(),
-          score1: 0,
-          score2: 0
-        });
+        try {
+          // Search for players who are already in match
+          let newPlayers = [];
+          if (req.body.player1) 
+            newPlayers.push(req.body.player1);
+          if (req.body.player2) 
+            newPlayers.push(req.body.player2);
+          if (req.body.player3) 
+            newPlayers.push(req.body.player3);
+          if (req.body.player4) 
+            newPlayers.push(req.body.player4);
+          if (req.body.publisher) 
+            newPlayers.push(req.body.publisher);
+          
+          const matchPlaying = await PlayingMatch.findOne({
+            $or: [
+              {
+                player1: {
+                  $in: newPlayers
+                }
+              }, {
+                player2: {
+                  $in: newPlayers
+                }
+              }, {
+                player3: {
+                  $in: newPlayers
+                }
+              }, {
+                player4: {
+                  $in: newPlayers
+                }
+              }, {
+                publisher: {
+                  $in: newPlayers
+                }
+              }
+            ]
+          }).exec();
 
-        if (req.body.player1) 
-          match.player1 = mongoose.Types.ObjectId(req.body.player1);
-        
-        if (req.body.player2) 
-          match.player2 = mongoose.Types.ObjectId(req.body.player2);
-        
-        if (req.body.player3) 
-          match.player3 = mongoose.Types.ObjectId(req.body.player3);
-        
-        if (req.body.player4) 
-          match.player4 = mongoose.Types.ObjectId(req.body.player4);
-        
-        match.save().then((result) => {
-          logger.debug('Match begin');
-          logger.debug(result);
-          return res.status(201).send(result);
-        }).catch((err) => {
+          if (matchPlaying) {
+            return res.status(409).send({error: 'PLAYERS_ALREADY_IN_MATCH'});
+          } else {
+            let match = new PlayingMatch({
+              _id: new mongoose.Types.ObjectId(),
+              publisher: mongoose.Types.ObjectId(decoded._id),
+              history: [],
+              createdAt: Date.now(),
+              lastUpdateAt: Date.now(),
+              score1: 0,
+              score2: 0
+            });
+
+            if (req.body.player1) 
+              match.player1 = mongoose.Types.ObjectId(req.body.player1);
+            
+            if (req.body.player2) 
+              match.player2 = mongoose.Types.ObjectId(req.body.player2);
+            
+            if (req.body.player3) 
+              match.player3 = mongoose.Types.ObjectId(req.body.player3);
+            
+            if (req.body.player4) 
+              match.player4 = mongoose.Types.ObjectId(req.body.player4);
+            
+            match.save().then((result) => {
+              return res.status(201).send(result);
+            }).catch((err) => {
+              logger.error(err);
+              return res.status(500).json({error: 'INTERNAL_SERVER_ERROR'})
+            });
+          }
+
+          // let match = new PlayingMatch({
+          //   _id: new mongoose.Types.ObjectId(),
+          //   publisher: mongoose.Types.ObjectId(decoded._id),
+          //   history: [],
+          //   createdAt: Date.now(),
+          //   lastUpdateAt: Date.now(),
+          //   score1: 0,
+          //   score2: 0
+          // });
+          //
+          // if (req.body.player1)
+          //   match.player1 = mongoose.Types.ObjectId(req.body.player1);
+          //
+          // if (req.body.player2)
+          //   match.player2 = mongoose.Types.ObjectId(req.body.player2);
+          //
+          // if (req.body.player3)
+          //   match.player3 = mongoose.Types.ObjectId(req.body.player3);
+          //
+          // if (req.body.player4)
+          //   match.player4 = mongoose.Types.ObjectId(req.body.player4);
+          //
+          //  match.save().then((result) => {
+          //    logger.debug('Match begin');
+          //    logger.debug(result);
+          //    return res.status(201).send(result);
+          //  }).catch((err) => {
+          //    logger.error(err);
+          //    return res.status(500).json({error: 'INTERNAL_SERVER_ERROR'})
+          //  });
+          // return res.status(201).send('hello');
+        } catch (err) {
           logger.error(err);
-          return res.status(500).json({error: 'INTERNAL_SERVER_ERROR'})
-        })
-
+        }
       } else { // Token expired or no token
 
         // TODO: Ask for connection

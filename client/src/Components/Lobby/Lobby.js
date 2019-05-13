@@ -21,7 +21,8 @@ import {
   Col,
   Input,
   InputGroup,
-  Icon
+  Icon,
+  Alert
 } from 'rsuite';
 
 
@@ -172,7 +173,7 @@ class Lobby extends Component {
 
   // DEBUG
   async componentWillReceiveProps(nextProps) {
-    if (nextProps.isConnected && !this.props.isConnected) {
+    if (nextProps.currentUser._id && !this.props.currentUser._id) {
       const players = await axios('/api/team/getAllPlayers', {});
       this.setState({ playersData: players.data });
     }
@@ -233,7 +234,7 @@ class Lobby extends Component {
 
   onRandomButtonTouch = async () => {
     // socket.emit('goalEvent', this.state.matchId);
-    console.log(await axios.post('/api/playingMatch', {}));
+    // console.log(await axios.post('/api/playingMatch', {}));
   }
 
   beginMatch = async () => {
@@ -244,17 +245,22 @@ class Lobby extends Component {
         player1: this.props.P1._id || '',
         player2: this.props.P2._id || '',
         player3: this.props.P3._id || '',
-        player4: this.props.P4._id || ''
+        player4: this.props.P4._id || '',
+        publisher: this.props.currentUser._id
         // table: TODO
       });
+
       this.props.setCurrentMatchId(response.data._id);
+
+      this.setState({
+        beginMatch: true
+      });
     } catch (err) {
       console.log(err);
+      if (err.response.status === 409)
+        Alert.error('Un joueur ou plus sont déjà dans un match',
+          3000);
     }
-
-    // this.setState({
-    //   beginMatch: true
-    // });
   }
 
   render() {

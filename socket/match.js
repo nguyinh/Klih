@@ -219,15 +219,17 @@ module.exports = (io) => {
         const matchId = Object.values(socket.rooms)[1];
 
         // Refresh set of connected players
-        let playersSet = new Set();
-        for (socketID in matchIO.adapter.rooms[matchId].sockets) {
-          const soc = matchIO.connected[socketID];
-          playersSet.add(soc.player);
-        }
-        // Delete current leaving player
-        playersSet.delete(socket.player);
+        if (matchIO.adapter.rooms[matchId]) {
+          let playersSet = new Set();
+          for (socketID in matchIO.adapter.rooms[matchId].sockets) {
+            const soc = matchIO.connected[socketID];
+            playersSet.add(soc.player);
+          }
+          // Delete current leaving player
+          playersSet.delete(socket.player);
 
-        matchIO.to(matchId).emit('onConnectedPlayersChange', {playersArray: Array.from(playersSet)});
+          matchIO.to(matchId).emit('onConnectedPlayersChange', {playersArray: Array.from(playersSet)});
+        }
       } catch (err) {
         logger.error(err)
       }
