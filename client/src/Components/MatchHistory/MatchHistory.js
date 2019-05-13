@@ -13,7 +13,8 @@ import {
   Row,
   Col,
   Checkbox,
-  Icon
+  Icon,
+  Alert
 } from 'rsuite';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { socket } from './../../socket';
@@ -91,6 +92,10 @@ class MatchHistory extends Component {
 
       this.updateTime();
     });
+
+    // socket.on('playerHasJoined', (data) => {
+    //   Alert.info('Un joueur a rejoint la partie');
+    // });
   }
 
   componentWillUnmount() {

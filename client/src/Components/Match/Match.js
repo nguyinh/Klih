@@ -57,7 +57,8 @@ const mapStateToProps = state => {
     minutesElapsed: state.minutesElapsed,
     currentMatchId: state.currentMatchId,
     currentUser: state.currentUser,
-    saveInProgress: false
+    saveInProgress: false,
+    playersArray: []
   };
 };
 
@@ -92,7 +93,8 @@ class Match extends Component {
       betrayPoint: false,
       playersMissing: false,
       pointMissing: false,
-      startedAt: Date.now()
+      startedAt: Date.now(),
+      playersArray: []
     }
   }
 
@@ -119,6 +121,13 @@ class Match extends Component {
       } else {
         this.setState({ teamToDisplay: '' });
       }
+
+      if (playersArray.length > this.state.playersArray.length) {
+        Alert.info('Un joueur a rejoint la partie');
+      } else if (playersArray.length < this.state.playersArray.length) {
+        Alert.info('Un joueur a quitté la partie');
+      }
+      this.setState({ playersArray });
     });
 
     socket.on('matchEnded', (data) => {
