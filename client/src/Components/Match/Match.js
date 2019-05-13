@@ -128,7 +128,8 @@ class Match extends Component {
 
       this.resetPointState();
 
-      if (playersArray.length > this.state.playersArray.length) {
+      if (playersArray.length > this.state.playersArray.length &&
+        this.state.playersArray.length !== 0) {
         Alert.info('Un joueur a rejoint la partie');
       } else if (playersArray.length < this.state.playersArray.length) {
         Alert.info('Un joueur a quitté la partie');

@@ -152,17 +152,15 @@ class Lobby extends Component {
 
       this.props.setCurrentMatchId(response.data._id);
     } catch (err) {
-      console.log(err);
-    }
+      // console.log(err);
 
-    // TODO: on Match componentDidMount
-    // TODO: send all player data
-
-    try {
-      const players = await axios('/api/team/getAllPlayers', {});
-      this.setState({ playersData: players.data });
-    } catch (err) {
-      console.log(err);
+      // If match not found, fetch for players
+      try {
+        const players = await axios('/api/team/getAllPlayers', {});
+        this.setState({ playersData: players.data });
+      } catch (err) {
+        console.log(err);
+      }
     }
   }
 

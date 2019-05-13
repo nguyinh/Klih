@@ -44,7 +44,6 @@ module.exports = (io) => {
 
           socket.emit('joinMatch', match); // Return actual match data
           matchIO.to(data.matchId).emit('onConnectedPlayersChange', {playersArray: Array.from(playersSet)});
-          // on front, send match state
         } else {
           logger.debug('Match not found');
           socket.emit('joinMatch', 'NOT_FOUND');

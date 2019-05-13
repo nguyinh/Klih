@@ -122,47 +122,13 @@ module.exports = (() => {
             if (req.body.player4) 
               match.player4 = mongoose.Types.ObjectId(req.body.player4);
             
-            match.save().then((result) => {
-              return res.status(201).send(result);
-            }).catch((err) => {
-              logger.error(err);
-              return res.status(500).json({error: 'INTERNAL_SERVER_ERROR'})
-            });
-          }
+            const result = await match.save();
 
-          // let match = new PlayingMatch({
-          //   _id: new mongoose.Types.ObjectId(),
-          //   publisher: mongoose.Types.ObjectId(decoded._id),
-          //   history: [],
-          //   createdAt: Date.now(),
-          //   lastUpdateAt: Date.now(),
-          //   score1: 0,
-          //   score2: 0
-          // });
-          //
-          // if (req.body.player1)
-          //   match.player1 = mongoose.Types.ObjectId(req.body.player1);
-          //
-          // if (req.body.player2)
-          //   match.player2 = mongoose.Types.ObjectId(req.body.player2);
-          //
-          // if (req.body.player3)
-          //   match.player3 = mongoose.Types.ObjectId(req.body.player3);
-          //
-          // if (req.body.player4)
-          //   match.player4 = mongoose.Types.ObjectId(req.body.player4);
-          //
-          //  match.save().then((result) => {
-          //    logger.debug('Match begin');
-          //    logger.debug(result);
-          //    return res.status(201).send(result);
-          //  }).catch((err) => {
-          //    logger.error(err);
-          //    return res.status(500).json({error: 'INTERNAL_SERVER_ERROR'})
-          //  });
-          // return res.status(201).send('hello');
+            return res.status(201).send(result);
+          }
         } catch (err) {
           logger.error(err);
+          return res.status(500).json({error: 'INTERNAL_SERVER_ERROR'})
         }
       } else { // Token expired or no token
 
@@ -173,8 +139,6 @@ module.exports = (() => {
       }
     });
   });
-
-  // TODO: Delete route -> delete current match if finished or timeout
 
   return router;
 })()
