@@ -113,14 +113,20 @@ class Match extends Component {
         const player4ID = this.state.P4._id;
         if (userID === player1ID ||
           userID === player2ID) {
-          this.setState({ teamToDisplay: 'Team1' });
+          this.setState({
+            teamToDisplay: 'Team1'
+          });
         } else if (userID === player3ID ||
           userID === player4ID) {
-          this.setState({ teamToDisplay: 'Team2' });
+          this.setState({
+            teamToDisplay: 'Team2'
+          });
         }
       } else {
         this.setState({ teamToDisplay: '' });
       }
+
+      this.resetPointState();
 
       if (playersArray.length > this.state.playersArray.length) {
         Alert.info('Un joueur a rejoint la partie');
@@ -144,7 +150,7 @@ class Match extends Component {
       Alert.warning('Ce match a été annulé par un joueur',
         0);
       this.props.resetMatch();
-      // TODO: some things on match end
+      // TODO: some things on match cancel
     });
   }
 
