@@ -35,3 +35,5 @@ export const setStartTimestamp = content => ({type: action.SET_START_TIMESTAMP, 
 export const resetUserSession = () => ({type: action.RESET_USER_SESSION});
 
 export const setCurrentMatchId = content => ({type: action.SET_MATCH_ID, payload: content});
+
+export const resetMatch = content => ({type: action.RESET_MATCH});

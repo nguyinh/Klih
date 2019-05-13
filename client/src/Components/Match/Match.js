@@ -17,7 +17,7 @@ import {
   Icon,
   Alert
 } from 'rsuite';
-import { setMatch, setScore1, setScore2, setHistory, addToMatch } from './../../redux/actions/index.actions.js';
+import { setMatch, setScore1, setScore2, setHistory, addToMatch, resetMatch } from './../../redux/actions/index.actions.js';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { socket } from './../../socket';
 
@@ -37,6 +37,9 @@ const mapDispatchToProps = dispatch => {
     },
     addToMatch: (value) => {
       dispatch(addToMatch(value))
+    },
+    resetMatch: (value) => {
+      dispatch(resetMatch())
     },
   })
 }
@@ -122,6 +125,7 @@ class Match extends Component {
       console.log('match ended');
       Alert.success('Le match a bien été enregistré',
         0);
+      this.props.resetMatch();
       // TODO: some things on match end
     });
 
@@ -130,10 +134,23 @@ class Match extends Component {
       console.log(data.reason);
       Alert.warning('Ce match a été annulé par un joueur',
         0);
+      this.props.resetMatch();
       // TODO: some things on match end
     });
+  }
 
-
+  async componentWillReceiveProps(nextProps) {
+    if (nextProps.P1.name !== this.props.P1.name ||
+      nextProps.P2.name !== this.props.P2.name ||
+      nextProps.P3.name !== this.props.P3.name ||
+      nextProps.P4.name !== this.props.P4.name) {
+      await this.setState({
+        P1: nextProps.P1,
+        P2: nextProps.P2,
+        P3: nextProps.P3,
+        P4: nextProps.P4
+      });
+    }
   }
 
   componentWillUnmount() {

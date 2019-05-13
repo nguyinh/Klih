@@ -1,6 +1,15 @@
 import act from '../../config/actions.constants.js'
 import plusImage from './../../plus.png';
 
+const noPlayer = {
+  name: '',
+  firstName: '',
+  lastName: '',
+  image: plusImage,
+  score: undefined,
+  _id: undefined
+};
+
 const initialState = {
   isConnected: undefined,
   actualPage: '',
@@ -48,20 +57,6 @@ const initialState = {
     score: undefined,
     _id: undefined
   },
-  // match: {
-  //   score1: 0,
-  //   score2: 0,
-  //   history: [],
-  //   minutesElapsed: 0,
-  //   startTimestamp: ''
-  // },
-  // team1: [],
-  // team2: [],
-  // score1: 0,
-  // score2: 0,
-  // matchHistory: [],
-  // minutesElapsed: 0,
-  // startTimestamp: '',
   currentMatchId: ''
 }
 
@@ -149,6 +144,15 @@ function rootReducer(state = initialState, action) {
       });
     case act.SET_P4:
       return Object.assign({}, state, {P4: action.payload});
+    case act.RESET_MATCH:
+      return Object.assign({}, state, {
+        P1: noPlayer,
+        P2: noPlayer,
+        P3: noPlayer,
+        P4: noPlayer,
+        currentMatchId: '',
+        playerCursor: undefined
+      });
     case act.SET_MATCH:
       return Object.assign({}, state, {match: action.payload});
     case act.SET_SCORE1:
