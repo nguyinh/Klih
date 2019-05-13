@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const matchEventScheme = mongoose.Schema({
@@ -11,7 +10,8 @@ const matchEventScheme = mongoose.Schema({
     type: Number
   },
   byPlayer: {
-    type: ObjectId
+    type: ObjectId,
+    ref: 'Player'
   },
   isBetray: {
     type: Boolean
@@ -41,22 +41,27 @@ const playingMatchScheme = mongoose.Schema({
   },
   player1: {
     type: ObjectId,
+    ref: 'Player',
     required: false
   },
   player2: {
     type: ObjectId,
+    ref: 'Player',
     required: false
   },
   player3: {
     type: ObjectId,
+    ref: 'Player',
     required: false
   },
   player4: {
     type: ObjectId,
+    ref: 'Player',
     required: false
   },
   publisher: {
     type: ObjectId,
+    ref: 'Player',
     required: false
   },
   history: {

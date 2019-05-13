@@ -30,9 +30,6 @@ const playerScheme = mongoose.Schema({
   alias: {
     type: String
   },
-  teams: {
-    type: [ObjectId]
-  },
   avatar: {
     data: Buffer,
     contentType: String

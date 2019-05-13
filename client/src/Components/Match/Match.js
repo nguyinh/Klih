@@ -400,14 +400,15 @@ class Match extends Component {
       playerId: this.props.currentUser._id,
       match: {
         score1: (
-          ((changingScore > 0 && !betrayPoint && (P1.isSelected || P2.isSelected)) ||
-            (changingScore > 0 && betrayPoint && (P3.isSelected || P4.isSelected)) ||
-            (changingScore < 0 && !betrayPoint && (P3.isSelected || P4.isSelected)) ||
-            (changingScore < 0 && betrayPoint && (P1.isSelected || P2.isSelected))) ?
+          (changingScore > 0 && !betrayPoint && (P1.isSelected || P2.isSelected)) ||
+          (changingScore > 0 && betrayPoint && (P3.isSelected || P4.isSelected)) ||
+          (changingScore < 0 && !betrayPoint && (P3.isSelected || P4.isSelected)) ||
+          (changingScore < 0 && betrayPoint && (P1.isSelected || P2.isSelected)) ?
           changingScore :
           0
         ),
-        score2: ((changingScore > 0 && !betrayPoint && (P3.isSelected || P4.isSelected)) ||
+        score2: (
+          (changingScore > 0 && !betrayPoint && (P3.isSelected || P4.isSelected)) ||
           (changingScore > 0 && betrayPoint && (P1.isSelected || P2.isSelected)) ||
           (changingScore < 0 && !betrayPoint && (P1.isSelected || P2.isSelected)) ||
           (changingScore < 0 && betrayPoint && (P3.isSelected || P4.isSelected)) ?

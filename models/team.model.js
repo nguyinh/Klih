@@ -14,6 +14,7 @@ const teamPlayerScheme = mongoose.Schema({
   },
   playerId: {
     type: ObjectId,
+    ref: 'Player',
     required: true
   }
 });

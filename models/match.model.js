@@ -14,6 +14,7 @@ const matchEventScheme = mongoose.Schema({
   },
   byPlayer: {
     type: ObjectId,
+    ref: 'Player',
     required: true
   },
   isBetray: {
@@ -37,22 +38,27 @@ const matchScheme = mongoose.Schema({
   },
   player1: {
     type: ObjectId,
+    ref: 'Player',
     required: false
   },
   player2: {
     type: ObjectId,
+    ref: 'Player',
     required: false
   },
   player3: {
     type: ObjectId,
+    ref: 'Player',
     required: false
   },
   player4: {
     type: ObjectId,
+    ref: 'Player',
     required: false
   },
   publisher: {
     type: ObjectId,
+    ref: 'Player',
     required: false
   },
   history: {

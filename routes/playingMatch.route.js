@@ -100,8 +100,9 @@ module.exports = (() => {
           if (matchPlaying) {
             return res.status(409).send({error: 'PLAYERS_ALREADY_IN_MATCH'});
           } else {
+            const thisID = new mongoose.Types.ObjectId();
             let match = new PlayingMatch({
-              _id: new mongoose.Types.ObjectId(),
+              _id: thisID,
               publisher: mongoose.Types.ObjectId(decoded._id),
               history: [],
               createdAt: Date.now(),
@@ -109,18 +110,19 @@ module.exports = (() => {
               score1: 0,
               score2: 0
             });
-
+            // console.log(req.body.player1);
+            // console.log(mongoose.Types.ObjectId.isValid(req.body.player1));
             if (req.body.player1) 
-              match.player1 = mongoose.Types.ObjectId(req.body.player1);
+              match.player1 = req.body.player1;
             
             if (req.body.player2) 
-              match.player2 = mongoose.Types.ObjectId(req.body.player2);
+              match.player2 = req.body.player2;
             
             if (req.body.player3) 
-              match.player3 = mongoose.Types.ObjectId(req.body.player3);
+              match.player3 = req.body.player3;
             
             if (req.body.player4) 
-              match.player4 = mongoose.Types.ObjectId(req.body.player4);
+              match.player4 = req.body.player4;
             
             const result = await match.save();
 
