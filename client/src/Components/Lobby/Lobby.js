@@ -285,8 +285,7 @@ class Lobby extends Component {
       return <Redirect push to="/match" />;
     }
 
-    return <div>
-      <Grid>
+    return <Grid className='lobbyContainer'>
         <Row>
           <Col
             xs={22}
@@ -426,9 +425,7 @@ class Lobby extends Component {
               </Grid>
           </Col>
         </Row>
-      </Grid>
-
-    </div>;
+      </Grid>;
   }
 }
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Lobby));

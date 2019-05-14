@@ -4,7 +4,7 @@ module.exports = (io) => {
   const PlayingMatch = require('./../models/playingMatch.model.js')
   const Match = require('./../models/match.model.js')
   const mongoose = require('mongoose');
-  const MATCH_TIMEOUT = 10 * (60 * 1000); // (milliseconds) Timeout for matchs inactive for 10 minutes
+  const MATCH_TIMEOUT = 20 * (60 * 1000); // (milliseconds) Timeout for matchs inactive for 20 minutes
   const REFRESH_TIMEOUT = 2 * (60 * 1000); // (milliseconds) Search for inactive matchs every 2 minutes
 
   logger.info('[Socket.io] Initialization');

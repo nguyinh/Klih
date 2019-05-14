@@ -140,18 +140,17 @@ class Match extends Component {
     socket.on('matchEnded', (data) => {
       console.log('match ended');
       Alert.success('Le match a bien été enregistré',
-        0);
+        3000);
       this.props.resetMatch();
       // TODO: some things on match end
     });
 
     socket.on('matchCancelled', (data) => {
-      console.log('match ended');
-      console.log(data.reason);
-      Alert.warning('Ce match a été annulé par un joueur',
-        0);
+      Alert.warning(data.reason === 'ENDED_BY_USER' ?
+        'Ce match a été annulé par un joueur' :
+        'Match annulé pour inactivité',
+        10000);
       this.props.resetMatch();
-      // TODO: some things on match cancel
     });
   }
 
