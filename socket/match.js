@@ -43,6 +43,13 @@ module.exports = (io) => {
           await match.save();
 
           socket.emit('joinMatch', match); // Return actual match data
+          // Return new match state to subscribers
+          socket.emit('placementChange', {
+            P1Placement: match.P1Placement,
+            P2Placement: match.P2Placement,
+            P3Placement: match.P3Placement,
+            P4Placement: match.P4Placement
+          });
           matchIO.to(data.matchId).emit('onConnectedPlayersChange', {playersArray: Array.from(playersSet)});
         } else {
           logger.debug('Match not found');
@@ -148,6 +155,58 @@ module.exports = (io) => {
 
           // Return new match state to subscribers
           matchIO.to(data.matchId).emit('goalEvent', match);
+        } else {
+          console.log('not found');
+        }
+      } catch (err) {
+        logger.error(err)
+      }
+    });
+
+    // On goal event
+    socket.on('placementChange', async (data) => {
+      try {
+        const match = await PlayingMatch.findOne({
+          $and: [
+            {
+              _id: data.matchId
+            }, {
+              $or: [
+                {
+                  player1: data.playerId
+                }, {
+                  player2: data.playerId
+                }, {
+                  player3: data.playerId
+                }, {
+                  player4: data.playerId
+                }, {
+                  publisher: data.playerId
+                }
+              ]
+            }
+          ]
+        }).exec();
+
+        if (match) {
+          if (data.P1Placement !== undefined) 
+            match.P1Placement = data.P1Placement;
+          if (data.P2Placement !== undefined) 
+            match.P2Placement = data.P2Placement;
+          if (data.P3Placement !== undefined) 
+            match.P3Placement = data.P3Placement;
+          if (data.P4Placement !== undefined) 
+            match.P4Placement = data.P4Placement;
+          
+          await match.save();
+
+          // Return new match state to subscribers
+          matchIO.to(data.matchId).emit('placementChange', {
+            P1Placement: match.P1Placement,
+            P2Placement: match.P2Placement,
+            P3Placement: match.P3Placement,
+            P4Placement: match.P4Placement
+          });
         } else {
           console.log('not found');
         }

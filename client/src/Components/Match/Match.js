@@ -137,6 +137,15 @@ class Match extends Component {
       this.setState({ playersArray });
     });
 
+    socket.on('placementChange', ({ P1Placement, P2Placement, P3Placement, P4Placement }) => {
+      this.setState(prevState => ({
+        P1: { ...prevState.P1, placement: P1Placement },
+        P2: { ...prevState.P2, placement: P2Placement },
+        P3: { ...prevState.P3, placement: P3Placement },
+        P4: { ...prevState.P4, placement: P4Placement },
+      }));
+    });
+
     socket.on('matchEnded', (data) => {
       console.log('match ended');
       Alert.success('Le match a bien été enregistré',
@@ -266,6 +275,7 @@ class Match extends Component {
     this.resetErrors();
 
     const { P1, P2, P3, P4 } = this.state;
+
     if (this.state.P1.isSelected) {
       this.setState({
         P1: {
@@ -274,10 +284,18 @@ class Match extends Component {
         },
         P2: {
           ...this.state.P2,
-          placement: (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : ''))
+          placement: (P1.placement === placementType ? P2.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
         },
         placement: (P1.placement === placementType ? '' : placementType)
       });
+
+      socket.emit('placementChange', {
+        matchId: this.props.currentMatchId,
+        playerId: this.props.currentUser._id,
+        P1Placement: (P1.placement === placementType ? '' : placementType),
+        P2Placement: (P1.placement === placementType ? P2.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
+      });
+
     } else if (this.state.P2.isSelected) {
       this.setState({
         P2: {
@@ -286,10 +304,18 @@ class Match extends Component {
         },
         P1: {
           ...this.state.P1,
-          placement: (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : ''))
+          placement: (P2.placement === placementType ? P1.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
         },
         placement: (P2.placement === placementType ? '' : placementType)
       });
+
+      socket.emit('placementChange', {
+        matchId: this.props.currentMatchId,
+        playerId: this.props.currentUser._id,
+        P1Placement: (P2.placement === placementType ? P1.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : ''))),
+        P2Placement: (P2.placement === placementType ? '' : placementType)
+      });
+
     } else if (this.state.P3.isSelected) {
       this.setState({
         P3: {
@@ -298,10 +324,18 @@ class Match extends Component {
         },
         P4: {
           ...this.state.P4,
-          placement: (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : ''))
+          placement: (P3.placement === placementType ? P4.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
         },
         placement: (P3.placement === placementType ? '' : placementType)
       });
+
+      socket.emit('placementChange', {
+        matchId: this.props.currentMatchId,
+        playerId: this.props.currentUser._id,
+        P3Placement: (P3.placement === placementType ? '' : placementType),
+        P4Placement: (P3.placement === placementType ? P4.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
+      });
+
     } else if (this.state.P4.isSelected) {
       this.setState({
         P4: {
@@ -310,9 +344,16 @@ class Match extends Component {
         },
         P3: {
           ...this.state.P3,
-          placement: (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : ''))
+          placement: (P4.placement === placementType ? P3.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
         },
         placement: (P4.placement === placementType ? '' : placementType)
+      });
+
+      socket.emit('placementChange', {
+        matchId: this.props.currentMatchId,
+        playerId: this.props.currentUser._id,
+        P3Placement: (P4.placement === placementType ? P3.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : ''))),
+        P4Placement: (P4.placement === placementType ? '' : placementType)
       });
     }
   }

@@ -59,6 +59,22 @@ const playingMatchScheme = mongoose.Schema({
     ref: 'Player',
     required: false
   },
+  P1Placement: {
+    type: String,
+    default: ''
+  },
+  P2Placement: {
+    type: String,
+    default: ''
+  },
+  P3Placement: {
+    type: String,
+    default: ''
+  },
+  P4Placement: {
+    type: String,
+    default: ''
+  },
   publisher: {
     type: ObjectId,
     ref: 'Player',
