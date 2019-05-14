@@ -152,6 +152,13 @@ class Match extends Component {
         10000);
       this.props.resetMatch();
     });
+
+    socket.on('reconnect', (attemptNumber) => {
+      socket.emit('joinMatch', {
+        matchId: this.props.currentMatchId,
+        playerId: this.props.currentUser._id
+      });
+    });
   }
 
   async componentWillReceiveProps(nextProps) {

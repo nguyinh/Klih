@@ -46,12 +46,10 @@ module.exports = (io) => {
           matchIO.to(data.matchId).emit('onConnectedPlayersChange', {playersArray: Array.from(playersSet)});
         } else {
           logger.debug('Match not found');
-          socket.emit('joinMatch', 'NOT_FOUND');
           // on front, keep going
         }
       } catch (err) {
         logger.error(err);
-        socket.emit('joinMatch', 'ERROR');
       }
     });
 
@@ -206,12 +204,10 @@ module.exports = (io) => {
           }
         } else {
           logger.debug('Match not found');
-          socket.emit('joinMatch', 'NOT_FOUND');
           // on front, keep going
         }
       } catch (err) {
         logger.error(err);
-        socket.emit('joinMatch', 'ERROR');
       }
     });
 
@@ -252,7 +248,6 @@ module.exports = (io) => {
           }
         } else {
           logger.debug('Match not found');
-          socket.emit('joinMatch', 'NOT_FOUND');
           // on front, keep going
         }
       } catch (err) {
