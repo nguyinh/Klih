@@ -72,6 +72,7 @@
 
     .goalEventContainer {
       margin-top: 3px;
+      position: relative;
     }
 
     .team1History {
@@ -80,6 +81,58 @@
 
     .team2History {
       text-align: right;
+    }
+
+    .team1History,
+    .team2History {
+      .removeOverlay {
+        position: absolute;
+        width: 110%;
+        color: white;
+        height: 110%;
+        text-align: center;
+        background: red;
+        top: -1px;
+        border-radius: 20px;
+        box-shadow: 0px 0px 8px -2px #4e4e4e;
+
+        span {
+          font-size: 12px;
+        }
+
+        &.right {
+          transform-origin: right;
+          right: 0;
+          &.displayOverlay {
+            visibility: visible;
+            opacity: 1;
+            transform: translate(10%);
+            transition: visibility 0s, opacity 0.3s, transform 0.3s ease-out;
+          }
+          &:not(.displayOverlay) {
+            visibility: hidden;
+            opacity: 0;
+            transform: translate(110%);
+            transition: visibility 0.4s, opacity 0.25s, transform 0.4s ease-in;
+          }
+        }
+        &.left {
+          transform-origin: left;
+          left: 0;
+          &.displayOverlay {
+            visibility: visible;
+            opacity: 1;
+            transform: translate(-10%);
+            transition: visibility 0s, opacity 0.3s, transform 0.3s ease-out;
+          }
+          &:not(.displayOverlay) {
+            visibility: hidden;
+            opacity: 0;
+            transform: translate(-110%);
+            transition: visibility 0.4s, opacity 0.25s, transform 0.4s ease-in;
+          }
+        }
+      }
     }
 
     .goalTime {
@@ -128,7 +181,18 @@
 
     .team1Anim-enter-active {
       opacity: 1;
-      transform: scale(1) translateX(0%);
+      transform: scale(1);
+      transition: all 300ms;
+    }
+
+    .team1Anim-exit {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .team1Anim-exit-active {
+      opacity: 0.01;
+      transform: scale(0.9) translateX(25%);
       transition: all 300ms;
     }
 
@@ -139,19 +203,19 @@
 
     .team2Anim-enter-active {
       opacity: 1;
-      transform: scale(1) translateX(0%);
+      transform: scale(1);
+      transition: all 300ms;
+    }
+
+    .team2Anim-exit {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .team2Anim-exit-active {
+      opacity: 0.01;
+      transform: scale(0.9) translateX(-25%);
       transition: all 300ms;
     }
   }
 }
-
-// .dialog-exit {
-//   opacity: 1;
-//   transform: scale(1);
-// }
-//
-// .dialog-exit-active {
-//   opacity: 0.01;
-//   transform: scale(1.1);
-//   transition: all 300ms;
-// }

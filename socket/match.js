@@ -107,6 +107,57 @@ module.exports = (io) => {
       }
     });
 
+    // On goal event
+    socket.on('removeGoalEvent', async (data) => {
+      try {
+        const match = await PlayingMatch.findOne({
+          $and: [
+            {
+              _id: data.matchId
+            }, {
+              $or: [
+                {
+                  player1: data.playerId
+                }, {
+                  player2: data.playerId
+                }, {
+                  player3: data.playerId
+                }, {
+                  player4: data.playerId
+                }, {
+                  publisher: data.playerId
+                }
+              ]
+            }
+          ]
+        }).exec();
+
+        if (match) {
+          const removedGoalEvent = match.history.splice(data.index, 1)[0];
+
+          match.score1 -= (
+            ((removedGoalEvent.team === 'Team1' && removedGoalEvent.deltaScore > 0) || (removedGoalEvent.team === 'Team2' && removedGoalEvent.deltaScore < 0))
+            ? removedGoalEvent.deltaScore
+            : 0);
+          match.score2 -= (
+            ((removedGoalEvent.team === 'Team2' && removedGoalEvent.deltaScore > 0) || (removedGoalEvent.team === 'Team1' && removedGoalEvent.deltaScore < 0))
+            ? removedGoalEvent.deltaScore
+            : 0);
+
+          match.lastUpdateAt = Date.now();
+
+          await match.save();
+
+          // Return new match state to subscribers
+          matchIO.to(data.matchId).emit('goalEvent', match);
+        } else {
+          console.log('not found');
+        }
+      } catch (err) {
+        logger.error(err)
+      }
+    });
+
     // User validates Match
     socket.on('saveMatch', async (data) => {
       try {

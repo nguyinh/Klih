@@ -73,9 +73,10 @@ module.exports = (() => {
               const JWTToken = jwt.sign({
                 email: user.email,
                 _id: user._id
-              }, process.env.JWT_SECRET, {expiresIn: '10d'})
+              }, process.env.JWT_SECRET, {expiresIn: '1y'});
+              const hour = 3600000;
               res.cookie('token', JWTToken, {
-                expiresIn: 90000,
+                maxAge: 365 * 24 * hour, // a year
                 httpOnly: true
               })
 
@@ -111,10 +112,11 @@ module.exports = (() => {
             const JWTToken = jwt.sign({
               email: user.email,
               _id: user._id
-            }, process.env.JWT_SECRET, {expiresIn: '10d'})
-            res.clearCookie('token')
+            }, process.env.JWT_SECRET, {expiresIn: '1y'})
+            res.clearCookie('token');
+            const hour = 3600000;
             res.cookie('token', JWTToken, {
-              expiresIn: 90000,
+              maxAge: 365 * 24 * hour, // a year
               httpOnly: true
             })
             return res.status(200).json({

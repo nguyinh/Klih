@@ -64,7 +64,8 @@ class MatchHistory extends Component {
       matchTimer: props.recordTime && setInterval(this.updateTime, 10000),
       startedAt: props.startedAt,
       createdAt: '',
-      minutesElapsed: 0
+      minutesElapsed: 0,
+      removeTimer: undefined
     }
   }
 
@@ -111,6 +112,34 @@ class MatchHistory extends Component {
   updateTime = () => {
     this.setState({
       minutesElapsed: parseInt((Date.now() - this.state.createdAt) / 60000)
+    });
+  }
+
+  openRemoveConfirmation = (e, index) => {
+    Array.from(document.getElementsByClassName('displayOverlay')).forEach((overlay) => {
+      clearTimeout(this.state.removeTimer);
+      overlay.classList.remove('displayOverlay');
+    });
+    document.getElementById('removeOverlay' + index).classList.add('displayOverlay');
+    this.setState({
+      removeTimer: setTimeout(() => {
+        if (document.getElementById('removeOverlay' + index))
+          document.getElementById('removeOverlay' + index).classList.remove('displayOverlay');
+      }, 1500)
+    });
+  }
+
+  removeGoalEvent = (e, index) => {
+    e.stopPropagation();
+    if (document.getElementById('removeOverlay' + index)) {
+      clearTimeout(this.state.removeTimer);
+      document.getElementById('removeOverlay' + index).classList.remove('displayOverlay');
+    }
+
+    socket.emit('removeGoalEvent', {
+      matchId: this.props.currentMatchId,
+      playerId: this.props.currentUser._id,
+      index: index
     });
   }
 
@@ -201,7 +230,8 @@ class MatchHistory extends Component {
                   return  <CSSTransition
                             timeout={300}
                             classNames="team2Anim"
-                            key={i}>
+                            key={i}
+                            onClick={(e) => this.openRemoveConfirmation(e, i)}>
                             <Row className='goalEventContainer'>
                               <Col xs={4}>
                                 <span className='goalTime'>{goal.goalTime}&rsquo;</span>
@@ -214,6 +244,15 @@ class MatchHistory extends Component {
                               <Col xs={16}>
                                 <span className='goalPlayer'>{goal.fullName}</span>
                               </Col>
+
+                              <div
+                                className='removeOverlay left'
+                                id={'removeOverlay' + i}
+                                onClick={(e) => this.removeGoalEvent(e, i)}>
+                                <span>
+                                  Supprimer
+                                </span>
+                              </div>
                             </Row>
                           </CSSTransition>;
                 }
@@ -232,7 +271,8 @@ class MatchHistory extends Component {
                   return <CSSTransition
                             timeout={300}
                             classNames="team1Anim"
-                            key={i}>
+                            key={i}
+                            onClick={(e) => this.openRemoveConfirmation(e, i)}>
                             <Row className='goalEventContainer' key={i}>
                               <Col xs={16}>
                                 <span className='goalPlayer'>{goal.fullName}</span>
@@ -245,6 +285,15 @@ class MatchHistory extends Component {
                               <Col xs={4}>
                                 <span className='goalTime'>{goal.goalTime}&rsquo;</span>
                               </Col>
+
+                              <div
+                                className='removeOverlay right'
+                                id={'removeOverlay' + i}
+                                onClick={(e) => this.removeGoalEvent(e, i)}>
+                                <span>
+                                  Supprimer
+                                </span>
+                              </div>
                             </Row>
                           </CSSTransition>;
                 }
