@@ -236,7 +236,7 @@ class MatchHistory extends Component {
                               <Col xs={4}>
                                 <span className='goalTime'>{goal.goalTime}&rsquo;</span>
                               </Col>
-                              <Col xs={4} className={'goalScoreContainer ' + (goal.deltaScore > 0 ? 'plus ' : 'minus ')}>
+                              <Col xs={4} className={'goalScoreContainer ' + (goal.deltaScore > 0 ? 'plus ' : 'minus ') + (goal.isBetray ? 'betray ' : '')}>
                                 <span className={'goalScore'}> {
                                     (goal.deltaScore > 0 ? '+' : '') + goal.deltaScore
                                   }</span>
@@ -277,7 +277,7 @@ class MatchHistory extends Component {
                               <Col xs={16}>
                                 <span className='goalPlayer'>{goal.fullName}</span>
                               </Col>
-                              <Col xs={4} className={'goalScoreContainer ' + (goal.deltaScore > 0 ? 'plus ' : 'minus ')}>
+                              <Col xs={4} className={'goalScoreContainer ' + (goal.deltaScore > 0 ? 'plus ' : 'minus ') + (goal.isBetray ? 'betray ' : '')}>
                                 <span className={'goalScore'}> {
                                     (goal.deltaScore > 0 ? '+' : '') + goal.deltaScore
                                   }</span>

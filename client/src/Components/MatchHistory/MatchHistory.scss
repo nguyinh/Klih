@@ -149,23 +149,23 @@
 
       &.plus {
         background: #00cc00;
+
+        &.betray {
+          background: #da9b00;
+        }
       }
 
       &.minus {
-        background: #da0000;
+        background: #bbe201;
+
+        &.betray {
+          background: #e00303;
+        }
       }
     }
 
     .goalScore {
       font-family: sans-serif;
-
-      &.plus {
-        background: #00cc00;
-      }
-
-      &.minus {
-        background: #da0000;
-      }
     }
 
     .goalPlayer {
