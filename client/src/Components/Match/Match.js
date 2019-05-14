@@ -179,6 +179,7 @@ class Match extends Component {
     socket.off('onConnectedPlayersChange');
     socket.off('matchEnded');
     socket.off('matchCancelled');
+    socket.off('reconnect');
   }
 
   // ====== Player and Placement ======
