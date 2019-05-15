@@ -226,10 +226,10 @@ class MatchHistory extends Component {
           <TransitionGroup component={null}>
             {
               this.state.history.map((goal, i) => {
-                if (goal.team === 'Team2') {
+                if (goal.team === 'Team1') {
                   return  <CSSTransition
                             timeout={300}
-                            classNames="team2Anim"
+                            classNames="leftTeamAnim"
                             key={i}
                             onClick={(e) => this.openRemoveConfirmation(e, i)}>
                             <Row className='goalEventContainer'>
@@ -267,10 +267,10 @@ class MatchHistory extends Component {
           <TransitionGroup component={null}>
             {
               this.state.history.map((goal, i) => {
-                if (goal.team === 'Team1') {
+                if (goal.team === 'Team2') {
                   return <CSSTransition
                             timeout={300}
-                            classNames="team1Anim"
+                            classNames="rightTeamAnim"
                             key={i}
                             onClick={(e) => this.openRemoveConfirmation(e, i)}>
                             <Row className='goalEventContainer' key={i}>

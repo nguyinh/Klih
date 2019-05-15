@@ -73,6 +73,8 @@
     .goalEventContainer {
       margin-top: 3px;
       position: relative;
+      overflow: hidden;
+      max-height: 50px;
     }
 
     .team1History {
@@ -174,48 +176,48 @@
     }
 
     // CSS Transitions
-    .team1Anim-enter {
+    .rightTeamAnim-enter {
       opacity: 0.01;
+      max-height: 0px;
       transform: scale(1.1) translateX(-25%);
     }
 
-    .team1Anim-enter-active {
+    .rightTeamAnim-enter-active {
       opacity: 1;
       transform: scale(1);
+      max-height: 40px;
       transition: all 300ms;
     }
 
-    .team1Anim-exit {
-      opacity: 1;
-      transform: scale(1);
+    .rightTeamAnim-exit {
     }
 
-    .team1Anim-exit-active {
-      opacity: 0.01;
-      transform: scale(0.9) translateX(25%);
-      transition: all 300ms;
+    .rightTeamAnim-exit-active {
+      max-height: 0px;
+      opacity: 0;
+      transition: max-height 300ms, opacity 150ms;
     }
 
-    .team2Anim-enter {
+    .leftTeamAnim-enter {
       opacity: 0.01;
+      max-height: 0px;
       transform: scale(1.1) translateX(25%);
     }
 
-    .team2Anim-enter-active {
+    .leftTeamAnim-enter-active {
       opacity: 1;
       transform: scale(1);
+      max-height: 40px;
       transition: all 300ms;
     }
 
-    .team2Anim-exit {
-      opacity: 1;
-      transform: scale(1);
+    .leftTeamAnim-exit {
     }
 
-    .team2Anim-exit-active {
-      opacity: 0.01;
-      transform: scale(0.9) translateX(-25%);
-      transition: all 300ms;
+    .leftTeamAnim-exit-active {
+      max-height: 0px;
+      opacity: 0;
+      transition: max-height 300ms, opacity 150ms;
     }
   }
 }
