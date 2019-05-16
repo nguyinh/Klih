@@ -293,12 +293,24 @@ module.exports = (io) => {
               ]
             }
           ]
-        }).exec();
+        }).populate('player1 player2 player3 player4 publisher').exec();
 
         if (currentMatch) {
+          const leaver = [currentMatch.player1, currentMatch.player2, currentMatch.player3, currentMatch.player4, currentMatch.publisher].filter((player) => {
+            return player._id == data.playerId;
+          });
+
           await PlayingMatch.deleteOne({_id: data.matchId}).exec();
 
-          matchIO.to(data.matchId).emit('matchCancelled', {reason: 'ENDED_BY_USER'});
+          socket.to(data.matchId).emit('matchCancelled', {
+            reason: 'ENDED_BY_USER',
+            self: false,
+            user: leaver[0].firstName
+          });
+          socket.emit('matchCancelled', {
+            reason: 'ENDED_BY_USER',
+            self: true
+          });
 
           // Each socket leave MatchId room
           for (socketID in matchIO.adapter.rooms[data.matchId].sockets) {

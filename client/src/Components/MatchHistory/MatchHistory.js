@@ -14,7 +14,8 @@ import {
   Col,
   Checkbox,
   Icon,
-  Alert
+  Alert,
+  Modal
 } from 'rsuite';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { socket } from './../../socket';
@@ -302,7 +303,6 @@ class MatchHistory extends Component {
           </TransitionGroup>
         </Col>
       </Row>
-
     </Grid>;
   }
 }

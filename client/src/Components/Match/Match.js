@@ -15,7 +15,8 @@ import {
   Col,
   Checkbox,
   Icon,
-  Alert
+  Alert,
+  Modal
 } from 'rsuite';
 import { setMatch, setScore1, setScore2, setHistory, addToMatch, resetMatch } from './../../redux/actions/index.actions.js';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
@@ -94,7 +95,9 @@ class Match extends Component {
       playersMissing: false,
       pointMissing: false,
       startedAt: Date.now(),
-      playersArray: []
+      playersArray: [],
+      validateModalDisplay: false,
+      isMatchLoading: false
     }
   }
 
@@ -155,9 +158,9 @@ class Match extends Component {
     });
 
     socket.on('matchCancelled', (data) => {
-      Alert.warning(data.reason === 'ENDED_BY_USER' ?
-        'Ce match a été annulé par un joueur' :
-        'Match annulé pour inactivité',
+      Alert.warning(data.self ? 'Match annulé' : (data.reason === 'ENDED_BY_USER' ?
+          (data.user ? 'Match annulé par ' + data.user : 'Ce match a été annulé par un autre joueur') :
+          'Match annulé pour inactivité'),
         10000);
       this.props.resetMatch();
     });
@@ -186,6 +189,7 @@ class Match extends Component {
 
   componentWillUnmount() {
     socket.off('onConnectedPlayersChange');
+    socket.off('placementChange');
     socket.off('matchEnded');
     socket.off('matchCancelled');
     socket.off('reconnect');
@@ -517,6 +521,8 @@ class Match extends Component {
   }
 
   onSaveButton = () => {
+    this.setState({ isMatchLoading: true });
+
     socket.emit('saveMatch', {
       matchId: this.props.currentMatchId,
       playerId: this.props.currentUser._id
@@ -525,6 +531,8 @@ class Match extends Component {
 
   onCancelButton = () => {
     // TODO: add some security
+    this.setState({ isMatchLoading: true });
+
     socket.emit('cancelMatch', {
       matchId: this.props.currentMatchId,
       playerId: this.props.currentUser._id
@@ -783,8 +791,8 @@ class Match extends Component {
                 size='lg'
                 block
                 className='roundButton red'
-                onClick={this.onCancelButton}>
-                Annuler
+                onClick={() => {this.setState({cancelModalDisplay: true})}}>
+                Quitter
               </Button>
             </Col>
 
@@ -794,13 +802,84 @@ class Match extends Component {
                 size='lg'
                 block
                 className='roundButton green'
-                onClick={this.onSaveButton}>
-                Valider
+                onClick={() => {this.setState({validateModalDisplay: true})}}>
+                Sauvegarder
               </Button>
             </Col>
           </Row>
         </Col>
       </Row>
+
+
+      <Modal
+        show={this.state.validateModalDisplay}
+        onHide={() => {this.setState({validateModalDisplay: false})}}
+        size='xs'>
+        <Modal.Header>
+          <Modal.Title>Valider le match ?</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <span>En validant le match, vous ne pourrez plus le modifier. Est ce votre dernier mot Jean-Pierre ?</span>
+        </Modal.Body>
+        <Modal.Footer>
+          <Grid style={{marginTop: '15px'}}>
+            <Row>
+              <Col xs={12}>
+                <Button
+                  onClick={() => {this.setState({validateModalDisplay: false})}}
+                  className='roundButton blue'
+                  block>
+                  Retour
+                </Button>
+              </Col>
+
+              <Col xs={12}>
+                <Button
+                  onClick={this.onSaveButton}
+                  className='roundButton green'
+                  block>
+                  {this.state.isMatchLoading ? <Icon icon='circle-o-notch' spin size="lg" style={{fontSize: '15px'}}/> : 'Valider'}
+                </Button>
+              </Col>
+            </Row>
+          </Grid>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal
+        show={this.state.cancelModalDisplay}
+        onHide={() => {this.setState({cancelModalDisplay: false})}}
+        size='xs'>
+        <Modal.Header>
+          <Modal.Title>Annuler le match ?</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <span>En annulant le match, vous perdrez toutes ses données. Est ce votre dernière bafouille ?</span>
+        </Modal.Body>
+        <Modal.Footer>
+          <Grid style={{marginTop: '15px'}}>
+            <Row>
+              <Col xs={12}>
+                <Button
+                  onClick={() => {this.setState({cancelModalDisplay: false})}}
+                  className='roundButton blue'
+                  block>
+                  Retour
+                </Button>
+              </Col>
+
+              <Col xs={12}>
+                <Button
+                  onClick={this.onCancelButton}
+                  className='roundButton red'
+                  block>
+                  {this.state.isMatchLoading ? <Icon icon='circle-o-notch' spin size="lg" style={{fontSize: '15px'}}/> : 'Supprimer'}
+                </Button>
+              </Col>
+            </Row>
+          </Grid>
+        </Modal.Footer>
+      </Modal>
     </Grid>;
   }
 }
