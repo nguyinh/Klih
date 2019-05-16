@@ -106,7 +106,7 @@ class Match extends Component {
     if (!this.props.currentMatchId)
       return;
 
-    socket.on('onConnectedPlayersChange', ({ playersArray }) => {
+    socket.on('onConnectedPlayersChange', ({ playersArray, playerName }) => {
       if ((playersArray.includes('P1') || playersArray.includes('P2')) &&
         (playersArray.includes('P3') || playersArray.includes('P4'))) {
         const userID = this.props.currentUser._id;
@@ -133,7 +133,7 @@ class Match extends Component {
 
       if (playersArray.length > this.state.playersArray.length &&
         this.state.playersArray.length !== 0) {
-        Alert.info('Un joueur a rejoint la partie');
+        Alert.info(playerName ? playerName + ' a rejoint la partie' : 'Un joueur a rejoint la partie ');
       } else if (playersArray.length < this.state.playersArray.length) {
         Alert.info('Un joueur a quitté la partie');
       }
@@ -149,10 +149,11 @@ class Match extends Component {
       }));
     });
 
-    socket.on('matchEnded', (data) => {
-      console.log('match ended');
-      Alert.success('Le match a bien été enregistré',
-        3000);
+    socket.on('matchEnded', ({ reason }) => {
+      if (reason === 'MATCH_ENDED')
+        Alert.error('Ce match est terminé', 3000);
+      else
+        Alert.success('Le match a bien été enregistré', 3000);
       this.props.resetMatch();
       // TODO: some things on match end
     });

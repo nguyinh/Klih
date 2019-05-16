@@ -18,19 +18,26 @@ module.exports = (io) => {
     // User is joining Match
     socket.on('joinMatch', async (data) => {
       try {
-        const match = await PlayingMatch.findOne({_id: data.matchId}).exec();
-
-        if (match.player1 == data.playerId) {
-          socket.player = 'P1';
-        } else if (match.player2 == data.playerId) {
-          socket.player = 'P2';
-        } else if (match.player3 == data.playerId) {
-          socket.player = 'P3';
-        } else if (match.player4 == data.playerId) {
-          socket.player = 'P4';
-        }
+        const match = await PlayingMatch.findOne({_id: data.matchId}).populate('player1 player2 player3 player4').exec();
 
         if (match) { // Match is being played
+          let newPlayer;
+          if (match.player1._id == data.playerId) {
+            socket.player = 'P1';
+            newPlayer = match.player1;
+          } else if (match.player2._id == data.playerId) {
+            socket.player = 'P2';
+            newPlayer = match.player2;
+          } else if (match.player3._id == data.playerId) {
+            socket.player = 'P3';
+            newPlayer = match.player3;
+          } else if (match.player4._id == data.playerId) {
+            socket.player = 'P4';
+            newPlayer = match.player4;
+          } else if (match.publisher._id == data.playerId) {
+            newPlayer = match.publisher;
+          }
+
           socket.join(data.matchId); // Socket join room 'matchId'
 
           let playersSet = new Set();
@@ -50,9 +57,14 @@ module.exports = (io) => {
             P3Placement: match.P3Placement,
             P4Placement: match.P4Placement
           });
-          matchIO.to(data.matchId).emit('onConnectedPlayersChange', {playersArray: Array.from(playersSet)});
+
+          matchIO.to(data.matchId).emit('onConnectedPlayersChange', {
+            playersArray: Array.from(playersSet),
+            playerName: newPlayer.firstName
+          });
         } else {
           logger.debug('Match not found');
+          socket.emit('matchEnded', {reason: 'MATCH_ENDED'});
           // on front, keep going
         }
       } catch (err) {
