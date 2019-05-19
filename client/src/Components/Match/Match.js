@@ -151,7 +151,7 @@ class Match extends Component {
 
     socket.on('matchEnded', ({ reason }) => {
       if (reason === 'MATCH_ENDED')
-        Alert.error('Ce match est terminé', 3000);
+        Alert.error('Ce match est terminé', 5000);
       else
         Alert.success('Le match a bien été enregistré', 3000);
       this.props.resetMatch();

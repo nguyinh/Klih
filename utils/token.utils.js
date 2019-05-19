@@ -23,6 +23,7 @@ module.exports = {
   sendToken: (req, res) => {
     res.setHeader('x-auth-token', req.token);
     console.log({email: req.user.email, fullName: req.user.fullName, _id: req.user._id});
-    return res.status(200).send({email: req.user.email, fullName: req.user.fullName, _id: req.user._id});
+    console.log(req.user);
+    return res.status(200).send({email: req.user.email, fullName: req.user.fullName, _id: req.user._id, avatar: req.user.avatar});
   }
 };

@@ -31,6 +31,13 @@ const mapStateToProps = state => {
   return { isConnected: state.isConnected };
 };
 
+const arrayBufferToBase64 = (buffer) => {
+  let binary = '';
+  let bytes = [].slice.call(new Uint8Array(buffer));
+  bytes.forEach((b) => binary += String.fromCharCode(b));
+  return window.btoa(binary);
+};
+
 class Auth extends Component {
   constructor(props) {
     super(props);
@@ -69,9 +76,11 @@ class Auth extends Component {
     fetch('/api/auth/facebook', options).then(res => {
       const token = res.headers.get('x-auth-token');
       res.json().then(user => {
+        const base64Flag = 'data:image/jpeg;base64,';
+        const imageStr = arrayBufferToBase64(user.avatar.data.data);
         this.props.setUser({
           fullName: user.fullName,
-          // avatar: base64Flag + imageStr,
+          avatar: base64Flag + imageStr,
           email: user.email,
           _id: user._id,
         });
@@ -97,13 +106,14 @@ class Auth extends Component {
     fetch('/api/auth/google', options).then(res => {
       const token = res.headers.get('x-auth-token');
       res.json().then(user => {
-        console.log(user);
-        console.log(token);
-        console.log(res.body);
+        // console.log(user);
+        // console.log(res.body);
         if (token) {
+          const base64Flag = 'data:image/jpeg;base64,';
+          const imageStr = arrayBufferToBase64(user.avatar.data.data);
           this.props.setUser({
             fullName: user.fullName,
-            // avatar: base64Flag + imageStr,
+            avatar: base64Flag + imageStr,
             email: user.email,
             _id: user._id,
           });
