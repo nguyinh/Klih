@@ -19,30 +19,7 @@ import 'rsuite/dist/styles/rsuite.css';
 
 
 ReactDOM.render(<Provider store={store}>
-  <Router>
-    <div>
-      <Navigation/>
-
-      <Route exact={true} path="/" render={props => <div>
-          <App/>
-        </div>}/>
-
-      <Route path="/lobby/:tableTag?" component={Lobby}/>
-
-      <Route path="/match" component={Match}/>
-
-      <Route path="/history" component={History}/>
-
-      <Route path="/statistics" component={Statistics}/>
-
-      <Route path="/monitor" component={Monitor}/>
-
-      <Route path="/profile" component={Profile}/>
-
-      <Route path="/join/:teamTag?" component={Profile}/>
-
-    </div>
-  </Router>
+  <App/>
 </Provider>, document.getElementById('root')); // ReactDOM.render(<App/>, document.getElementById('root'));
 
 // <Route path="/join/:teamTag" component={Team}/>

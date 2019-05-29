@@ -32,7 +32,7 @@ class PlayerChoose extends Component {
         alt='Avatar'/>
       <br/>
       <div className='playerName'>
-        {this.state.name}
+        {this.state.name || <div>&nbsp;</div>}
       </div>
 
       {

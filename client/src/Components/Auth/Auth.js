@@ -62,7 +62,7 @@ class Auth extends Component {
     });
   }
 
-  facebookResponse = (response) => {
+  facebookResponse = async (response) => {
     const tokenBlob = new Blob([JSON.stringify({
       access_token: response.accessToken
     }, null, 2)], { type: 'application/json' });
@@ -73,9 +73,11 @@ class Auth extends Component {
       cache: 'default',
       credentials: 'include'
     };
-    fetch('/api/auth/facebook', options).then(res => {
+    try {
+      const res = await fetch('/api/auth/facebook', options);
       const token = res.headers.get('x-auth-token');
-      res.json().then(user => {
+      const user = await res.json();
+      if (token) {
         const base64Flag = 'data:image/jpeg;base64,';
         const imageStr = arrayBufferToBase64(user.avatar.data.data);
         this.props.setUser({
@@ -84,15 +86,15 @@ class Auth extends Component {
           email: user.email,
           _id: user._id,
         });
-        if (token) {
-          this.setState({ isAuthenticated: true, user, token })
-          this.props.setUserAuth(true);
-        }
-      });
-    })
+        this.setState({ isAuthenticated: true, user, token })
+        this.props.setUserAuth(true);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  googleResponse = (response) => {
+  googleResponse = async (response) => {
     const tokenBlob = new Blob([JSON.stringify({
       access_token: response.accessToken
     }, null, 2)], { type: 'application/json' });
@@ -103,25 +105,28 @@ class Auth extends Component {
       cache: 'default',
       credentials: 'include'
     };
-    fetch('/api/auth/google', options).then(res => {
+    try {
+      const res = await fetch('/api/auth/google', options);
       const token = res.headers.get('x-auth-token');
-      res.json().then(user => {
-        // console.log(user);
-        // console.log(res.body);
-        if (token) {
-          const base64Flag = 'data:image/jpeg;base64,';
-          const imageStr = arrayBufferToBase64(user.avatar.data.data);
-          this.props.setUser({
-            fullName: user.fullName,
-            avatar: base64Flag + imageStr,
-            email: user.email,
-            _id: user._id,
-          });
-          this.setState({ isAuthenticated: true, user, token })
-          this.props.setUserAuth(true);
-        }
-      });
-    })
+      const user = await res.json();
+      // console.log(user);
+      // console.log(res.body);
+      if (token) {
+        const base64Flag = 'data:image/jpeg;base64,';
+        const imageStr = arrayBufferToBase64(user.avatar.data.data);
+        this.props.setUser({
+          fullName: user.fullName,
+          avatar: base64Flag + imageStr,
+          email: user.email,
+          _id: user._id,
+        });
+        this.setState({ isAuthenticated: true, user, token })
+        this.props.setUserAuth(true);
+      }
+
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   render() {

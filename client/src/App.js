@@ -3,15 +3,36 @@ import logo from './logo.svg';
 import './App.scss';
 import axios from 'axios';
 import { Button, Grid, Row, Col } from 'rsuite';
-import { Link, withRouter } from "react-router-dom";
+// import { Link, withRouter } from "react-router-dom";
+import { BrowserRouter as Router, Route, withRouter, Redirect } from 'react-router-dom';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
+
+import Match from './Components/Match/Match';
+import Lobby from './Components/Lobby/Lobby';
+import History from './Components/History/History';
+import Statistics from './Components/Statistics/Statistics';
+import Monitor from './Components/Monitor/Monitor';
+import Profile from './Components/Profile/Profile';
+import Navigation from './Components/Navigation/Navigation';
+import Welcome from './Components/Welcome/Welcome';
 
 import { connect } from 'react-redux';
-import { setUserAuth } from './redux/actions/index.actions.js'
+import { setNavigationState, setUserAuth, setAvatar, setUser } from './redux/actions/index.actions.js';
+require('dotenv').config()
 
 const mapDispatchToProps = dispatch => {
   return ({
+    setNavigationState: (value) => {
+      dispatch(setNavigationState(value))
+    },
     setUserAuth: (value) => {
       dispatch(setUserAuth(value))
+    },
+    setAvatar: (value) => {
+      dispatch(setAvatar(value))
+    },
+    setUser: (value) => {
+      dispatch(setUser(value))
     }
   })
 }
@@ -25,51 +46,92 @@ class App extends Component {
     super(props);
 
     this.state = {
-      working: false,
-      collapse: true
+      isAppLoaded: false
     }
-    this.collapseSwitch = this.collapseSwitch.bind(this);
   }
 
   componentDidMount() {
+    // Fetch user session with token in cookies
+    this.tryConnect();
+  }
+
+  arrayBufferToBase64(buffer) {
+    let binary = '';
+    let bytes = [].slice.call(new Uint8Array(buffer));
+    bytes.forEach((b) => binary += String.fromCharCode(b));
+    return window.btoa(binary);
+  };
+
+  // DEBUG
+  async tryConnect() {
     axios.defaults.withCredentials = true;
-    this.fetchAPI();
-  }
+    try {
+      const authResponse = await axios.post('/api/connect', {})
+      const base64Flag = 'data:image/jpeg;base64,';
+      const imageStr = this.arrayBufferToBase64(authResponse.data.avatar.data.data);
+      console.log(authResponse);
+      this.props.setUser({
+        fullName: authResponse.data.fullName,
+        avatar: base64Flag + imageStr,
+        email: authResponse.data.email,
+        _id: authResponse.data._id,
+      });
+      this.setState({
+        playerName: authResponse.data.fullName,
+        image: base64Flag + imageStr,
+        isAppLoaded: true
+      });
 
-  fetchAPI = () => {
-    axios.get('/api/test', {}).then((res) => {
-      // this.props.setUserAuth(true);
-    }).catch((err) => {
-      // this.props.setUserAuth(false);
-    });
-  }
 
-  collapseSwitch() {
-    this.setState({
-      collapse: !this.state.collapse
-    })
+    } catch (err) {
+      // DEBUG: if status==500, then back-end not initialized, retry connect until back-end up
+      this.setState({
+        playerName: '',
+        isAppLoaded: true
+      });
+      console.log(err);
+      if (err.response.status === 500 && process.env.NODE_ENV === 'development') {
+        this.tryConnect();
+      }
+    }
   }
+  // DEBUG END
 
   render() {
-    return (<div className="App">
-      <Grid>
-        <Row>
-          <Col md={6}>
-            <Button block="block">Hello world</Button>
-          </Col>
-          <Col xs={24}>
+    return <Router>
+      <div>
 
-            <Link to={'/join/hello'}>
-              <h1>Link</h1>
-            </Link>
+        <Navigation/>
 
-          </Col>
-        </Row>
-      </Grid>
+        <Route exact={true} path="/" render={props => <div>
+            <Redirect to={'/lobby'}/>
+          </div>}/>
 
-    </div>);
+        <Route path="/lobby/:tableTag?" component={Lobby}/>
+
+        <Route path="/match" component={Match}/>
+
+        <Route path="/history" component={History}/>
+
+        <Route path="/statistics" component={Statistics}/>
+
+        <Route path="/monitor" component={Monitor}/>
+
+        <Route path="/profile" component={Profile}/>
+
+        <Route path="/join/:teamTag?" component={Profile}/>
+
+        <CSSTransition
+          in={!this.state.isAppLoaded}
+          timeout={1000}
+          classNames="welcome"
+          unmountOnExit>
+          <Welcome/>
+        </CSSTransition>
+      </div>
+    </Router>;
   }
 }
 
 // export default App;
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
+export default connect(mapStateToProps, mapDispatchToProps)(App);

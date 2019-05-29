@@ -404,9 +404,8 @@ class Profile extends Component {
 
     return <div className='profile'>
     {
-      this.props.isConnected === undefined ?
-      'Loading' :
-        this.props.isConnected ?
+
+        this.props.currentUser._id ?
         <Grid>
           <Row>
             <Col

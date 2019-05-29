@@ -67,43 +67,10 @@ class Navigation extends Component {
 
   async componentDidMount() {
     // Fetch user session with token in cookies
-    this.tryConnect();
+    // this.tryConnect();
   }
 
-  // DEBUG
-  async tryConnect() {
-    axios.defaults.withCredentials = true;
-    try {
-      const authResponse = await axios.post('/api/connect', {})
-      this.props.setUserAuth(true);
-      const base64Flag = 'data:image/jpeg;base64,';
-      const imageStr = this.arrayBufferToBase64(authResponse.data.avatar.data.data);
-      this.props.setUser({
-        fullName: authResponse.data.fullName,
-        avatar: base64Flag + imageStr,
-        email: authResponse.data.email,
-        _id: authResponse.data._id,
-      });
-      this.setState({
-        playerName: authResponse.data.fullName,
-        image: base64Flag + imageStr
-      });
-      // this.props.setAvatar(base64Flag + imageStr);
 
-
-    } catch (err) {
-      // TODO: handle image error
-      this.props.setUserAuth(false);
-      // DEBUG: if status==500, then back-end not initialized, retry connect until back-end up
-      this.setState({
-        playerName: ''
-      });
-      if (err.response.status === 500 && process.env.NODE_ENV === 'development') {
-        this.tryConnect();
-      }
-    }
-  }
-  // DEBUG END
 
   matchPage() {
     this.props.setNavigationState('Match');

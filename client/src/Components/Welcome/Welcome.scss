@@ -1,0 +1,15 @@
+.welcome-container {
+  min-height: 100vh;
+  background: #4caf50;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 10;
+}
+
+.app-title {
+  text-align: center;
+  margin-top: 40vh;
+  color: white;
+  font-size: 65px;
+}
