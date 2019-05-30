@@ -10,7 +10,7 @@ const cors = require('cors');
 const app = express();
 const server = require('http').Server(app);
 const io = require('./socket')(server);
-const {logger} = require('./middlewares');
+const {logger, redirectSecure} = require('./middlewares');
 const authRoute = require('./routes/auth.route.js');
 const matchRoute = require('./routes/match.route.js');
 const teamRoute = require('./routes/team.route.js');
@@ -28,6 +28,9 @@ const corsOption = {
   exposedHeaders: ['x-auth-token', 'Set-Cookie']
 };
 app.use(cors(corsOption));
+if (process.env.ENV !== 'dev') {
+  app.use(redirectSecure);
+}
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());

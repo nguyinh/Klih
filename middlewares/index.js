@@ -1,3 +1,4 @@
 module.exports = {
-  logger: require('./logger')
+  logger: require('./logger'),
+  redirectSecure: require('./forceHttps')
 }
