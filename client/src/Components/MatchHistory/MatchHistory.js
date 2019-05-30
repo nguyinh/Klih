@@ -65,7 +65,7 @@ class MatchHistory extends Component {
       matchTimer: props.recordTime && setInterval(this.updateTime, 10000),
       startedAt: props.startedAt,
       createdAt: '',
-      minutesElapsed: 0,
+      minutesElapsed: 1,
       removeTimer: undefined
     }
   }
@@ -112,7 +112,7 @@ class MatchHistory extends Component {
 
   updateTime = () => {
     this.setState({
-      minutesElapsed: parseInt((Date.now() - this.state.createdAt) / 60000)
+      minutesElapsed: parseInt((Date.now() - this.state.createdAt) / 60000) + 1
     });
   }
 

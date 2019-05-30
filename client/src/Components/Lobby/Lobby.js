@@ -290,7 +290,8 @@ class Lobby extends Component {
           <Col
             xs={22}
             xsOffset={1}
-            className='container'>
+            className='container'
+            style={{display: 'none'}}>
 
             <Grid>
               <Row>
