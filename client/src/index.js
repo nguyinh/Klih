@@ -17,6 +17,10 @@ import store from "./redux/store.js";
 // import 'rsuite/dist/styles/rsuite.min.css';
 import 'rsuite/dist/styles/rsuite.css';
 
+// if (process.env.NODE_ENV !== 'production') {
+//   const { whyDidYouUpdate } = require('why-did-you-update');
+//   whyDidYouUpdate(React);
+// }
 
 ReactDOM.render(<Provider store={store}>
   <App/>

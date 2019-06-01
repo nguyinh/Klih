@@ -49,7 +49,7 @@ const mapStateToProps = state => {
   };
 };
 
-const cmp = (o1, o2) => JSON.stringify(o1) === JSON.stringify(o2);
+// const cmp = (o1, o2) => JSON.stringify(o1) === JSON.stringify(o2);
 
 class MatchHistory extends Component {
   constructor(props) {
@@ -58,6 +58,8 @@ class MatchHistory extends Component {
       score1: props.score1 || 0,
       score2: props.score2 || 0,
       history: props.history || [],
+      team1History: [],
+      team2History: [],
       imageP1: props.imageP1,
       imageP2: props.imageP2,
       imageP3: props.imageP3,
@@ -80,7 +82,9 @@ class MatchHistory extends Component {
       this.setState({
         score1: data.score1,
         score2: data.score2,
-        history: data.history
+        history: data.history,
+        team1History: data.history.filter(h => h.team === 'Team1'),
+        team2History: data.history.filter(h => h.team === 'Team2')
       });
     });
 
@@ -88,7 +92,9 @@ class MatchHistory extends Component {
       this.setState({
         score1: data.score1,
         score2: data.score2,
-        history: data.history,
+        // history: data.history,
+        team1History: data.history.filter(h => h.team === 'Team1'),
+        team2History: data.history.filter(h => h.team === 'Team2'),
         createdAt: Date.parse(data.createdAt)
       });
 
@@ -132,6 +138,7 @@ class MatchHistory extends Component {
 
   removeGoalEvent = (e, index) => {
     e.stopPropagation();
+    console.log('removeOverlay' + index);
     if (document.getElementById('removeOverlay' + index)) {
       clearTimeout(this.state.removeTimer);
       document.getElementById('removeOverlay' + index).classList.remove('displayOverlay');
@@ -157,6 +164,7 @@ class MatchHistory extends Component {
 
 
   render() {
+    console.log('render history');
     return <Grid className='matchHistoryContainer'>
       <Row>
         <Col
@@ -226,13 +234,14 @@ class MatchHistory extends Component {
           className='team1History'>
           <TransitionGroup component={null}>
             {
-              this.state.history.map((goal, i) => {
-                if (goal.team === 'Team1') {
+
+              this.state.team1History.map((goal, i) => {
+
                   return  <CSSTransition
                             timeout={300}
                             classNames="leftTeamAnim"
-                            key={i}
-                            onClick={(e) => this.openRemoveConfirmation(e, i)}>
+                            key={'t1-'+i}
+                            onClick={(e) => this.openRemoveConfirmation(e, 't1-'+i)}>
                             <Row className='goalEventContainer'>
                               <Col xs={4}>
                                 <span className='goalTime'>{goal.goalTime}&rsquo;</span>
@@ -248,15 +257,15 @@ class MatchHistory extends Component {
 
                               <div
                                 className='removeOverlay left'
-                                id={'removeOverlay' + i}
-                                onClick={(e) => this.removeGoalEvent(e, i)}>
+                                id={'removeOverlay' + 't1-'+i}
+                                onClick={(e) => this.removeGoalEvent(e, 't1-'+i)}>
                                 <span>
                                   Supprimer
                                 </span>
                               </div>
                             </Row>
                           </CSSTransition>;
-                }
+
               })
             }
           </TransitionGroup>
@@ -267,14 +276,13 @@ class MatchHistory extends Component {
           className='team2History'>
           <TransitionGroup component={null}>
             {
-              this.state.history.map((goal, i) => {
-                if (goal.team === 'Team2') {
+              this.state.team2History.map((goal, i) => {
                   return <CSSTransition
                             timeout={300}
                             classNames="rightTeamAnim"
-                            key={i}
-                            onClick={(e) => this.openRemoveConfirmation(e, i)}>
-                            <Row className='goalEventContainer' key={i}>
+                            key={'t2-'+i}
+                            onClick={(e) => this.openRemoveConfirmation(e, 't2-'+i)}>
+                            <Row className='goalEventContainer'>
                               <Col xs={16}>
                                 <span className='goalPlayer'>{goal.fullName}</span>
                               </Col>
@@ -289,15 +297,14 @@ class MatchHistory extends Component {
 
                               <div
                                 className='removeOverlay right'
-                                id={'removeOverlay' + i}
-                                onClick={(e) => this.removeGoalEvent(e, i)}>
+                                id={'removeOverlay' + 't2-'+i}
+                                onClick={(e) => this.removeGoalEvent(e, 't2-'+i)}>
                                 <span>
                                   Supprimer
                                 </span>
                               </div>
                             </Row>
                           </CSSTransition>;
-                }
               })
             }
           </TransitionGroup>

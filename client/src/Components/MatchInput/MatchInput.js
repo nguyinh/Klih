@@ -1,23 +1,19 @@
 import React, { PureComponent } from 'react';
-import './Match.scss';
+import './MatchInput.scss';
 import swordImage from '../../sword.png';
 import shieldImage from '../../shield.png';
 import plusImage from '../../plus-sign.png';
 import minusImage from '../../minus-sign.png';
 import MatchPlayer from '../MatchPlayer/MatchPlayer';
-import MatchHistory from '../MatchHistory/MatchHistory';
-import MatchInput from '../MatchInput/MatchInput';
+
 import { withRouter, Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
 import {
-  Button,
   Grid,
   Row,
   Col,
-  Checkbox,
   Icon,
-  Alert,
-  Modal
+  Alert
 } from 'rsuite';
 import { setMatch, setScore1, setScore2, setHistory, addToMatch, resetMatch } from './../../redux/actions/index.actions.js';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
@@ -66,7 +62,7 @@ const mapStateToProps = state => {
 
 // const cmp = (o1, o2) => JSON.stringify(o1) === JSON.stringify(o2);
 
-class Match extends PureComponent {
+class MatchInput extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -95,7 +91,6 @@ class Match extends PureComponent {
       betrayPoint: false,
       playersMissing: false,
       pointMissing: false,
-      startedAt: Date.now(),
       playersArray: [],
       validateModalDisplay: false,
       isMatchLoading: false
@@ -432,7 +427,7 @@ class Match extends PureComponent {
 
   // ====== Adding score to history ======
   onAddGoalButtonTouch = () => {
-    const { P1, P2, P3, P4, changingScore, betrayPoint, startedAt } = this.state;
+    const { P1, P2, P3, P4, changingScore, betrayPoint } = this.state;
 
     this.setState({
       playersMissing: (!P1.isSelected && !P2.isSelected && !P3.isSelected && !P4.isSelected),
@@ -454,10 +449,8 @@ class Match extends PureComponent {
     };
     const selectedPlayer = getPlayer([P1, P2, P3, P4].filter(player => player.isSelected)[0]);
 
-    const beginTime = Date.now();
-
     // Save in history
-    let { match, score1, score2, history, minutesElapsed } = this.props;
+    // let { match, score1, score2, history, minutesElapsed } = this.props;
 
     this.setState({
       saveInProgress: true
@@ -536,25 +529,6 @@ class Match extends PureComponent {
     });
   }
 
-  onSaveButton = () => {
-    this.setState({ isMatchLoading: true });
-
-    socket.emit('saveMatch', {
-      matchId: this.props.currentMatchId,
-      playerId: this.props.currentUser._id
-    });
-  }
-
-  onCancelButton = () => {
-    // TODO: add some security
-    this.setState({ isMatchLoading: true });
-
-    socket.emit('cancelMatch', {
-      matchId: this.props.currentMatchId,
-      playerId: this.props.currentUser._id
-    });
-  }
-
 
   render() {
     console.log('rerender');
@@ -564,126 +538,223 @@ class Match extends PureComponent {
       return <Redirect push to="/lobby" />;
 
     return <Grid className='matchContainer'>
-      <MatchInput
-        />
-
       <Row>
         <Col
           xs={22}
           xsOffset={1}
-          className='container historyContainer'>
+          className='container goalSelectionContainer'>
 
+          {/* Player and placement selection */}
           <Row>
+            <Col xs={22} xsOffset={1}>
+              <h2 style={{margin: '0', marginBottom: '10px'}}>Selectionnez le buteur</h2>
+            </Col>
+
             <Col
-              xs={24}>
-              <MatchHistory
-                imageP1={this.state.P1.name !== '' ? this.state.P1.image : ''}
-                imageP2={this.state.P2.name !== '' ? this.state.P2.image : ''}
-                imageP3={this.state.P3.name !== '' ? this.state.P3.image : ''}
-                imageP4={this.state.P4.name !== '' ? this.state.P4.image : ''}
-                recordTime
-                startedAt={Date.now()}/>
+              xs={22}
+              xsOffset={1}
+              className='playersContainer'>
+
+              <Row gutter={0}>
+                {
+                  this.state.teamToDisplay !== 'Team2' &&
+                  <Col
+                    xs={this.state.teamToDisplay === 'Team1' ? 20 : 10}>
+
+                    <Row gutter={0}>
+                      {this.state.P1._id &&
+                        <Col
+                          xs={12}
+                          className={'P1Container ' +
+                            (this.state.P1.isSelected ? 'selected ' : '') +
+                            (this.state.playersMissing ? 'error ' : '')}
+                          onClick={this.onP1Touch}>
+                          <MatchPlayer
+                            name={this.state.P1.name}
+                            firstName={this.state.P1.firstName}
+                            image={this.state.P1.image}
+                            placement={this.state.P1.placement}/>
+                        </Col>
+                      }
+
+
+                      {this.state.P2._id &&
+                        <Col
+                          xs={12}
+                          className={'P2Container ' +
+                            (this.state.P2.isSelected ? 'selected ' : '') +
+                            (this.state.playersMissing ? 'error ' : '')}
+                          onClick={this.onP2Touch}>
+                          <MatchPlayer
+                            name={this.state.P2.name}
+                            firstName={this.state.P2.firstName}
+                            image={this.state.P2.image}
+                            placement={this.state.P2.placement}/>
+                        </Col>
+                      }
+                    </Row>
+                  </Col>
+                }
+
+                <Col
+                  xs={4}
+                  className='playerPlacementContainer'>
+
+                  <div
+                    className='swordContainer'
+                    onClick={() => this.onPlacementChange('Attack')}>
+                    <img
+                      src={swordImage}
+                      className={'placementImage sword ' + ((!P1.isSelected && !P2.isSelected && !P3.isSelected && !P4.isSelected) ? 'disabled ' : placement === 'Attack' ? 'selected' : '')}
+                      alt='attack'/>
+                  </div>
+
+                  <div
+                    className='shieldContainer'
+                    onClick={() => this.onPlacementChange('Defense')}>
+                  <img
+                    src={shieldImage}
+                    className={'placementImage shield ' + ((!P1.isSelected && !P2.isSelected && !P3.isSelected && !P4.isSelected) ? 'disabled ' : placement === 'Defense' ? 'selected' : '')}
+                    alt='defense'/>
+                  </div>
+
+                </Col>
+
+                {
+                  this.state.teamToDisplay !== 'Team1' &&
+                  <Col
+                    xs={this.state.teamToDisplay === 'Team2' ? 20 : 10}>
+                    <Row gutter={0}>
+                      {this.state.P3._id &&
+                        <Col
+                          xs={12}
+                          className={'P3Container ' +
+                            (this.state.P3.isSelected ? 'selected ' : '') +
+                            (this.state.playersMissing ? 'error ' : '')}
+                          onClick={this.onP3Touch}>
+                          <MatchPlayer
+                            name={this.state.P3.name}
+                            firstName={this.state.P3.firstName}
+                            image={this.state.P3.image}
+                            placement={this.state.P3.placement}/>
+                        </Col>
+                      }
+
+
+                      {this.state.P4._id &&
+                        <Col
+                          xs={12}
+                          className={'P4Container ' +
+                            (this.state.P4.isSelected ? 'selected ' : '') +
+                            (this.state.playersMissing ? 'error ' : '')}
+                          onClick={this.onP4Touch}>
+                          <MatchPlayer
+                            name={this.state.P4.name}
+                            firstName={this.state.P4.firstName}
+                            image={this.state.P4.image}
+                            placement={this.state.P4.placement}/>
+                        </Col>
+                      }
+                    </Row>
+                  </Col>
+                }
+              </Row>
+
             </Col>
           </Row>
 
-          <Row className='matchValidation'>
+          <hr/>
+
+          {/* Adding/removing points */}
+          <Row className='pointsSelector'>
+            <Col xs={22} xsOffset={1}>
+              <h2 style={{margin: '0', textAlign: 'initial'}}>Points marqués</h2>
+            </Col>
+
+            <Col
+              xs={9}>
+              <div
+                className={'removePointButton ' +
+                  (P1.isSelected || P2.isSelected || P3.isSelected || P4.isSelected ? '' : 'disabled ') +
+                  (this.state.pointMissing ? 'error ' : '')}
+                onClick={this.removePoint}>
+                <span className="verticalHelper"></span>
+                <img
+                  src={minusImage}
+                  alt='minus'
+                  className='minusImage'/>
+              </div>
+            </Col>
+
+            <Col
+              xs={6}>
+              <span className="verticalHelper"></span>
+              <span className='changingScore'>{(this.state.changingScore > 0 ? '+' : '') + this.state.changingScore}</span>
+            </Col>
+
+            <Col
+              xs={9}>
+              <div
+                className={'addPointButton ' +
+                  (P1.isSelected || P2.isSelected || P3.isSelected || P4.isSelected ? '' : 'disabled ') +
+                  (this.state.pointMissing ? 'error ' : '')}
+                onClick={this.addPoint}>
+                <span className="verticalHelper"></span>
+                <img
+                  src={plusImage}
+                  alt='plus'
+                  className='plusImage'/>
+              </div>
+            </Col>
+
+          </Row>
+
+          <Row className='matchButtonsContainer'>
             <Col
               xs={11}
               xsOffset={1}>
-              <Button
-                size='lg'
-                block
-                className='roundButton red'
-                onClick={() => {this.setState({cancelModalDisplay: true})}}>
-                Quitter
-              </Button>
+              <div
+                className={'betrayToggle ' +
+                  (P1.isSelected || P2.isSelected || P3.isSelected || P4.isSelected ? '' : 'disabled ') +
+                  (this.state.betrayPoint ? 'active' : '')}
+                onClick={this.onBetrayButtonTouch}>
+                {this.state.betrayPoint ?
+                  <>
+                    <span>BOUH </span>
+                    <span role='img' style={{fontSize: '18px'}}>👎</span>
+                  </>
+                  :
+                  <span>Contre son camp</span>
+                }
+              </div>
             </Col>
 
-            <Col
-              xs={11}>
-              <Button
-                size='lg'
-                block
-                className='roundButton green'
-                onClick={() => {this.setState({validateModalDisplay: true})}}>
-                Sauvegarder
-              </Button>
-            </Col>
+            {/* Add score button */}
+            <TransitionGroup component={null}>
+              {
+                this.state.isGoalValid &&
+                <CSSTransition
+                          timeout={300}
+                          classNames="addGoalButtonAnim">
+                  <Col xs={11} className='addButtonContainer'>
+                    <div
+                      className='addGoalButton'
+                      onClick={this.onAddGoalButtonTouch}>
+                      {
+                        this.state.saveInProgress ?
+                        <Icon icon='circle-o-notch' spin size="lg"/> :
+                        <span>Ajouter</span>
+                      }
+                    </div>
+                  </Col>
+                </CSSTransition>
+              }
+            </TransitionGroup>
           </Row>
+
         </Col>
       </Row>
-
-
-      <Modal
-        show={this.state.validateModalDisplay}
-        onHide={() => {this.setState({validateModalDisplay: false})}}
-        size='xs'>
-        <Modal.Header>
-          <Modal.Title>Valider le match ?</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <span>En validant le match, vous ne pourrez plus le modifier. Est ce votre dernier mot Jean-Pierre ?</span>
-        </Modal.Body>
-        <Modal.Footer>
-          <Grid style={{marginTop: '15px'}}>
-            <Row>
-              <Col xs={12}>
-                <Button
-                  onClick={() => {this.setState({validateModalDisplay: false})}}
-                  className='roundButton blue'
-                  block>
-                  Retour
-                </Button>
-              </Col>
-
-              <Col xs={12}>
-                <Button
-                  onClick={this.onSaveButton}
-                  className='roundButton green'
-                  block>
-                  {this.state.isMatchLoading ? <Icon icon='circle-o-notch' spin size="lg" style={{fontSize: '15px'}}/> : 'Valider'}
-                </Button>
-              </Col>
-            </Row>
-          </Grid>
-        </Modal.Footer>
-      </Modal>
-
-      <Modal
-        show={this.state.cancelModalDisplay}
-        onHide={() => {this.setState({cancelModalDisplay: false})}}
-        size='xs'>
-        <Modal.Header>
-          <Modal.Title>Annuler le match ?</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <span>En annulant le match, vous perdrez toutes ses données. Est ce votre dernière bafouille ?</span>
-        </Modal.Body>
-        <Modal.Footer>
-          <Grid style={{marginTop: '15px'}}>
-            <Row>
-              <Col xs={12}>
-                <Button
-                  onClick={() => {this.setState({cancelModalDisplay: false})}}
-                  className='roundButton blue'
-                  block>
-                  Retour
-                </Button>
-              </Col>
-
-              <Col xs={12}>
-                <Button
-                  onClick={this.onCancelButton}
-                  className='roundButton red'
-                  block>
-                  {this.state.isMatchLoading ? <Icon icon='circle-o-notch' spin size="lg" style={{fontSize: '15px'}}/> : 'Supprimer'}
-                </Button>
-              </Col>
-            </Row>
-          </Grid>
-        </Modal.Footer>
-      </Modal>
     </Grid>;
   }
 }
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Match));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MatchInput));
