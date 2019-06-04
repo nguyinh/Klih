@@ -103,7 +103,8 @@ module.exports = (io) => {
           match.history = [
             ...match.history, {
               ...data.match.history,
-              goalTime: parseInt((Date.now() - match.createdAt) / 60000)
+              goalTime: parseInt((Date.now() - match.createdAt) / 60000),
+              index: Date.now()
             }
           ];
           match.lastUpdateAt = Date.now();

@@ -24,6 +24,9 @@ const matchEventScheme = mongoose.Schema({
   },
   team: {
     type: String
+  },
+  index: {
+    type: String
   }
 });
 

@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import './MatchHistory.scss';
+import HistoryEntryLeft from '../HistoryEntryLeft/HistoryEntryLeft.js';
+import HistoryEntryRight from '../HistoryEntryRight/HistoryEntryRight.js';
 import swordImage from '../../sword.png';
 import shieldImage from '../../shield.png';
 import plusImage from '../../plus-sign.png';
@@ -51,7 +53,7 @@ const mapStateToProps = state => {
 
 // const cmp = (o1, o2) => JSON.stringify(o1) === JSON.stringify(o2);
 
-class MatchHistory extends Component {
+class MatchHistory extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -164,7 +166,6 @@ class MatchHistory extends Component {
 
 
   render() {
-    console.log('render history');
     return <Grid className='matchHistoryContainer'>
       <Row>
         <Col
@@ -232,82 +233,29 @@ class MatchHistory extends Component {
         <Col
           xs={12}
           className='team1History'>
-          <TransitionGroup component={null}>
             {
-
               this.state.team1History.map((goal, i) => {
-
-                  return  <CSSTransition
-                            timeout={300}
-                            classNames="leftTeamAnim"
-                            key={'t1-'+i}
-                            onClick={(e) => this.openRemoveConfirmation(e, 't1-'+i)}>
-                            <Row className='goalEventContainer'>
-                              <Col xs={4}>
-                                <span className='goalTime'>{goal.goalTime}&rsquo;</span>
-                              </Col>
-                              <Col xs={4} className={'goalScoreContainer ' + (goal.deltaScore > 0 ? 'plus ' : 'minus ') + (goal.isBetray ? 'betray ' : '')}>
-                                <span className={'goalScore'}> {
-                                    (goal.deltaScore > 0 ? '+' : '') + goal.deltaScore
-                                  }</span>
-                              </Col>
-                              <Col xs={16}>
-                                <span className='goalPlayer'>{goal.fullName}</span>
-                              </Col>
-
-                              <div
-                                className='removeOverlay left'
-                                id={'removeOverlay' + 't1-'+i}
-                                onClick={(e) => this.removeGoalEvent(e, 't1-'+i)}>
-                                <span>
-                                  Supprimer
-                                </span>
-                              </div>
-                            </Row>
-                          </CSSTransition>;
-
+                return <HistoryEntryLeft
+                          index={goal.index}
+                          goalTime={goal.goalTime}
+                          deltaScore={goal.deltaScore}
+                          fullName={goal.fullName}/>;
               })
             }
-          </TransitionGroup>
         </Col>
 
         <Col
           xs={12}
           className='team2History'>
-          <TransitionGroup component={null}>
             {
               this.state.team2History.map((goal, i) => {
-                  return <CSSTransition
-                            timeout={300}
-                            classNames="rightTeamAnim"
-                            key={'t2-'+i}
-                            onClick={(e) => this.openRemoveConfirmation(e, 't2-'+i)}>
-                            <Row className='goalEventContainer'>
-                              <Col xs={16}>
-                                <span className='goalPlayer'>{goal.fullName}</span>
-                              </Col>
-                              <Col xs={4} className={'goalScoreContainer ' + (goal.deltaScore > 0 ? 'plus ' : 'minus ') + (goal.isBetray ? 'betray ' : '')}>
-                                <span className={'goalScore'}> {
-                                    (goal.deltaScore > 0 ? '+' : '') + goal.deltaScore
-                                  }</span>
-                              </Col>
-                              <Col xs={4}>
-                                <span className='goalTime'>{goal.goalTime}&rsquo;</span>
-                              </Col>
-
-                              <div
-                                className='removeOverlay right'
-                                id={'removeOverlay' + 't2-'+i}
-                                onClick={(e) => this.removeGoalEvent(e, 't2-'+i)}>
-                                <span>
-                                  Supprimer
-                                </span>
-                              </div>
-                            </Row>
-                          </CSSTransition>;
+                return <HistoryEntryRight
+                          index={goal.index}
+                          goalTime={goal.goalTime}
+                          deltaScore={goal.deltaScore}
+                          fullName={goal.fullName}/>;
               })
             }
-          </TransitionGroup>
         </Col>
       </Row>
     </Grid>;

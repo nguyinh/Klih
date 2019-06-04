@@ -1,0 +1,223 @@
+.matchHistoryContainer {
+  text-align: center;
+  margin-top: 10px;
+  // .col1 {
+  //   background-color: #ff000088;
+  // }
+  // .col2 {
+  //   background-color: #ffed0088;
+  // }
+  // .col3 {
+  //   background-color: #1cff0088;
+  // }
+  // .col4 {
+  //   background-color: #0047ff88;
+  // }
+  // .col5 {
+  //   background-color: #00f7ff88;
+  // }
+
+  .avatarImage {
+    height: 50px;
+    width: 50px;
+    border-radius: 100px;
+    box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.5);
+  }
+
+  // .imageP2,
+  // .imageP4 {
+  //
+  // }
+
+  .translateTop {
+    transform: translateY(-60%);
+  }
+
+  .team1,
+  .team2 {
+    height: 75px;
+  }
+
+  .scoreContainer {
+    height: 75px;
+    padding: 0 !important;
+
+    .score1,
+    .score2 {
+      font-size: 40px;
+      font-family: sans-serif;
+    }
+  }
+
+  .timerContainer {
+    height: 60px;
+
+    .timer {
+      background-color: #adadadc9;
+      color: white;
+      font-family: sans-serif;
+      padding: 3px 12px;
+      border-radius: 20px;
+    }
+  }
+
+  .verticalHelper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+  }
+
+  .history {
+    margin-top: 10px;
+
+    .goalEventContainer {
+      margin-top: 3px;
+      position: relative;
+      overflow: hidden;
+      max-height: 50px;
+    }
+
+    .team1History {
+      text-align: left;
+    }
+
+    .team2History {
+      text-align: right;
+    }
+
+    .team1History,
+    .team2History {
+      .removeOverlay {
+        position: absolute;
+        width: 110%;
+        color: white;
+        height: 110%;
+        text-align: center;
+        background: red;
+        top: -1px;
+        border-radius: 20px;
+        box-shadow: 0px 0px 8px -2px #4e4e4e;
+
+        span {
+          font-size: 12px;
+        }
+
+        &.right {
+          transform-origin: right;
+          right: 0;
+          &.displayOverlay {
+            visibility: visible;
+            opacity: 1;
+            transform: translate(10%);
+            transition: visibility 0s, opacity 0.3s, transform 0.3s ease-out;
+          }
+          &:not(.displayOverlay) {
+            visibility: hidden;
+            opacity: 0;
+            transform: translate(110%);
+            transition: visibility 0.4s, opacity 0.25s, transform 0.4s ease-in;
+          }
+        }
+        &.left {
+          transform-origin: left;
+          left: 0;
+          &.displayOverlay {
+            visibility: visible;
+            opacity: 1;
+            transform: translate(-10%);
+            transition: visibility 0s, opacity 0.3s, transform 0.3s ease-out;
+          }
+          &:not(.displayOverlay) {
+            visibility: hidden;
+            opacity: 0;
+            transform: translate(-110%);
+            transition: visibility 0.4s, opacity 0.25s, transform 0.4s ease-in;
+          }
+        }
+      }
+    }
+
+    .goalTime {
+      color: #bdbdbd;
+      font-family: sans-serif;
+      font-weight: 1000;
+      margin: 2px 2px;
+    }
+
+    .goalScoreContainer {
+      border-radius: 15px;
+      text-align: center;
+      color: white;
+
+      &.plus {
+        background: #00cc00;
+
+        &.betray {
+          background: #da9b00;
+        }
+      }
+
+      &.minus {
+        background: #bbe201;
+
+        &.betray {
+          background: #e00303;
+        }
+      }
+    }
+
+    .goalScore {
+      font-family: sans-serif;
+    }
+
+    .goalPlayer {
+      margin: 2px 2px;
+      font-weight: 1000;
+    }
+
+    // CSS Transitions
+    .rightTeamAnim-enter {
+      opacity: 0.01;
+      max-height: 0px;
+      transform: scale(1.1) translateX(-25%);
+    }
+
+    .rightTeamAnim-enter-active {
+      opacity: 1;
+      transform: scale(1);
+      max-height: 40px;
+      transition: all 300ms;
+    }
+
+    .rightTeamAnim-exit {
+    }
+
+    .rightTeamAnim-exit-active {
+      max-height: 0px;
+      opacity: 0;
+      transition: max-height 300ms, opacity 150ms;
+    }
+  }
+}
+
+.leftTeamAnim-enter {
+  opacity: 0.01;
+  max-height: 0px;
+  transform: scale(1.1) translateX(25%);
+}
+
+.leftTeamAnim-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  max-height: 40px;
+  transition: all 300ms;
+}
+
+.leftTeamAnim-exit {
+}
+
+.leftTeamAnim-exit-active {
+  max-height: 0px;
+  opacity: 0;
+  transition: max-height 300ms, opacity 150ms;
+}

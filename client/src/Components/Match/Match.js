@@ -207,7 +207,7 @@ class Match extends PureComponent {
   deselectPlayers = async () => {
     this.resetErrors();
 
-    await this.setState({
+    this.setState({
       P1: {
         ...this.state.P1,
         isSelected: false
@@ -564,8 +564,7 @@ class Match extends PureComponent {
       return <Redirect push to="/lobby" />;
 
     return <Grid className='matchContainer'>
-      <MatchInput
-        />
+      <MatchInput/>
 
       <Row>
         <Col

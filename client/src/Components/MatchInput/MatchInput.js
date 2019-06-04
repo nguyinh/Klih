@@ -531,7 +531,6 @@ class MatchInput extends PureComponent {
 
 
   render() {
-    console.log('rerender');
     const { P1, P2, P3, P4, placement } = this.state;
 
     if (!P1._id && !P2._id && !P3._id && !P4._id)
