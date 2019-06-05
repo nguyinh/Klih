@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import './Match.scss';
 import swordImage from '../../sword.png';
 import shieldImage from '../../shield.png';
@@ -66,7 +66,7 @@ const mapStateToProps = state => {
 
 // const cmp = (o1, o2) => JSON.stringify(o1) === JSON.stringify(o2);
 
-class Match extends PureComponent {
+class Match extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -107,48 +107,48 @@ class Match extends PureComponent {
     if (!this.props.currentMatchId)
       return;
 
-    socket.on('onConnectedPlayersChange', ({ playersArray, playerName }) => {
-      if ((playersArray.includes('P1') || playersArray.includes('P2')) &&
-        (playersArray.includes('P3') || playersArray.includes('P4'))) {
-        const userID = this.props.currentUser._id;
-        const player1ID = this.state.P1._id;
-        const player2ID = this.state.P2._id;
-        const player3ID = this.state.P3._id;
-        const player4ID = this.state.P4._id;
-        if (userID === player1ID ||
-          userID === player2ID) {
-          this.setState({
-            teamToDisplay: 'Team1'
-          });
-        } else if (userID === player3ID ||
-          userID === player4ID) {
-          this.setState({
-            teamToDisplay: 'Team2'
-          });
-        }
-      } else {
-        this.setState({ teamToDisplay: '' });
-      }
+    // socket.on('onConnectedPlayersChange', ({ playersArray, playerName }) => {
+    //   if ((playersArray.includes('P1') || playersArray.includes('P2')) &&
+    //     (playersArray.includes('P3') || playersArray.includes('P4'))) {
+    //     const userID = this.props.currentUser._id;
+    //     const player1ID = this.state.P1._id;
+    //     const player2ID = this.state.P2._id;
+    //     const player3ID = this.state.P3._id;
+    //     const player4ID = this.state.P4._id;
+    //     if (userID === player1ID ||
+    //       userID === player2ID) {
+    //       this.setState({
+    //         teamToDisplay: 'Team1'
+    //       });
+    //     } else if (userID === player3ID ||
+    //       userID === player4ID) {
+    //       this.setState({
+    //         teamToDisplay: 'Team2'
+    //       });
+    //     }
+    //   } else {
+    //     this.setState({ teamToDisplay: '' });
+    //   }
+    //
+    //   this.resetPointState();
+    //
+    //   if (playersArray.length > this.state.playersArray.length &&
+    //     this.state.playersArray.length !== 0) {
+    //     Alert.info(playerName ? playerName + ' a rejoint la partie' : 'Un joueur a rejoint la partie ');
+    //   } else if (playersArray.length < this.state.playersArray.length) {
+    //     Alert.info('Un joueur a quitté la partie');
+    //   }
+    //   this.setState({ playersArray });
+    // });
 
-      this.resetPointState();
-
-      if (playersArray.length > this.state.playersArray.length &&
-        this.state.playersArray.length !== 0) {
-        Alert.info(playerName ? playerName + ' a rejoint la partie' : 'Un joueur a rejoint la partie ');
-      } else if (playersArray.length < this.state.playersArray.length) {
-        Alert.info('Un joueur a quitté la partie');
-      }
-      this.setState({ playersArray });
-    });
-
-    socket.on('placementChange', ({ P1Placement, P2Placement, P3Placement, P4Placement }) => {
-      this.setState(prevState => ({
-        P1: { ...prevState.P1, placement: P1Placement },
-        P2: { ...prevState.P2, placement: P2Placement },
-        P3: { ...prevState.P3, placement: P3Placement },
-        P4: { ...prevState.P4, placement: P4Placement },
-      }));
-    });
+    // socket.on('placementChange', ({ P1Placement, P2Placement, P3Placement, P4Placement }) => {
+    //   this.setState(prevState => ({
+    //     P1: { ...prevState.P1, placement: P1Placement },
+    //     P2: { ...prevState.P2, placement: P2Placement },
+    //     P3: { ...prevState.P3, placement: P3Placement },
+    //     P4: { ...prevState.P4, placement: P4Placement },
+    //   }));
+    // });
 
     socket.on('matchEnded', ({ reason }) => {
       if (reason === 'MATCH_ENDED')
@@ -175,25 +175,25 @@ class Match extends PureComponent {
     });
   }
 
-  async componentWillReceiveProps(nextProps) {
-    // if (nextProps.P1.name !== this.props.P1.name ||
-    //   nextProps.P2.name !== this.props.P2.name ||
-    //   nextProps.P3.name !== this.props.P3.name ||
-    //   nextProps.P4.name !== this.props.P4.name) {
-    //   await this.setState({
-    //     P1: nextProps.P1,
-    //     P2: nextProps.P2,
-    //     P3: nextProps.P3,
-    //     P4: nextProps.P4
-    //   });
-    // }
-  }
-
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   console.log(this.state);
-  //   console.log(nextState);
-  //   return this.state !== nextState;
+  // async componentWillReceiveProps(nextProps) {
+  //   if (nextProps.P1.name !== this.props.P1.name ||
+  //     nextProps.P2.name !== this.props.P2.name ||
+  //     nextProps.P3.name !== this.props.P3.name ||
+  //     nextProps.P4.name !== this.props.P4.name) {
+  //     await this.setState({
+  //       P1: nextProps.P1,
+  //       P2: nextProps.P2,
+  //       P3: nextProps.P3,
+  //       P4: nextProps.P4
+  //     });
+  //   }
   // }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log(this.props);
+    console.log(nextProps);
+    return true;
+  }
 
   componentWillUnmount() {
     socket.off('onConnectedPlayersChange');
@@ -201,339 +201,6 @@ class Match extends PureComponent {
     socket.off('matchEnded');
     socket.off('matchCancelled');
     socket.off('reconnect');
-  }
-
-  // ====== Player and Placement ======
-  deselectPlayers = async () => {
-    this.resetErrors();
-
-    this.setState({
-      P1: {
-        ...this.state.P1,
-        isSelected: false
-      },
-      P2: {
-        ...this.state.P2,
-        isSelected: false
-      },
-      P3: {
-        ...this.state.P3,
-        isSelected: false
-      },
-      P4: {
-        ...this.state.P4,
-        isSelected: false
-      },
-    })
-  }
-
-  onP1Touch = () => {
-    if (this.state.P1.isSelected)
-      return;
-    this.deselectPlayers();
-    const { P1, placement, changingScore } = this.state;
-    this.setState({
-      P1: {
-        ...P1,
-        placement: (!P1.placement ? '' : P1.placement),
-        isSelected: true
-      },
-      placement: (!P1.placement ? '' : P1.placement),
-      isGoalValid: (changingScore !== 0)
-    });
-  }
-
-  onP2Touch = () => {
-    if (this.state.P2.isSelected)
-      return;
-    this.deselectPlayers();
-    const { P2, placement, changingScore } = this.state;
-    this.setState({
-      P2: {
-        ...P2,
-        placement: (!P2.placement ? '' : P2.placement),
-        isSelected: true
-      },
-      placement: (!P2.placement ? '' : P2.placement),
-      isGoalValid: (changingScore !== 0)
-    });
-  }
-
-  onP3Touch = () => {
-    if (this.state.P3.isSelected)
-      return;
-    this.deselectPlayers();
-    const { P3, placement, changingScore } = this.state;
-    this.setState({
-      P3: {
-        ...P3,
-        placement: (!P3.placement ? '' : P3.placement),
-        isSelected: true
-      },
-      placement: (!P3.placement ? '' : P3.placement),
-      isGoalValid: (changingScore !== 0)
-    });
-  }
-
-  onP4Touch = () => {
-    if (this.state.P4.isSelected)
-      return;
-    this.deselectPlayers();
-    const { P4, placement, changingScore } = this.state;
-    this.setState({
-      P4: {
-        ...P4,
-        placement: (!P4.placement ? '' : P4.placement),
-        isSelected: true
-      },
-      placement: (!P4.placement ? '' : P4.placement),
-      isGoalValid: (changingScore !== 0)
-    });
-  }
-
-  onPlacementChange = (placementType) => {
-    this.resetErrors();
-
-    const { P1, P2, P3, P4 } = this.state;
-
-    if (this.state.P1.isSelected) {
-      this.setState({
-        P1: {
-          ...this.state.P1,
-          placement: (P1.placement === placementType ? '' : placementType)
-        },
-        P2: {
-          ...this.state.P2,
-          placement: (P1.placement === placementType ? P2.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
-        },
-        placement: (P1.placement === placementType ? '' : placementType)
-      });
-
-      socket.emit('placementChange', {
-        matchId: this.props.currentMatchId,
-        playerId: this.props.currentUser._id,
-        P1Placement: (P1.placement === placementType ? '' : placementType),
-        P2Placement: (P1.placement === placementType ? P2.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
-      });
-
-    } else if (this.state.P2.isSelected) {
-      this.setState({
-        P2: {
-          ...this.state.P2,
-          placement: (P2.placement === placementType ? '' : placementType)
-        },
-        P1: {
-          ...this.state.P1,
-          placement: (P2.placement === placementType ? P1.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
-        },
-        placement: (P2.placement === placementType ? '' : placementType)
-      });
-
-      socket.emit('placementChange', {
-        matchId: this.props.currentMatchId,
-        playerId: this.props.currentUser._id,
-        P1Placement: (P2.placement === placementType ? P1.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : ''))),
-        P2Placement: (P2.placement === placementType ? '' : placementType)
-      });
-
-    } else if (this.state.P3.isSelected) {
-      this.setState({
-        P3: {
-          ...this.state.P3,
-          placement: (P3.placement === placementType ? '' : placementType)
-        },
-        P4: {
-          ...this.state.P4,
-          placement: (P3.placement === placementType ? P4.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
-        },
-        placement: (P3.placement === placementType ? '' : placementType)
-      });
-
-      socket.emit('placementChange', {
-        matchId: this.props.currentMatchId,
-        playerId: this.props.currentUser._id,
-        P3Placement: (P3.placement === placementType ? '' : placementType),
-        P4Placement: (P3.placement === placementType ? P4.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
-      });
-
-    } else if (this.state.P4.isSelected) {
-      this.setState({
-        P4: {
-          ...this.state.P4,
-          placement: (P4.placement === placementType ? '' : placementType)
-        },
-        P3: {
-          ...this.state.P3,
-          placement: (P4.placement === placementType ? P3.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
-        },
-        placement: (P4.placement === placementType ? '' : placementType)
-      });
-
-      socket.emit('placementChange', {
-        matchId: this.props.currentMatchId,
-        playerId: this.props.currentUser._id,
-        P3Placement: (P4.placement === placementType ? P3.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : ''))),
-        P4Placement: (P4.placement === placementType ? '' : placementType)
-      });
-    }
-  }
-
-
-  // ====== Adding/removing points ======
-  addPoint = () => {
-    if (this.state.P1.isSelected ||
-      this.state.P2.isSelected ||
-      this.state.P3.isSelected ||
-      this.state.P4.isSelected) {
-      this.resetErrors();
-
-      this.setState((state, props) => {
-        return {
-          changingScore: state.changingScore + 1,
-          isGoalValid: ((state.P1.isSelected || state.P2.isSelected || state.P3.isSelected || state.P4.isSelected) &&
-            (state.changingScore + 1) !== 0)
-        }
-      });
-    }
-  }
-
-  removePoint = () => {
-    if (this.state.P1.isSelected ||
-      this.state.P2.isSelected ||
-      this.state.P3.isSelected ||
-      this.state.P4.isSelected) {
-      this.resetErrors();
-
-      this.setState((state, props) => {
-        return {
-          changingScore: state.changingScore - 1,
-          isGoalValid: ((state.P1.isSelected || state.P2.isSelected || state.P3.isSelected || state.P4.isSelected) &&
-            (state.changingScore - 1) !== 0)
-        }
-      });
-    }
-  }
-
-  onBetrayButtonTouch = () => {
-    if (this.state.P1.isSelected ||
-      this.state.P2.isSelected ||
-      this.state.P3.isSelected ||
-      this.state.P4.isSelected) {
-      this.resetErrors();
-
-      this.setState((state, props) => {
-        return {
-          betrayPoint: !state.betrayPoint
-        }
-      });
-    }
-  }
-
-
-  // ====== Adding score to history ======
-  onAddGoalButtonTouch = () => {
-    const { P1, P2, P3, P4, changingScore, betrayPoint, startedAt } = this.state;
-
-    this.setState({
-      playersMissing: (!P1.isSelected && !P2.isSelected && !P3.isSelected && !P4.isSelected),
-      pointMissing: this.state.changingScore === 0,
-    });
-
-    // If error, don't save goal
-    if ((!P1.isSelected && !P2.isSelected && !P3.isSelected && !P4.isSelected) ||
-      this.state.changingScore === 0 ||
-      this.state.saveInProgress)
-      return;
-
-    const getPlayer = ({ data, name, placement }) => {
-      return {
-        _id: data._id,
-        fullName: name,
-        placement: placement
-      };
-    };
-    const selectedPlayer = getPlayer([P1, P2, P3, P4].filter(player => player.isSelected)[0]);
-
-    const beginTime = Date.now();
-
-    // Save in history
-    let { match, score1, score2, history, minutesElapsed } = this.props;
-
-    this.setState({
-      saveInProgress: true
-    });
-
-    socket.emit('goalEvent', {
-      matchId: this.props.currentMatchId,
-      playerId: this.props.currentUser._id,
-      match: {
-        score1: (
-          (changingScore > 0 && !betrayPoint && (P1.isSelected || P2.isSelected)) ||
-          (changingScore > 0 && betrayPoint && (P3.isSelected || P4.isSelected)) ||
-          (changingScore < 0 && !betrayPoint && (P3.isSelected || P4.isSelected)) ||
-          (changingScore < 0 && betrayPoint && (P1.isSelected || P2.isSelected)) ?
-          changingScore :
-          0
-        ),
-        score2: (
-          (changingScore > 0 && !betrayPoint && (P3.isSelected || P4.isSelected)) ||
-          (changingScore > 0 && betrayPoint && (P1.isSelected || P2.isSelected)) ||
-          (changingScore < 0 && !betrayPoint && (P1.isSelected || P2.isSelected)) ||
-          (changingScore < 0 && betrayPoint && (P3.isSelected || P4.isSelected)) ?
-          changingScore :
-          0
-        ),
-        history: {
-          goalTime: Date.now(),
-          deltaScore: this.state.changingScore,
-          byPlayer: selectedPlayer._id,
-          placement: selectedPlayer.placement,
-          fullName: selectedPlayer.fullName,
-          isBetray: this.state.betrayPoint,
-          team: (
-            ((P1.isSelected || P2.isSelected) && !this.state.betrayPoint) ||
-            ((P3.isSelected || P4.isSelected) && this.state.betrayPoint) ?
-            'Team1' :
-            'Team2'
-          )
-        }
-      }
-    }, () => {
-      this.resetPointState();
-    });
-  }
-
-  resetPointState = () => {
-    this.setState({
-      P1: {
-        ...this.state.P1,
-        isSelected: false,
-      },
-      P2: {
-        ...this.state.P2,
-        isSelected: false,
-      },
-      P3: {
-        ...this.state.P3,
-        isSelected: false,
-      },
-      P4: {
-        ...this.state.P4,
-        isSelected: false,
-      },
-      placement: '',
-      changingScore: 0,
-      betrayPoint: false,
-      isGoalValid: false,
-      saveInProgress: false
-    });
-  }
-
-  resetErrors = () => {
-    this.setState({
-      playersMissing: false,
-      pointMissing: false
-    });
   }
 
   onSaveButton = () => {
@@ -559,9 +226,6 @@ class Match extends PureComponent {
   render() {
     console.log('rerender');
     const { P1, P2, P3, P4, placement } = this.state;
-
-    if (!P1._id && !P2._id && !P3._id && !P4._id)
-      return <Redirect push to="/lobby" />;
 
     return <Grid className='matchContainer'>
       <MatchInput/>

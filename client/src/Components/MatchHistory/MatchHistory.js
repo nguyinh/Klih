@@ -85,8 +85,8 @@ class MatchHistory extends Component {
         score1: data.score1,
         score2: data.score2,
         history: data.history,
-        team1History: data.history.filter(h => h.team === 'Team1'),
-        team2History: data.history.filter(h => h.team === 'Team2')
+        team1History: data.history.filter(h => h.team === 'Team1').reverse(),
+        team2History: data.history.filter(h => h.team === 'Team2').reverse()
       });
     });
 
@@ -95,8 +95,8 @@ class MatchHistory extends Component {
         score1: data.score1,
         score2: data.score2,
         // history: data.history,
-        team1History: data.history.filter(h => h.team === 'Team1'),
-        team2History: data.history.filter(h => h.team === 'Team2'),
+        team1History: data.history.filter(h => h.team === 'Team1').reverse(),
+        team2History: data.history.filter(h => h.team === 'Team2').reverse(),
         createdAt: Date.parse(data.createdAt)
       });
 
@@ -241,7 +241,8 @@ class MatchHistory extends Component {
                           deltaScore={goal.deltaScore}
                           fullName={goal.fullName}
                           currentMatchId={this.props.currentMatchId}
-                          currentUserId={this.props.currentUser._id}/>;
+                          currentUserId={this.props.currentUser._id}
+                          key={goal.index}/>;
               })
             }
         </Col>
@@ -257,7 +258,8 @@ class MatchHistory extends Component {
                           deltaScore={goal.deltaScore}
                           fullName={goal.fullName}
                           currentMatchId={this.props.currentMatchId}
-                          currentUserId={this.props.currentUser._id}/>;
+                          currentUserId={this.props.currentUser._id}
+                          key={goal.index}/>;
               })
             }
         </Col>

@@ -13,7 +13,7 @@ import {
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { socket } from './../../socket';
 
-class HistoryEntry extends Component {
+class HistoryEntryLeft extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -107,4 +107,4 @@ class HistoryEntry extends Component {
   }
 }
 
-export default HistoryEntry;
+export default HistoryEntryLeft;
