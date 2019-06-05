@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import './MatchHistory.scss';
 import HistoryEntryLeft from '../HistoryEntryLeft/HistoryEntryLeft.js';
 import HistoryEntryRight from '../HistoryEntryRight/HistoryEntryRight.js';
@@ -53,7 +53,7 @@ const mapStateToProps = state => {
 
 // const cmp = (o1, o2) => JSON.stringify(o1) === JSON.stringify(o2);
 
-class MatchHistory extends PureComponent {
+class MatchHistory extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -239,7 +239,9 @@ class MatchHistory extends PureComponent {
                           index={goal.index}
                           goalTime={goal.goalTime}
                           deltaScore={goal.deltaScore}
-                          fullName={goal.fullName}/>;
+                          fullName={goal.fullName}
+                          currentMatchId={this.props.currentMatchId}
+                          currentUserId={this.props.currentUser._id}/>;
               })
             }
         </Col>
@@ -253,7 +255,9 @@ class MatchHistory extends PureComponent {
                           index={goal.index}
                           goalTime={goal.goalTime}
                           deltaScore={goal.deltaScore}
-                          fullName={goal.fullName}/>;
+                          fullName={goal.fullName}
+                          currentMatchId={this.props.currentMatchId}
+                          currentUserId={this.props.currentUser._id}/>;
               })
             }
         </Col>

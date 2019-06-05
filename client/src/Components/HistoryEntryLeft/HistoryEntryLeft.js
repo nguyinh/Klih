@@ -59,8 +59,8 @@ class HistoryEntry extends Component {
 
     socket.emit('removeGoalEvent', {
       matchId: this.props.currentMatchId,
-      playerId: this.props.currentUser._id,
-      index: index
+      playerId: this.props.currentUserId,
+      index: this.props.index
     });
   }
 
@@ -71,7 +71,8 @@ class HistoryEntry extends Component {
       classNames='leftTeamAnim'
       in={this.state.isLoading}
       key={this.props.index}
-      onClick={(e) => this.openRemoveConfirmation(e, 't1-' + this.props.index)}>
+      onClick={(e) => this.openRemoveConfirmation(e, 't1-' + this.props.index)}
+      unmountOnExit>
       <Row className='goalEventContainer'>
         <Col xs={4}>
           <span className='goalTime'>{this.props.goalTime}&rsquo;</span>

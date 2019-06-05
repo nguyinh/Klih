@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './HistoryEntryRight.scss';
 import {
   Button,
@@ -10,8 +10,8 @@ import {
   Alert,
   Modal
 } from 'rsuite';
-import {TransitionGroup, CSSTransition} from 'react-transition-group';
-import {socket} from './../../socket';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import { socket } from './../../socket';
 
 class HistoryEntryRight extends Component {
   constructor(props) {
@@ -22,11 +22,12 @@ class HistoryEntryRight extends Component {
   }
 
   componentDidMount() {
-    this.setState({isLoading: true});
+    this.setState({ isLoading: true });
   }
 
   componentWillUnmount() {
-    this.setState({isLoading: false});
+    console.log('byebye');
+    this.setState({ isLoading: false });
   }
 
   shouldComponentUpdate(prevProps, prevState) {
@@ -39,11 +40,12 @@ class HistoryEntryRight extends Component {
       overlay.classList.remove('displayOverlay');
     });
     document.getElementById('removeOverlay' + index).classList.add('displayOverlay');
-    this.setState({removeTimer: setTimeout(() => {
-        if (document.getElementById('removeOverlay' + index)) 
+    this.setState({
+      removeTimer: setTimeout(() => {
+        if (document.getElementById('removeOverlay' + index))
           document.getElementById('removeOverlay' + index).classList.remove('displayOverlay');
-        }
-      , 1500)});
+      }, 1500)
+    });
   }
 
   removeGoalEvent = (e, index) => {
@@ -56,14 +58,20 @@ class HistoryEntryRight extends Component {
 
     socket.emit('removeGoalEvent', {
       matchId: this.props.currentMatchId,
-      playerId: this.props.currentUser._id,
-      index: index
+      playerId: this.props.currentUserId,
+      index: this.props.index
     });
   }
 
   render() {
     console.log('render', this.props.index);
-    return <CSSTransition timeout={300} in={this.state.isLoading} classNames='rightTeamAnim' key={this.props.index} onClick={(e) => this.openRemoveConfirmation(e, 't2-' + this.props.index)}>
+    return <CSSTransition
+      timeout={300}
+      in={this.state.isLoading}
+      classNames='rightTeamAnim'
+      key={this.props.index}
+      onClick={(e) => this.openRemoveConfirmation(e, 't2-' + this.props.index)}
+      unmountOnExit>
       <Row className='goalEventContainer'>
         <Col xs={16}>
           <span className='goalPlayer'>{this.props.fullName}</span>
