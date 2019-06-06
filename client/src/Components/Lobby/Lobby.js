@@ -80,14 +80,17 @@ class Lobby extends Component {
       isMatchReady: false,
       beginMatch: false,
       beginMatchLoading: false,
-      matchId: ''
+      matchId: '',
+      isSearchingMatch: false
     }
   }
 
   async componentDidMount() {
     try {
+      this.setState({ isSearchingMatch: true });
+
       const response = await axios.get('/api/playingMatch', {});
-      // TODO: if response, load Lobby state
+
       if (response.data.player1) {
         const resP1 = await axios.get('/api/players/' + response.data.player1, {});
         this.props.setP1({
@@ -147,10 +150,20 @@ class Lobby extends Component {
       // If match not found, fetch for players
       try {
         const players = await axios('/api/team/getAllPlayers', {});
-        this.setState({ playersData: players.data });
+        this.setState({
+          playersData: players.data
+        });
       } catch (err) {
         console.log(err);
+      } finally {
+        this.setState({
+          isSearchingMatch: false
+        });
       }
+    } finally {
+      this.setState({
+        isSearchingMatch: false
+      });
     }
   }
 
@@ -319,12 +332,23 @@ class Lobby extends Component {
           </Col>
         </Row>
 
+
         <Row>
           <Col
             xs={22}
             xsOffset={1}
             className='container'>
 
+            {
+              this.state.isSearchingMatch ?
+              <div className='search-match-loading'>
+                <div className='spinner dark'>
+                  <div className='bounce1'></div>
+                  <div className='bounce2'></div>
+                  <div className='bounce3'></div>
+                </div>
+              </div>
+              :
               <Grid>
                 <Row className='playersPlaceholder'>
                   <div className='versusSeparator'>
@@ -428,8 +452,10 @@ class Lobby extends Component {
 
 
               </Grid>
+              }
           </Col>
         </Row>
+
       </Grid>;
   }
 }

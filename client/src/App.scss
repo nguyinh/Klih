@@ -170,7 +170,7 @@ button {
 }
 
 .spinner {
-  margin: 5vh auto 0;
+  // margin: 5vh auto 0;
   text-align: center;
 }
 
@@ -183,6 +183,10 @@ button {
   display: inline-block;
   -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
   animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.spinner.dark > div {
+  background-color: #4a4949;
 }
 
 .spinner .bounce1 {

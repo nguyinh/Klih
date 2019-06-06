@@ -67,7 +67,7 @@ class App extends Component {
       const authResponse = await axios.post('/api/connect', {})
       const base64Flag = 'data:image/jpeg;base64,';
       const imageStr = this.arrayBufferToBase64(authResponse.data.avatar.data.data);
-      console.log(authResponse);
+
       this.props.setUser({
         fullName: authResponse.data.fullName,
         avatar: base64Flag + imageStr,
@@ -79,7 +79,6 @@ class App extends Component {
         image: base64Flag + imageStr,
         isAppLoaded: true
       });
-
 
     } catch (err) {
       // DEBUG: if status==500, then back-end not initialized, retry connect until back-end up
