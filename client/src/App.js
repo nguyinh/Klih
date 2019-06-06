@@ -7,7 +7,7 @@ import { CSSTransition } from 'react-transition-group';
 
 import Match from './Components/Match/Match';
 import Lobby from './Components/Lobby/Lobby';
-import History from './Components/History/History';
+// import History from './Components/History/History';
 import Statistics from './Components/Statistics/Statistics';
 import Monitor from './Components/Monitor/Monitor';
 import Profile from './Components/Profile/Profile';
@@ -103,7 +103,7 @@ class App extends Component {
 
         <Route path="/match" component={Match}/>
 
-        <Route path="/history" component={History}/>
+        {/*<Route path="/history" component={History}/>*/}
 
         <Route path="/statistics" component={Statistics}/>
 
