@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import './PlayerChoose.scss';
 import { withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
+import swordImage from '../../sword.png';
+import shieldImage from '../../shield.png';
+import { p } from '../../utils';
 
 class PlayerChoose extends Component {
   constructor(props) {
@@ -10,7 +13,8 @@ class PlayerChoose extends Component {
       name: props.name,
       score: props.score,
       image: props.image,
-      selected: props.selected || false
+      selected: props.selected || false,
+      placement: props.placement
     };
   }
 
@@ -30,6 +34,22 @@ class PlayerChoose extends Component {
         }
         className={'avatarImage ' + (!this.state.selected || 'selectAnimation')}
         alt='Avatar'/>
+        <div className='placementBadgeContainer'>
+
+          {this.state.placement === p.ATTACK &&
+            <img
+              src={swordImage}
+              className='swordBadge'
+              alt='Attack'/>
+          }
+          {this.state.placement === p.DEFENCE &&
+            <img
+              src={shieldImage}
+              className='shieldBadge'
+              alt='Defence'/>
+          }
+
+          </div>
       <br/>
       <div className='playerName'>
         {this.state.name || <div>&nbsp;</div>}

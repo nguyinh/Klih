@@ -30,15 +30,6 @@ class Team extends Component {
     return window.btoa(binary);
   };
 
-  componentDidMount() {
-    // let base64Flag = 'data:image/jpeg;base64,';
-    // let imageStr = this.arrayBufferToBase64(this.state.data.avatar.data);
-    // let imageStr = this.state.data.avatar.data;
-    // this.setState({
-    //   image: base64Flag + imageStr
-    // });
-  }
-
   componentWillReceiveProps(nextProps) {
     // if (nextProps.data !== this.props.data)
     //   this.setState({

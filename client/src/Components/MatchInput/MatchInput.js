@@ -19,11 +19,7 @@ import {
 import { setMatch, setScore1, setScore2, setHistory, addToMatch, resetMatch } from './../../redux/actions/index.actions.js';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { socket } from './../../socket';
-
-const p = {
-  ATTACK: 'A',
-  DEFENCE: 'D'
-}
+import { p } from '../../utils';
 
 const mapDispatchToProps = dispatch => {
   return ({

@@ -15,6 +15,7 @@ import { GoogleLogin } from 'react-google-login';
 import config from '../../config/oauth.config.js'
 import { setUserAuth, setUser } from '../../redux/actions/index.actions.js'
 import str from '../../constants/labels.constants.js'
+import { arrayBufferToBase64 } from '../../utils';
 
 const mapDispatchToProps = dispatch => {
   return ({
@@ -29,13 +30,6 @@ const mapDispatchToProps = dispatch => {
 
 const mapStateToProps = state => {
   return { isConnected: state.isConnected };
-};
-
-const arrayBufferToBase64 = (buffer) => {
-  let binary = '';
-  let bytes = [].slice.call(new Uint8Array(buffer));
-  bytes.forEach((b) => binary += String.fromCharCode(b));
-  return window.btoa(binary);
 };
 
 class Auth extends Component {

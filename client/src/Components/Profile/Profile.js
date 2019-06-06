@@ -17,6 +17,7 @@ import {
 import { setUserAuth, setAvatar, resetUserSession } from '../../redux/actions/index.actions.js';
 import axios from 'axios';
 import str from '../../constants/labels.constants.js';
+import { arrayBufferToBase64 } from '../../utils';
 // import QRCode from 'qrcode.react';
 
 const mapDispatchToProps = dispatch => {
@@ -123,13 +124,6 @@ class Profile extends Component {
     this.setState({ selectedFile: event.target.files[0] })
   }
 
-  arrayBufferToBase64(buffer) {
-    let binary = '';
-    let bytes = [].slice.call(new Uint8Array(buffer));
-    bytes.forEach((b) => binary += String.fromCharCode(b));
-    return window.btoa(binary);
-  };
-
   uploadHandler = async () => {
     // Format image file
     const formData = new FormData();
@@ -143,7 +137,7 @@ class Profile extends Component {
     try {
       const avatarResponse = await axios.post('api/profile/avatar', formData, config);
       var base64Flag = 'data:image/jpeg;base64,';
-      var imageStr = this.arrayBufferToBase64(avatarResponse.data.data.data);
+      var imageStr = arrayBufferToBase64(avatarResponse.data.data.data);
       this.props.setAvatar(base64Flag + imageStr);
     } catch (err) {
       console.log(err);

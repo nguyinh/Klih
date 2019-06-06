@@ -11,11 +11,7 @@ import {
   setP3,
   setP4
 } from '../../redux/actions/index.actions.js'
-
-const p = {
-  ATTACK: 'A',
-  DEFENCE: 'D'
-}
+import { p } from '../../utils';
 
 const mapDispatchToProps = dispatch => {
   return ({

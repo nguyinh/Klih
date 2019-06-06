@@ -14,6 +14,8 @@ import Profile from './Components/Profile/Profile';
 import Navigation from './Components/Navigation/Navigation';
 import Welcome from './Components/Welcome/Welcome';
 
+import { arrayBufferToBase64 } from './utils';
+
 import { connect } from 'react-redux';
 import { setNavigationState, setUserAuth, setAvatar, setUser } from './redux/actions/index.actions.js';
 require('dotenv').config()
@@ -53,20 +55,13 @@ class App extends Component {
     this.tryConnect();
   }
 
-  arrayBufferToBase64(buffer) {
-    let binary = '';
-    let bytes = [].slice.call(new Uint8Array(buffer));
-    bytes.forEach((b) => binary += String.fromCharCode(b));
-    return window.btoa(binary);
-  };
-
   // DEBUG
   async tryConnect() {
     axios.defaults.withCredentials = true;
     try {
       const authResponse = await axios.post('/api/connect', {})
       const base64Flag = 'data:image/jpeg;base64,';
-      const imageStr = this.arrayBufferToBase64(authResponse.data.avatar.data.data);
+      const imageStr = arrayBufferToBase64(authResponse.data.avatar.data.data);
 
       this.props.setUser({
         fullName: authResponse.data.fullName,

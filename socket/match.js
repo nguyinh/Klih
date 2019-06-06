@@ -19,7 +19,7 @@ module.exports = (io) => {
     socket.on('joinMatch', async (data) => {
       try {
         const match = await PlayingMatch.findOne({_id: data.matchId}).populate('player1 player2 player3 player4').exec();
-        console.log(match.player1);
+
         if (match) { // Match is being played
           let newPlayer;
           if (match.player1 && match.player1._id == data.playerId) {

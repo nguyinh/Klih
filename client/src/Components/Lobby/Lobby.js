@@ -23,6 +23,7 @@ import {
   Icon,
   Alert
 } from 'rsuite';
+import { arrayBufferToBase64 } from '../../utils';
 
 
 const mapDispatchToProps = dispatch => {
@@ -60,13 +61,6 @@ const mapStateToProps = state => {
     currentMatchId: state.currentMatchId,
     noPlayer: state.noPlayer
   };
-};
-
-const arrayBufferToBase64 = (buffer) => {
-  let binary = '';
-  let bytes = [].slice.call(new Uint8Array(buffer));
-  bytes.forEach((b) => binary += String.fromCharCode(b));
-  return window.btoa(binary);
 };
 
 
@@ -366,7 +360,8 @@ class Lobby extends Component {
                             name={selectedP1.name}
                             image={selectedP1.image}
                             score={selectedP1.score}
-                            selected={selectedPlayer === 'P1'}/>
+                            selected={selectedPlayer === 'P1'}
+                            placement='D'/>
                         </Col>
                         <Col
                           xs={12}
@@ -375,7 +370,8 @@ class Lobby extends Component {
                             name={selectedP2.name}
                             image={selectedP2.image}
                             score={selectedP2.score}
-                            selected={selectedPlayer === 'P2'}/>
+                            selected={selectedPlayer === 'P2'}
+                            placement='A'/>
                         </Col>
                       </Row>
                     </Grid>
@@ -393,7 +389,8 @@ class Lobby extends Component {
                             name={selectedP3.name}
                             image={selectedP3.image}
                             score={selectedP3.score}
-                            selected={selectedPlayer === 'P3'}/>
+                            selected={selectedPlayer === 'P3'}
+                            placement='A'/>
                         </Col>
                         <Col
                           xs={12}
@@ -402,7 +399,8 @@ class Lobby extends Component {
                             name={selectedP4.name}
                             image={selectedP4.image}
                             score={selectedP4.score}
-                            selected={selectedPlayer === 'P4'}/>
+                            selected={selectedPlayer === 'P4'}
+                            placement='D'/>
                         </Col>
                       </Row>
                     </Grid>
