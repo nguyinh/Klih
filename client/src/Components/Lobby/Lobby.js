@@ -79,6 +79,7 @@ class Lobby extends Component {
       selectedPlayer: '',
       isMatchReady: false,
       beginMatch: false,
+      beginMatchLoading: false,
       matchId: ''
     }
   }
@@ -226,6 +227,12 @@ class Lobby extends Component {
 
   beginMatch = async () => {
     // TODO: transition logic between lobby and match HERE
+    if (this.state.beginMatchLoading)
+      return;
+
+    this.setState({
+      beginMatchLoading: true
+    });
 
     try {
       const response = await axios.post('/api/playingMatch', {
@@ -247,6 +254,10 @@ class Lobby extends Component {
       if (err.response.status === 409)
         Alert.error('Un joueur ou plus sont déjà dans un match',
           3000);
+    } finally {
+      this.setState({
+        beginMatchLoading: false
+      });
     }
   }
 
@@ -395,7 +406,11 @@ class Lobby extends Component {
                             className={'roundButton green beginMatchButton ' + (isMatchReady ? 'ready ' : '')}
                             disabled={!isMatchReady}
                             onClick={this.beginMatch}>
-                            Commencer <span role="img" aria-label="Football">⚽️</span>
+                            {
+                              this.state.beginMatchLoading ?
+                              <Icon icon='circle-o-notch' spin size="lg"/> :
+                              <span>Commencer <span role="img" aria-label="Football">⚽️</span></span>
+                            }
                           </Button>
 
                       </Col>

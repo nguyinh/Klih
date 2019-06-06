@@ -16,7 +16,6 @@ class HistoryEntryLeft extends Component {
 
   componentDidMount() {
     this.setState({ isLoading: true });
-    console.log('true');
   }
 
   componentWillUnmount() {

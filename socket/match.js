@@ -310,8 +310,12 @@ module.exports = (io) => {
 
         if (currentMatch) {
           const leaver = [currentMatch.player1, currentMatch.player2, currentMatch.player3, currentMatch.player4, currentMatch.publisher].filter((player) => {
-            return player._id == data.playerId;
-          });
+            if (player) 
+              return player._id == data.playerId;
+            else 
+              return false;
+            }
+          );
 
           await PlayingMatch.deleteOne({_id: data.matchId}).exec();
 

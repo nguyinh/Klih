@@ -19,7 +19,6 @@ class HistoryEntryRight extends Component {
   }
 
   componentWillUnmount() {
-    console.log('byebye');
     this.setState({ isLoading: false });
   }
 

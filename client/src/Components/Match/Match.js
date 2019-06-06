@@ -130,6 +130,8 @@ class Match extends Component {
   onCancelButton = () => {
     this.setState({ isMatchLoading: true });
 
+    console.log(this.props.currentMatchId);
+    console.log(this.props.currentUser._id);
     socket.emit('cancelMatch', {
       matchId: this.props.currentMatchId,
       playerId: this.props.currentUser._id
