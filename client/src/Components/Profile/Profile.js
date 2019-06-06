@@ -17,7 +17,7 @@ import {
 import { setUserAuth, setAvatar, resetUserSession } from '../../redux/actions/index.actions.js';
 import axios from 'axios';
 import str from '../../constants/labels.constants.js';
-import QRCode from 'qrcode.react';
+// import QRCode from 'qrcode.react';
 
 const mapDispatchToProps = dispatch => {
   return ({
@@ -39,14 +39,6 @@ const mapStateToProps = state => {
     currentUser: state.currentUser
   };
 };
-
-function isEmpty(obj) {
-  for (var key in obj) {
-    if (obj.hasOwnProperty(key))
-      return false;
-  }
-  return true;
-}
 
 class Profile extends Component {
   constructor(props) {
@@ -422,7 +414,8 @@ class Profile extends Component {
                       { this.props.currentUser.avatar ?
                         <img
                           src={this.props.currentUser.avatar}
-                          className='profileAvatarImage' /> :
+                          className='profileAvatarImage'
+                          alt='User avatar'/> :
                         <img
                           src={require('./../../profile.png')}
                           className='profileAvatarImage'
@@ -477,7 +470,7 @@ class Profile extends Component {
 
                   <Row>
                     <Col xs={24}>
-                      <h2>Vos équipes 👥</h2>
+                      <h2>Vos équipes <span role="img" aria-label="Team">👥</span></h2>
                     </Col>
                   </Row>
 

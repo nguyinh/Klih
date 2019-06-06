@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.scss';
 import axios from 'axios';
-import { Button, Grid, Row, Col } from 'rsuite';
 // import { Link, withRouter } from "react-router-dom";
-import { BrowserRouter as Router, Route, withRouter, Redirect } from 'react-router-dom';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import { CSSTransition } from 'react-transition-group';
 
 import Match from './Components/Match/Match';
 import Lobby from './Components/Lobby/Lobby';

@@ -11,7 +11,6 @@ import {
 import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
 import { setNavigationState, setUserAuth, setAvatar, setUser } from './../../redux/actions/index.actions.js'
-import axios from 'axios';
 require('dotenv').config()
 
 const mapDispatchToProps = dispatch => {
@@ -127,7 +126,8 @@ class Navigation extends Component {
             { this.props.currentUser.avatar ?
               <img
                 src={this.props.currentUser.avatar}
-                className='avatarImage' /> :
+                className='avatarImage'
+                alt='User avatar'/> :
               <img
                 src={require('./../../profile.png')}
                 className='avatarImage'

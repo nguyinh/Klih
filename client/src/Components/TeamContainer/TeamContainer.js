@@ -4,7 +4,6 @@ import Player from '../Player/Player';
 import { withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
 import {
-  Button,
   Grid,
   Row,
   Col

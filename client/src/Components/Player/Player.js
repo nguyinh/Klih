@@ -36,8 +36,7 @@ const mapStateToProps = state => {
     P1: state.P1,
     P2: state.P2,
     P3: state.P3,
-    P4: state.P4,
-    playerCursor: state.playerCursor
+    P4: state.P4
   };
 };
 

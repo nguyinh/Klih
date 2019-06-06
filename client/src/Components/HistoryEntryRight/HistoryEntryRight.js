@@ -1,17 +1,10 @@
 import React, { Component } from 'react';
 import './HistoryEntryRight.scss';
 import {
-  Button,
-  Grid,
   Row,
-  Col,
-  Checkbox,
-  Icon,
-  Alert,
-  Modal
+  Col
 } from 'rsuite';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import { socket } from './../../socket';
+import { CSSTransition } from 'react-transition-group';
 
 class HistoryEntryRight extends Component {
   constructor(props) {
@@ -35,42 +28,19 @@ class HistoryEntryRight extends Component {
   }
 
   openRemoveConfirmation = (e, index) => {
-    Array.from(document.getElementsByClassName('displayOverlay')).forEach((overlay) => {
-      clearTimeout(this.state.removeTimer);
-      overlay.classList.remove('displayOverlay');
-    });
-    document.getElementById('removeOverlay' + index).classList.add('displayOverlay');
-    this.setState({
-      removeTimer: setTimeout(() => {
-        if (document.getElementById('removeOverlay' + index))
-          document.getElementById('removeOverlay' + index).classList.remove('displayOverlay');
-      }, 1500)
-    });
+    this.props.openRemoveConfirmation(e, index);
   }
 
   removeGoalEvent = (e, index) => {
-    e.stopPropagation();
-    console.log('removeOverlay' + index);
-    if (document.getElementById('removeOverlay' + index)) {
-      clearTimeout(this.state.removeTimer);
-      document.getElementById('removeOverlay' + index).classList.remove('displayOverlay');
-    }
-
-    socket.emit('removeGoalEvent', {
-      matchId: this.props.currentMatchId,
-      playerId: this.props.currentUserId,
-      index: this.props.index
-    });
+    this.props.removeGoalEvent(e, index);
   }
 
   render() {
-    console.log('render', this.props.index);
     return <CSSTransition
-      timeout={300}
+      timeout={500}
       in={this.state.isLoading}
       classNames='rightTeamAnim'
-      key={this.props.index}
-      onClick={(e) => this.openRemoveConfirmation(e, 't2-' + this.props.index)}
+      onClick={(e) => this.openRemoveConfirmation(e, this.props.index)}
       unmountOnExit>
       <Row className='goalEventContainer'>
         <Col xs={16}>
@@ -96,7 +66,10 @@ class HistoryEntryRight extends Component {
           <span className='goalTime'>{this.props.goalTime}&rsquo;</span>
         </Col>
 
-        <div className='removeOverlay right' id={'removeOverlay' + 't2-' + this.props.index} onClick={(e) => this.removeGoalEvent(e, 't2-' + this.props.index)}>
+        <div
+          className='removeOverlay right'
+          id={'removeOverlay' + this.props.index}
+          onClick={(e) => this.removeGoalEvent(e, this.props.index)}>
           <span>
             Supprimer
           </span>

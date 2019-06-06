@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Lobby.scss';
-import { withRouter, Link, Redirect } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 import PlayerChoose from '../PlayerChoose/PlayerChoose';
 import TeamContainer from '../TeamContainer/TeamContainer';
 import { connect } from 'react-redux';
@@ -13,7 +13,6 @@ import {
   setCurrentMatchId
 } from '../../redux/actions/index.actions.js'
 import axios from 'axios';
-import plusImage from './../../plus.png';
 import {
   Button,
   Grid,
@@ -61,16 +60,6 @@ const mapStateToProps = state => {
     currentMatchId: state.currentMatchId,
     noPlayer: state.noPlayer
   };
-};
-
-const cmp = (o1, o2) => JSON.stringify(o1) === JSON.stringify(o2);
-
-function isEmpty(obj) {
-  for (var key in obj) {
-    if (obj.hasOwnProperty(key))
-      return false;
-  }
-  return true;
 };
 
 const arrayBufferToBase64 = (buffer) => {
@@ -406,7 +395,7 @@ class Lobby extends Component {
                             className={'roundButton green beginMatchButton ' + (isMatchReady ? 'ready ' : '')}
                             disabled={!isMatchReady}
                             onClick={this.beginMatch}>
-                            Commencer ⚽️
+                            Commencer <span role="img" aria-label="Football">⚽️</span>
                           </Button>
 
                       </Col>

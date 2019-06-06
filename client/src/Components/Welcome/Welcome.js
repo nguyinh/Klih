@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './Welcome.scss';
-import { connect } from 'react-redux';
 
 class Welcome extends Component {
   constructor(props) {

@@ -42,8 +42,6 @@ const mapStateToProps = state => {
   };
 };
 
-// const cmp = (o1, o2) => JSON.stringify(o1) === JSON.stringify(o2);
-
 class MatchPlayer extends Component {
   constructor(props) {
     super(props);
@@ -65,45 +63,10 @@ class MatchPlayer extends Component {
       });
   }
 
-  // onPlayerClick = () => {
-  //   // Check if player already choosen
-  //   if (cmp(this.state, this.props.P1) ||
-  //     cmp(this.state, this.props.P2) ||
-  //     cmp(this.state, this.props.P3) ||
-  //     cmp(this.state, this.props.P4))
-  //     return;
-  //
-  //   switch (this.props.playerCursor) {
-  //     case 'P1':
-  //       this.props.setP1({
-  //         ...this.state
-  //       });
-  //       break;
-  //     case 'P2':
-  //       this.props.setP2({
-  //         ...this.state
-  //       });
-  //       break;
-  //     case 'P3':
-  //       this.props.setP3({
-  //         ...this.state
-  //       });
-  //       break;
-  //     case 'P4':
-  //       this.props.setP4({
-  //         ...this.state
-  //       });
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // }
-
   render() { { /* If player not added, don't render anything */ }
     if (!this.state.name)
       return null;
 
-    const isSelected = false;
     const teamColor =
       (this.props.P1._id === this.state._id || this.props.P2._id === this.state._id) ?
       'blueTeam ' :

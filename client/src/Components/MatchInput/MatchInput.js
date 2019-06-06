@@ -161,27 +161,20 @@ class MatchInput extends PureComponent {
         10000);
       this.props.resetMatch();
     });
-
-    socket.on('reconnect', (attemptNumber) => {
-      socket.emit('joinMatch', {
-        matchId: this.props.currentMatchId,
-        playerId: this.props.currentUser._id
-      });
-    });
   }
 
   async componentWillReceiveProps(nextProps) {
-    // if (nextProps.P1.name !== this.props.P1.name ||
-    //   nextProps.P2.name !== this.props.P2.name ||
-    //   nextProps.P3.name !== this.props.P3.name ||
-    //   nextProps.P4.name !== this.props.P4.name) {
-    //   await this.setState({
-    //     P1: nextProps.P1,
-    //     P2: nextProps.P2,
-    //     P3: nextProps.P3,
-    //     P4: nextProps.P4
-    //   });
-    // }
+    if (nextProps.P1._id !== this.props.P1._id ||
+      nextProps.P2._id !== this.props.P2._id ||
+      nextProps.P3._id !== this.props.P3._id ||
+      nextProps.P4._id !== this.props.P4._id) {
+      await this.setState({
+        P1: nextProps.P1,
+        P2: nextProps.P2,
+        P3: nextProps.P3,
+        P4: nextProps.P4
+      });
+    }
   }
 
   // shouldComponentUpdate(nextProps, nextState) {
@@ -195,7 +188,6 @@ class MatchInput extends PureComponent {
     socket.off('placementChange');
     socket.off('matchEnded');
     socket.off('matchCancelled');
-    socket.off('reconnect');
   }
 
   // ====== Player and Placement ======
@@ -226,7 +218,7 @@ class MatchInput extends PureComponent {
     if (this.state.P1.isSelected)
       return;
     this.deselectPlayers();
-    const { P1, placement, changingScore } = this.state;
+    const { P1, changingScore } = this.state;
     this.setState({
       P1: {
         ...P1,
@@ -242,7 +234,7 @@ class MatchInput extends PureComponent {
     if (this.state.P2.isSelected)
       return;
     this.deselectPlayers();
-    const { P2, placement, changingScore } = this.state;
+    const { P2, changingScore } = this.state;
     this.setState({
       P2: {
         ...P2,
@@ -258,7 +250,7 @@ class MatchInput extends PureComponent {
     if (this.state.P3.isSelected)
       return;
     this.deselectPlayers();
-    const { P3, placement, changingScore } = this.state;
+    const { P3, changingScore } = this.state;
     this.setState({
       P3: {
         ...P3,
@@ -274,7 +266,7 @@ class MatchInput extends PureComponent {
     if (this.state.P4.isSelected)
       return;
     this.deselectPlayers();
-    const { P4, placement, changingScore } = this.state;
+    const { P4, changingScore } = this.state;
     this.setState({
       P4: {
         ...P4,
@@ -440,10 +432,10 @@ class MatchInput extends PureComponent {
       this.state.saveInProgress)
       return;
 
-    const getPlayer = ({ data, name, placement }) => {
+    const getPlayer = ({ data, firstName, placement }) => {
       return {
         _id: data._id,
-        fullName: name,
+        fullName: firstName,
         placement: placement
       };
     };
@@ -546,7 +538,7 @@ class MatchInput extends PureComponent {
           {/* Player and placement selection */}
           <Row>
             <Col xs={22} xsOffset={1}>
-              <h2 style={{margin: '0', marginBottom: '10px'}}>Selectionnez le buteur</h2>
+              <h2 className='select-goal-title'>Selectionnez le buteur</h2>
             </Col>
 
             <Col
@@ -601,6 +593,7 @@ class MatchInput extends PureComponent {
 
                   <div
                     className='swordContainer'
+                    data-newplacement='A'
                     onClick={() => this.onPlacementChange('Attack')}>
                     <img
                       src={swordImage}
@@ -667,7 +660,7 @@ class MatchInput extends PureComponent {
           {/* Adding/removing points */}
           <Row className='pointsSelector'>
             <Col xs={22} xsOffset={1}>
-              <h2 style={{margin: '0', textAlign: 'initial'}}>Points marqués</h2>
+              <h2 className='goals-title'>Points marqués</h2>
             </Col>
 
             <Col
@@ -720,7 +713,7 @@ class MatchInput extends PureComponent {
                 {this.state.betrayPoint ?
                   <>
                     <span>BOUH </span>
-                    <span role='img' style={{fontSize: '18px'}}>👎</span>
+                    <span role='img' aria-label="Thumb down" style={{fontSize: '18px'}}>👎</span>
                   </>
                   :
                   <span>Contre son camp</span>

@@ -232,7 +232,6 @@ module.exports = (io) => {
     // User validates Match
     socket.on('saveMatch', async (data) => {
       try {
-
         const currentMatch = await PlayingMatch.findOne({
           $and: [
             {
@@ -343,7 +342,6 @@ module.exports = (io) => {
     // On User disconnecting
     socket.on('disconnecting', async () => {
       // Refresh connected players sockets in matchId room
-
       try {
         // Get matchId
         const matchId = Object.values(socket.rooms)[1];

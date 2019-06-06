@@ -2,50 +2,18 @@ import React, { Component } from 'react';
 import './MatchHistory.scss';
 import HistoryEntryLeft from '../HistoryEntryLeft/HistoryEntryLeft.js';
 import HistoryEntryRight from '../HistoryEntryRight/HistoryEntryRight.js';
-import swordImage from '../../sword.png';
-import shieldImage from '../../shield.png';
-import plusImage from '../../plus-sign.png';
-import minusImage from '../../minus-sign.png';
 import { withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
-import { setMatch, setElapsedTime } from './../../redux/actions/index.actions.js';
 import {
-  Button,
   Grid,
   Row,
   Col,
-  Checkbox,
   Icon,
-  Alert,
-  Modal
 } from 'rsuite';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { socket } from './../../socket';
-
-const mapDispatchToProps = dispatch => {
-  return ({
-    setMatch: (value) => {
-      dispatch(setMatch(value))
-    },
-    setElapsedTime: (value) => {
-      dispatch(setElapsedTime(value))
-    }
-  })
-}
 
 const mapStateToProps = state => {
   return {
-    P1: state.P1,
-    P2: state.P2,
-    P3: state.P3,
-    P4: state.P4,
-    match: state.match,
-    score1: state.score1,
-    score2: state.score2,
-    history: state.matchHistory,
-    team1: state.team1,
-    team2: state.team2,
-    minutesElapsed: state.minutesElapsed,
     currentMatchId: state.currentMatchId,
     currentUser: state.currentUser
   };
@@ -59,7 +27,6 @@ class MatchHistory extends Component {
     this.state = {
       score1: props.score1 || 0,
       score2: props.score2 || 0,
-      history: props.history || [],
       team1History: [],
       team2History: [],
       imageP1: props.imageP1,
@@ -75,16 +42,16 @@ class MatchHistory extends Component {
   }
 
   componentDidMount() {
-    socket.emit('joinMatch', {
-      matchId: this.props.currentMatchId,
-      playerId: this.props.currentUser._id
-    });
+    if (this.props.currentMatchId && this.props.currentUser._id)
+      socket.emit('joinMatch', {
+        matchId: this.props.currentMatchId,
+        playerId: this.props.currentUser._id
+      });
 
     socket.on('goalEvent', (data) => {
       this.setState({
         score1: data.score1,
         score2: data.score2,
-        history: data.history,
         team1History: data.history.filter(h => h.team === 'Team1').reverse(),
         team2History: data.history.filter(h => h.team === 'Team2').reverse()
       });
@@ -94,7 +61,6 @@ class MatchHistory extends Component {
       this.setState({
         score1: data.score1,
         score2: data.score2,
-        // history: data.history,
         team1History: data.history.filter(h => h.team === 'Team1').reverse(),
         team2History: data.history.filter(h => h.team === 'Team2').reverse(),
         createdAt: Date.parse(data.createdAt)
@@ -114,7 +80,6 @@ class MatchHistory extends Component {
     // Increase performance
     return prevState.score1 !== this.state.score1 ||
       prevState.score2 !== this.state.score2 ||
-      prevState.history !== this.state.history ||
       prevState.minutesElapsed !== this.state.minutesElapsed;
   }
 
@@ -140,7 +105,7 @@ class MatchHistory extends Component {
 
   removeGoalEvent = (e, index) => {
     e.stopPropagation();
-    console.log('removeOverlay' + index);
+
     if (document.getElementById('removeOverlay' + index)) {
       clearTimeout(this.state.removeTimer);
       document.getElementById('removeOverlay' + index).classList.remove('displayOverlay');
@@ -152,17 +117,6 @@ class MatchHistory extends Component {
       index: index
     });
   }
-
-  // async componentWillReceiveProps(nextProps) {
-  // if (nextProps !== this.props) {
-  //   await this.setState({
-  //     // ...nextProps
-  //     score1: nextProps.score1,
-  //     score2: nextProps.score2,
-  //     history: nextProps.history
-  //   });
-  // }
-  // }
 
 
   render() {
@@ -242,7 +196,9 @@ class MatchHistory extends Component {
                           fullName={goal.fullName}
                           currentMatchId={this.props.currentMatchId}
                           currentUserId={this.props.currentUser._id}
-                          key={goal.index}/>;
+                          key={goal.index}
+                          openRemoveConfirmation={this.openRemoveConfirmation}
+                          removeGoalEvent={this.removeGoalEvent}/>;
               })
             }
         </Col>
@@ -259,7 +215,9 @@ class MatchHistory extends Component {
                           fullName={goal.fullName}
                           currentMatchId={this.props.currentMatchId}
                           currentUserId={this.props.currentUser._id}
-                          key={goal.index}/>;
+                          key={goal.index}
+                          openRemoveConfirmation={this.openRemoveConfirmation}
+                          removeGoalEvent={this.removeGoalEvent}/>;
               })
             }
         </Col>
@@ -267,4 +225,4 @@ class MatchHistory extends Component {
     </Grid>;
   }
 }
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MatchHistory));
+export default withRouter(connect(mapStateToProps, null)(MatchHistory));

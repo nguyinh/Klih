@@ -1,10 +1,5 @@
 import React, { Component } from 'react';
 import './Match.scss';
-import swordImage from '../../sword.png';
-import shieldImage from '../../shield.png';
-import plusImage from '../../plus-sign.png';
-import minusImage from '../../minus-sign.png';
-import MatchPlayer from '../MatchPlayer/MatchPlayer';
 import MatchHistory from '../MatchHistory/MatchHistory';
 import MatchInput from '../MatchInput/MatchInput';
 import { withRouter, Redirect } from "react-router-dom";
@@ -14,13 +9,10 @@ import {
   Grid,
   Row,
   Col,
-  Checkbox,
   Icon,
-  Alert,
   Modal
 } from 'rsuite';
 import { setMatch, setScore1, setScore2, setHistory, addToMatch, resetMatch } from './../../redux/actions/index.actions.js';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { socket } from './../../socket';
 
 const mapDispatchToProps = dispatch => {
@@ -107,99 +99,22 @@ class Match extends Component {
     if (!this.props.currentMatchId)
       return;
 
-    // socket.on('onConnectedPlayersChange', ({ playersArray, playerName }) => {
-    //   if ((playersArray.includes('P1') || playersArray.includes('P2')) &&
-    //     (playersArray.includes('P3') || playersArray.includes('P4'))) {
-    //     const userID = this.props.currentUser._id;
-    //     const player1ID = this.state.P1._id;
-    //     const player2ID = this.state.P2._id;
-    //     const player3ID = this.state.P3._id;
-    //     const player4ID = this.state.P4._id;
-    //     if (userID === player1ID ||
-    //       userID === player2ID) {
-    //       this.setState({
-    //         teamToDisplay: 'Team1'
-    //       });
-    //     } else if (userID === player3ID ||
-    //       userID === player4ID) {
-    //       this.setState({
-    //         teamToDisplay: 'Team2'
-    //       });
-    //     }
-    //   } else {
-    //     this.setState({ teamToDisplay: '' });
-    //   }
-    //
-    //   this.resetPointState();
-    //
-    //   if (playersArray.length > this.state.playersArray.length &&
-    //     this.state.playersArray.length !== 0) {
-    //     Alert.info(playerName ? playerName + ' a rejoint la partie' : 'Un joueur a rejoint la partie ');
-    //   } else if (playersArray.length < this.state.playersArray.length) {
-    //     Alert.info('Un joueur a quitté la partie');
-    //   }
-    //   this.setState({ playersArray });
-    // });
-
-    // socket.on('placementChange', ({ P1Placement, P2Placement, P3Placement, P4Placement }) => {
-    //   this.setState(prevState => ({
-    //     P1: { ...prevState.P1, placement: P1Placement },
-    //     P2: { ...prevState.P2, placement: P2Placement },
-    //     P3: { ...prevState.P3, placement: P3Placement },
-    //     P4: { ...prevState.P4, placement: P4Placement },
-    //   }));
-    // });
-
-    socket.on('matchEnded', ({ reason }) => {
-      if (reason === 'MATCH_ENDED')
-        Alert.error('Ce match est terminé', 5000);
-      else
-        Alert.success('Le match a bien été enregistré', 3000);
-      this.props.resetMatch();
-      // TODO: some things on match end
-    });
-
-    socket.on('matchCancelled', (data) => {
-      Alert.warning(data.self ? 'Match annulé' : (data.reason === 'ENDED_BY_USER' ?
-          (data.user ? 'Match annulé par ' + data.user : 'Ce match a été annulé par un autre joueur') :
-          'Match annulé pour inactivité'),
-        10000);
-      this.props.resetMatch();
-    });
-
     socket.on('reconnect', (attemptNumber) => {
       socket.emit('joinMatch', {
         matchId: this.props.currentMatchId,
         playerId: this.props.currentUser._id
       });
+      // TODO: Alert on reconnection
     });
   }
 
-  // async componentWillReceiveProps(nextProps) {
-  //   if (nextProps.P1.name !== this.props.P1.name ||
-  //     nextProps.P2.name !== this.props.P2.name ||
-  //     nextProps.P3.name !== this.props.P3.name ||
-  //     nextProps.P4.name !== this.props.P4.name) {
-  //     await this.setState({
-  //       P1: nextProps.P1,
-  //       P2: nextProps.P2,
-  //       P3: nextProps.P3,
-  //       P4: nextProps.P4
-  //     });
-  //   }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   console.log(this.props);
+  //   console.log(nextProps);
+  // return false;
   // }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log(this.props);
-    console.log(nextProps);
-    return true;
-  }
-
   componentWillUnmount() {
-    socket.off('onConnectedPlayersChange');
-    socket.off('placementChange');
-    socket.off('matchEnded');
-    socket.off('matchCancelled');
     socket.off('reconnect');
   }
 
@@ -213,7 +128,6 @@ class Match extends Component {
   }
 
   onCancelButton = () => {
-    // TODO: add some security
     this.setState({ isMatchLoading: true });
 
     socket.emit('cancelMatch', {
@@ -224,9 +138,6 @@ class Match extends Component {
 
 
   render() {
-    console.log('rerender');
-    const { P1, P2, P3, P4, placement } = this.state;
-
     return <Grid className='matchContainer'>
       <MatchInput/>
 
@@ -240,10 +151,10 @@ class Match extends Component {
             <Col
               xs={24}>
               <MatchHistory
-                imageP1={this.state.P1.name !== '' ? this.state.P1.image : ''}
-                imageP2={this.state.P2.name !== '' ? this.state.P2.image : ''}
-                imageP3={this.state.P3.name !== '' ? this.state.P3.image : ''}
-                imageP4={this.state.P4.name !== '' ? this.state.P4.image : ''}
+                imageP1={this.state.P1._id !== '' ? this.state.P1.image : ''}
+                imageP2={this.state.P2._id !== '' ? this.state.P2.image : ''}
+                imageP3={this.state.P3._id !== '' ? this.state.P3.image : ''}
+                imageP4={this.state.P4._id !== '' ? this.state.P4.image : ''}
                 recordTime
                 startedAt={Date.now()}/>
             </Col>
