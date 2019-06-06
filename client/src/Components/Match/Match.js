@@ -140,6 +140,7 @@ class Match extends Component {
 
 
   render() {
+    console.log(this.state);
     return <Grid className='matchContainer'>
       <MatchInput/>
 
@@ -153,10 +154,10 @@ class Match extends Component {
             <Col
               xs={24}>
               <MatchHistory
-                imageP1={this.state.P1._id !== '' ? this.state.P1.image : ''}
-                imageP2={this.state.P2._id !== '' ? this.state.P2.image : ''}
-                imageP3={this.state.P3._id !== '' ? this.state.P3.image : ''}
-                imageP4={this.state.P4._id !== '' ? this.state.P4.image : ''}
+                imageP1={this.state.P1._id ? this.state.P1.image : ''}
+                imageP2={this.state.P2._id ? this.state.P2.image : ''}
+                imageP3={this.state.P3._id ? this.state.P3.image : ''}
+                imageP4={this.state.P4._id ? this.state.P4.image : ''}
                 recordTime
                 startedAt={Date.now()}/>
             </Col>

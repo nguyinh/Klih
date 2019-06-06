@@ -68,6 +68,8 @@ class MatchHistory extends Component {
 
       this.updateTime();
     });
+
+    console.log(this.props);
   }
 
   componentWillUnmount() {
