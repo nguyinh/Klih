@@ -10,8 +10,6 @@ import {
 } from 'rsuite';
 
 
-// const cmp = (o1, o2) => JSON.stringify(o1) === JSON.stringify(o2);
-
 class Team extends Component {
   constructor(props) {
     super(props);
@@ -21,20 +19,6 @@ class Team extends Component {
       tag: props.tag,
       image: undefined
     }
-  }
-
-  arrayBufferToBase64(buffer) {
-    let binary = '';
-    let bytes = [].slice.call(new Uint8Array(buffer));
-    bytes.forEach((b) => binary += String.fromCharCode(b));
-    return window.btoa(binary);
-  };
-
-  componentWillReceiveProps(nextProps) {
-    // if (nextProps.data !== this.props.data)
-    //   this.setState({
-    //     ...nextProps
-    //   });
   }
 
   render() {
