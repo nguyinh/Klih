@@ -19,19 +19,19 @@ module.exports = (io) => {
     socket.on('joinMatch', async (data) => {
       try {
         const match = await PlayingMatch.findOne({_id: data.matchId}).populate('player1 player2 player3 player4').exec();
-
+        console.log(match.player1);
         if (match) { // Match is being played
           let newPlayer;
-          if (match.player1._id == data.playerId) {
+          if (match.player1 && match.player1._id == data.playerId) {
             socket.player = 'P1';
             newPlayer = match.player1;
-          } else if (match.player2._id == data.playerId) {
+          } else if (match.player2 && match.player2._id == data.playerId) {
             socket.player = 'P2';
             newPlayer = match.player2;
-          } else if (match.player3._id == data.playerId) {
+          } else if (match.player3 && match.player3._id == data.playerId) {
             socket.player = 'P3';
             newPlayer = match.player3;
-          } else if (match.player4._id == data.playerId) {
+          } else if (match.player4 && match.player4._id == data.playerId) {
             socket.player = 'P4';
             newPlayer = match.player4;
           } else if (match.publisher._id == data.playerId) {
@@ -52,10 +52,18 @@ module.exports = (io) => {
           socket.emit('joinMatch', match); // Return actual match data
           // Return new match state to subscribers
           socket.emit('placementChange', {
-            P1Placement: match.P1Placement,
-            P2Placement: match.P2Placement,
-            P3Placement: match.P3Placement,
-            P4Placement: match.P4Placement
+            P1Placement: match.player1
+              ? match.P1Placement
+              : '',
+            P2Placement: match.player2
+              ? match.P2Placement
+              : '',
+            P3Placement: match.player3
+              ? match.P3Placement
+              : '',
+            P4Placement: match.player4
+              ? match.P4Placement
+              : ''
           });
 
           matchIO.to(data.matchId).emit('onConnectedPlayersChange', {

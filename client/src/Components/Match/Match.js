@@ -56,8 +56,6 @@ const mapStateToProps = state => {
   };
 };
 
-// const cmp = (o1, o2) => JSON.stringify(o1) === JSON.stringify(o2);
-
 class Match extends Component {
   constructor(props) {
     super(props);

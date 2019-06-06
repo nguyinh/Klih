@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import './MatchInput.scss';
 import swordImage from '../../sword.png';
 import shieldImage from '../../shield.png';
+import switchImage from '../../switch.png';
 import plusImage from '../../plus-sign.png';
 import minusImage from '../../minus-sign.png';
 import MatchPlayer from '../MatchPlayer/MatchPlayer';
@@ -18,6 +19,11 @@ import {
 import { setMatch, setScore1, setScore2, setHistory, addToMatch, resetMatch } from './../../redux/actions/index.actions.js';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { socket } from './../../socket';
+
+const p = {
+  ATTACK: 'A',
+  DEFENCE: 'D'
+}
 
 const mapDispatchToProps = dispatch => {
   return ({
@@ -137,12 +143,34 @@ class MatchInput extends PureComponent {
     });
 
     socket.on('placementChange', ({ P1Placement, P2Placement, P3Placement, P4Placement }) => {
-      this.setState(prevState => ({
-        P1: { ...prevState.P1, placement: P1Placement },
-        P2: { ...prevState.P2, placement: P2Placement },
-        P3: { ...prevState.P3, placement: P3Placement },
-        P4: { ...prevState.P4, placement: P4Placement },
-      }));
+
+      // Initialize placements
+      if (this.state.P1._id && !P1Placement ||
+        this.state.P2._id && !P2Placement ||
+        this.state.P3._id && !P3Placement ||
+        this.state.P4._id && !P4Placement) {
+        socket.emit('placementChange', {
+          matchId: this.props.currentMatchId,
+          playerId: this.props.currentUser._id,
+          P1Placement: this.state.P1._id ? p.DEFENCE : '',
+          P2Placement: this.state.P2._id ? p.ATTACK : '',
+          P3Placement: this.state.P3._id ? p.ATTACK : '',
+          P4Placement: this.state.P4._id ? p.DEFENCE : ''
+        });
+
+        this.setState(prevState => ({
+          P1: { ...prevState.P1, placement: this.state.P1._id ? p.DEFENCE : '', },
+          P2: { ...prevState.P2, placement: this.state.P2._id ? p.ATTACK : '' },
+          P3: { ...prevState.P3, placement: this.state.P3._id ? p.ATTACK : '' },
+          P4: { ...prevState.P4, placement: this.state.P4._id ? p.DEFENCE : '' },
+        }));
+      } else
+        this.setState(prevState => ({
+          P1: { ...prevState.P1, placement: P1Placement },
+          P2: { ...prevState.P2, placement: P2Placement },
+          P3: { ...prevState.P3, placement: P3Placement },
+          P4: { ...prevState.P4, placement: P4Placement },
+        }));
     });
 
     socket.on('matchEnded', ({ reason }) => {
@@ -283,87 +311,138 @@ class MatchInput extends PureComponent {
 
     const { P1, P2, P3, P4 } = this.state;
 
-    if (this.state.P1.isSelected) {
+    if (this.state.P1.isSelected || this.state.P2.isSelected) {
       this.setState({
         P1: {
           ...this.state.P1,
-          placement: (P1.placement === placementType ? '' : placementType)
+          placement: this.state.P1._id ? (P1.placement === p.ATTACK ? p.DEFENCE : p.ATTACK) : '',
+          isSelected: false
         },
         P2: {
           ...this.state.P2,
-          placement: (P1.placement === placementType ? P2.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
-        },
-        placement: (P1.placement === placementType ? '' : placementType)
+          placement: this.state.P2._id ? (P2.placement === p.ATTACK ? p.DEFENCE : p.ATTACK) : '',
+          isSelected: false
+        }
+      }, () => {
+        socket.emit('placementChange', {
+          matchId: this.props.currentMatchId,
+          playerId: this.props.currentUser._id,
+          P1Placement: this.state.P1.placement,
+          P2Placement: this.state.P2.placement
+        });
       });
-
-      socket.emit('placementChange', {
-        matchId: this.props.currentMatchId,
-        playerId: this.props.currentUser._id,
-        P1Placement: (P1.placement === placementType ? '' : placementType),
-        P2Placement: (P1.placement === placementType ? P2.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
-      });
-
-    } else if (this.state.P2.isSelected) {
-      this.setState({
-        P2: {
-          ...this.state.P2,
-          placement: (P2.placement === placementType ? '' : placementType)
-        },
-        P1: {
-          ...this.state.P1,
-          placement: (P2.placement === placementType ? P1.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
-        },
-        placement: (P2.placement === placementType ? '' : placementType)
-      });
-
-      socket.emit('placementChange', {
-        matchId: this.props.currentMatchId,
-        playerId: this.props.currentUser._id,
-        P1Placement: (P2.placement === placementType ? P1.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : ''))),
-        P2Placement: (P2.placement === placementType ? '' : placementType)
-      });
-
-    } else if (this.state.P3.isSelected) {
+    } else if (this.state.P3.isSelected || this.state.P4.isSelected) {
       this.setState({
         P3: {
           ...this.state.P3,
-          placement: (P3.placement === placementType ? '' : placementType)
+          placement: this.state.P3._id ? (P3.placement === p.ATTACK ? p.DEFENCE : p.ATTACK) : '',
+          isSelected: false
         },
         P4: {
           ...this.state.P4,
-          placement: (P3.placement === placementType ? P4.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
-        },
-        placement: (P3.placement === placementType ? '' : placementType)
-      });
-
-      socket.emit('placementChange', {
-        matchId: this.props.currentMatchId,
-        playerId: this.props.currentUser._id,
-        P3Placement: (P3.placement === placementType ? '' : placementType),
-        P4Placement: (P3.placement === placementType ? P4.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
-      });
-
-    } else if (this.state.P4.isSelected) {
-      this.setState({
-        P4: {
-          ...this.state.P4,
-          placement: (P4.placement === placementType ? '' : placementType)
-        },
-        P3: {
-          ...this.state.P3,
-          placement: (P4.placement === placementType ? P3.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
-        },
-        placement: (P4.placement === placementType ? '' : placementType)
-      });
-
-      socket.emit('placementChange', {
-        matchId: this.props.currentMatchId,
-        playerId: this.props.currentUser._id,
-        P3Placement: (P4.placement === placementType ? P3.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : ''))),
-        P4Placement: (P4.placement === placementType ? '' : placementType)
+          placement: this.state.P4._id ? (P4.placement === p.ATTACK ? p.DEFENCE : p.ATTACK) : '',
+          isSelected: false
+        }
+      }, () => {
+        socket.emit('placementChange', {
+          matchId: this.props.currentMatchId,
+          playerId: this.props.currentUser._id,
+          P3Placement: this.state.P3.placement,
+          P4Placement: this.state.P4.placement
+        });
       });
     }
   }
+
+
+
+
+  // onPlacementChange = (placementType) => {
+  //   this.resetErrors();
+  //
+  //   const { P1, P2, P3, P4 } = this.state;
+  //
+  //   if (this.state.P1.isSelected) {
+  //     this.setState({
+  //       P1: {
+  //         ...this.state.P1,
+  //         placement: (P1.placement === placementType ? '' : placementType)
+  //       },
+  //       P2: {
+  //         ...this.state.P2,
+  //         placement: (P1.placement === placementType ? P2.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
+  //       },
+  //       placement: (P1.placement === placementType ? '' : placementType)
+  //     });
+  //
+  //     socket.emit('placementChange', {
+  //       matchId: this.props.currentMatchId,
+  //       playerId: this.props.currentUser._id,
+  //       P1Placement: (P1.placement === placementType ? '' : placementType),
+  //       P2Placement: (P1.placement === placementType ? P2.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
+  //     });
+  //
+  //   } else if (this.state.P2.isSelected) {
+  //     this.setState({
+  //       P2: {
+  //         ...this.state.P2,
+  //         placement: (P2.placement === placementType ? '' : placementType)
+  //       },
+  //       P1: {
+  //         ...this.state.P1,
+  //         placement: (P2.placement === placementType ? P1.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
+  //       },
+  //       placement: (P2.placement === placementType ? '' : placementType)
+  //     });
+  //
+  //     socket.emit('placementChange', {
+  //       matchId: this.props.currentMatchId,
+  //       playerId: this.props.currentUser._id,
+  //       P1Placement: (P2.placement === placementType ? P1.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : ''))),
+  //       P2Placement: (P2.placement === placementType ? '' : placementType)
+  //     });
+  //
+  //   } else if (this.state.P3.isSelected) {
+  //     this.setState({
+  //       P3: {
+  //         ...this.state.P3,
+  //         placement: (P3.placement === placementType ? '' : placementType)
+  //       },
+  //       P4: {
+  //         ...this.state.P4,
+  //         placement: (P3.placement === placementType ? P4.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
+  //       },
+  //       placement: (P3.placement === placementType ? '' : placementType)
+  //     });
+  //
+  //     socket.emit('placementChange', {
+  //       matchId: this.props.currentMatchId,
+  //       playerId: this.props.currentUser._id,
+  //       P3Placement: (P3.placement === placementType ? '' : placementType),
+  //       P4Placement: (P3.placement === placementType ? P4.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
+  //     });
+  //
+  //   } else if (this.state.P4.isSelected) {
+  //     this.setState({
+  //       P4: {
+  //         ...this.state.P4,
+  //         placement: (P4.placement === placementType ? '' : placementType)
+  //       },
+  //       P3: {
+  //         ...this.state.P3,
+  //         placement: (P4.placement === placementType ? P3.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
+  //       },
+  //       placement: (P4.placement === placementType ? '' : placementType)
+  //     });
+  //
+  //     socket.emit('placementChange', {
+  //       matchId: this.props.currentMatchId,
+  //       playerId: this.props.currentUser._id,
+  //       P3Placement: (P4.placement === placementType ? P3.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : ''))),
+  //       P4Placement: (P4.placement === placementType ? '' : placementType)
+  //     });
+  //   }
+  // }
 
 
   // ====== Adding/removing points ======
@@ -592,22 +671,11 @@ class MatchInput extends PureComponent {
                   className='playerPlacementContainer'>
 
                   <div
-                    className='swordContainer'
-                    data-newplacement='A'
-                    onClick={() => this.onPlacementChange('Attack')}>
+                    onClick={this.onPlacementChange}>
                     <img
-                      src={swordImage}
-                      className={'placementImage sword ' + ((!P1.isSelected && !P2.isSelected && !P3.isSelected && !P4.isSelected) ? 'disabled ' : placement === 'Attack' ? 'selected' : '')}
-                      alt='attack'/>
-                  </div>
-
-                  <div
-                    className='shieldContainer'
-                    onClick={() => this.onPlacementChange('Defense')}>
-                  <img
-                    src={shieldImage}
-                    className={'placementImage shield ' + ((!P1.isSelected && !P2.isSelected && !P3.isSelected && !P4.isSelected) ? 'disabled ' : placement === 'Defense' ? 'selected' : '')}
-                    alt='defense'/>
+                      src={switchImage}
+                      className={'switchImage ' + ((!P1.isSelected && !P2.isSelected && !P3.isSelected && !P4.isSelected) && 'disabled ')}
+                      alt='Switch'/>
                   </div>
 
                 </Col>

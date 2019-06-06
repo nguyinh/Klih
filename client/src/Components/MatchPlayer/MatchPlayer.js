@@ -12,6 +12,11 @@ import {
   setP4
 } from '../../redux/actions/index.actions.js'
 
+const p = {
+  ATTACK: 'A',
+  DEFENCE: 'D'
+}
+
 const mapDispatchToProps = dispatch => {
   return ({
     setPlayerCursor: (value) => {
@@ -57,7 +62,7 @@ class MatchPlayer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.data !== this.props.data || nextProps.placement !== this.props.placement)
+    if (nextProps._id !== this.props._id || nextProps.placement !== this.props.placement)
       this.setState({
         ...nextProps
       });
@@ -88,7 +93,7 @@ class MatchPlayer extends Component {
 
         {this.state.placement &&
           <div className='placementBadgeContainer'>
-          {this.state.placement === 'Attack' ?
+          {this.state.placement === p.ATTACK ?
 
               <img
                 src={swordImage}

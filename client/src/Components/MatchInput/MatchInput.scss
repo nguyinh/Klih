@@ -13,25 +13,18 @@
 
     .playerPlacementContainer {
       text-align: center;
-    }
 
-    .placementImage {
-      height: 40px;
-      background-color: #c8c8c8;
-      border-radius: 5px;
+      .switchImage {
+        height: 85px;
+        border-radius: 30px;
+        background-color: #c8c8c8;
+        box-shadow: 0 0 6px 2px rgba(111, 111, 111, 0.2);
 
-      &.disabled {
-        opacity: 0.3;
+        &.disabled {
+          opacity: 0.3;
+          box-shadow: 0 0 6px 2px rgba(111, 111, 111, 0);
+        }
       }
-    }
-
-    .swordContainer {
-      margin-top: -5px;
-      padding-bottom: 5px;
-    }
-
-    .shieldContainer {
-      padding-top: 5px;
     }
 
     .P1Container,
