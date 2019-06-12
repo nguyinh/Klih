@@ -14,7 +14,7 @@ import {
   Input,
   Modal
 } from 'rsuite';
-import { setUserAuth, setAvatar, resetUserSession } from '../../redux/actions/index.actions.js';
+import { setUserAuth, setAvatar, resetUserSession, setUser } from '../../redux/actions/index.actions.js';
 import axios from 'axios';
 import str from '../../constants/labels.constants.js';
 import { arrayBufferToBase64 } from '../../utils';
@@ -30,6 +30,9 @@ const mapDispatchToProps = dispatch => {
     },
     resetUserSession: (value) => {
       dispatch(resetUserSession(value))
+    },
+    setUser: (value) => {
+      dispatch(setUser(value))
     }
   })
 }
@@ -107,10 +110,16 @@ class Profile extends Component {
       if (res.status === 202) {
         this.props.setUserAuth(false);
         this.props.resetUserSession(false);
+        this.props.setUser({
+          _id: null,
+        });
       }
     }).catch((err) => {
       console.error(err);
       this.props.setUserAuth(false);
+      this.props.setUser({
+        _id: null,
+      });
     });
   }
 

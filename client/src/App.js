@@ -38,7 +38,10 @@ const mapDispatchToProps = dispatch => {
 }
 
 const mapStateToProps = state => {
-  return { isConnected: state.isConnected };
+  return {
+    isConnected: state.isConnected,
+    currentUser: state.currentUser
+  };
 };
 
 class App extends Component {
@@ -55,7 +58,7 @@ class App extends Component {
     this.tryConnect();
   }
 
-  // DEBUG
+
   async tryConnect() {
     axios.defaults.withCredentials = true;
     try {
@@ -77,17 +80,22 @@ class App extends Component {
 
     } catch (err) {
       // DEBUG: if status==500, then back-end not initialized, retry connect until back-end up
+      this.props.setUser({
+        _id: null,
+      });
       this.setState({
         playerName: '',
         isAppLoaded: true
       });
       console.log(err);
+      // DEBUG
       if (err.response.status === 500 && process.env.NODE_ENV === 'development') {
         this.tryConnect();
       }
+      // DEBUG END
     }
   }
-  // DEBUG END
+
 
   render() {
     return <Router>
@@ -118,7 +126,9 @@ class App extends Component {
           timeout={1000}
           classNames="welcome"
           unmountOnExit>
-          <Welcome/>
+          <Welcome
+            isAppLoaded={this.state.isAppLoaded}
+            userId={this.props.currentUser._id}/>
         </CSSTransition>
       </div>
     </Router>;

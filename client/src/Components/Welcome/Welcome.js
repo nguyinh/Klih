@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Welcome.scss';
+import { Redirect, withRouter } from 'react-router-dom';
 
 class Welcome extends Component {
   constructor(props) {
@@ -16,7 +17,11 @@ class Welcome extends Component {
         <div className='bounce2'></div>
         <div className='bounce3'></div>
       </div>
+
+      {
+        this.props.isAppLoaded && !this.props.userId && this.props.location.pathname !== '/profile' && <Redirect to={'/profile'}/>
+      }
     </div>
   }
 }
-export default Welcome;
+export default withRouter(Welcome);

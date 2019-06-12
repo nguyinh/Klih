@@ -269,6 +269,9 @@ class Lobby extends Component {
   }
 
   render() {
+    // if (this.props.currentUser._id === null)
+    //   return <Redirect push to='/profile'/>
+
     let { playersData } = this.state;
     let selectedP1 = this.props.P1;
     let selectedP2 = this.props.P2;

@@ -141,10 +141,10 @@ class MatchInput extends PureComponent {
     socket.on('placementChange', ({ P1Placement, P2Placement, P3Placement, P4Placement }) => {
 
       // Initialize placements
-      if (this.state.P1._id && !P1Placement ||
-        this.state.P2._id && !P2Placement ||
-        this.state.P3._id && !P3Placement ||
-        this.state.P4._id && !P4Placement) {
+      if ((this.state.P1._id && !P1Placement) ||
+        (this.state.P2._id && !P2Placement) ||
+        (this.state.P3._id && !P3Placement) ||
+        (this.state.P4._id && !P4Placement)) {
         socket.emit('placementChange', {
           matchId: this.props.currentMatchId,
           playerId: this.props.currentUser._id,
