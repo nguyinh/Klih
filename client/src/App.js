@@ -89,9 +89,9 @@ class App extends Component {
       });
       console.log(err);
       // DEBUG
-      if (err.response.status === 500 && process.env.NODE_ENV === 'development') {
-        this.tryConnect();
-      }
+      // if (err.response.status === 500 && process.env.NODE_ENV === 'development') {
+      //   this.tryConnect();
+      // }
       // DEBUG END
     }
   }

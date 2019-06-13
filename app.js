@@ -10,7 +10,7 @@ const cors = require('cors');
 const app = express();
 const server = require('http').Server(app);
 const io = require('./socket')(server);
-const {logger, redirectSecure} = require('./middlewares');
+const {logger, redirectSecure, jwtVerify} = require('./middlewares');
 const authRoute = require('./routes/auth.route.js');
 const matchRoute = require('./routes/match.route.js');
 const teamRoute = require('./routes/team.route.js');
@@ -35,6 +35,7 @@ if (process.env.ENV !== 'dev') {
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(cookieParser());
+// app.use(jwtVerify);
 app.use((req, res, next) => {
   const whitelist = ['http://localhost:3000', 'http://klih.herokuapp.com'];
   const origin = req.headers.origin;
@@ -65,17 +66,17 @@ db.once('open', () => {
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
 // Enable API REST
-app.use('/', authRoute);
-app.use('/', matchRoute);
-app.use('/', teamRoute);
+app.use('/api', authRoute);
+app.use('/api', matchRoute);
+app.use('/api', teamRoute);
 app.use('/api', oauthRoute);
-app.use('/', profileRoute);
-app.use('/', playingRoute);
-app.use('/', playerRoute);
+app.use('/api', profileRoute);
+app.use('/api', playingRoute);
+app.use('/api', playerRoute);
 
 // Put all API endpoints under '/api'
 app.get('/api/*', (req, res) => {
-  res.json('Welcome to Klih !')
+  res.json('Welcome to Klih !');
 });
 
 // The "catchall" handler: for any request that doesn't

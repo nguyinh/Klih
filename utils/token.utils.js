@@ -10,18 +10,22 @@ const createToken = (auth, user) => {
   }, process.env.JWT_SECRET, {expiresIn: '10d'});
 };
 
+const generateToken = (req, res, next) => {
+  req.token = createToken(req.auth, req.user);
+  const hour = 3600000;
+  res.cookie('token', req.token, {
+    maxAge: 365 * 24 * hour, // a year
+    httpOnly: true
+  });
+  return next();
+};
+
+const sendToken = (req, res) => {
+  res.setHeader('x-auth-token', req.token);
+  return res.status(200).send({email: req.user.email, fullName: req.user.fullName, _id: req.user._id, avatar: req.user.avatar});
+};
+
 module.exports = {
-  generateToken: (req, res, next) => {
-    req.token = createToken(req.auth, req.user);
-    const hour = 3600000;
-    res.cookie('token', req.token, {
-      maxAge: 365 * 24 * hour, // a year
-      httpOnly: true
-    });
-    return next();
-  },
-  sendToken: (req, res) => {
-    res.setHeader('x-auth-token', req.token);
-    return res.status(200).send({email: req.user.email, fullName: req.user.fullName, _id: req.user._id, avatar: req.user.avatar});
-  }
+  generateToken,
+  sendToken
 };

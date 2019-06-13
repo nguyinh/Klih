@@ -3,55 +3,46 @@ const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const Player = require('../models/player.model.js')
 const Match = require('../models/match.model.js')
-const logger = require('log4js').getLogger();
+const {verifyJWT, logger} = require('../middlewares');
 
-require("dotenv").config()
+require("dotenv").config();
 
 module.exports = (() => {
-  const router = express.Router()
+  const router = express.Router();
 
-  router.post('/api/match', (req, res) => {
-    jwt.verify(req.cookies.token, process.env.JWT_SECRET, (err, decoded) => {
-      if (decoded) {
-        Player.findOne({email: decoded.email}).exec().then((user) => {
-          if (user) { // User exists
+  // DEPRECATED
+  // Match save in socket match file
+  router.post('/match', verifyJWT, async (req, res) => {
+    try {
+      const user = await Player.findOne({_id: req.decoded._id}).exec();
+      if (user) { // User exists
 
-            const match = new Match({
-              _id: new mongoose.Types.ObjectId(),
-              score1: req.body.score1,
-              score2: req.body.score2,
-              player1: req.body.player1,
-              player2: req.body.player2,
-              player3: req.body.player3,
-              player4: req.body.player4,
-              createdAt: Date.now(),
-              duration: Date.now() - req.body.matchBegin,
-              history: req.body.history,
-              team: req.body.team
-            }) // Create and save new match
+        const match = new Match({
+          _id: new mongoose.Types.ObjectId(),
+          score1: req.body.score1,
+          score2: req.body.score2,
+          player1: req.body.player1,
+          player2: req.body.player2,
+          player3: req.body.player3,
+          player4: req.body.player4,
+          publisher: req.decoded._id,
+          createdAt: Date.now(),
+          duration: Date.now() - req.body.matchBegin,
+          history: req.body.history,
+          team: req.body.team
+        }) // Create and save new match
 
-            match.save().then((result) => {
-              logger.debug('match saved !');
-              return res.status(201).json({match: match})
-            }).catch((error) => {
-              console.log(error)
-              return res.status(500).json({error: 'INTERNAL_SERVER_ERROR'})
-            })
+        const result = await match.save();
+        return res.status(201).send({match: match});
 
-          } else { // User no longer exists
-            res.clearCookie('token')
-            return res.status(401).send({error: 'USER_NO_LONGER_EXISTS'})
-          }
-        })
-
-      } else { // Token expired or no token
-
-        // TODO: Ask for connection
-
-        res.clearCookie('token')
-        return res.status(401).send({error: 'TOKEN_EXPIRED'})
+      } else { // User no longer exists
+        res.clearCookie('token');
+        return res.status(401).send({error: 'USER_NO_LONGER_EXISTS'});
       }
-    })
+    } catch (err) {
+      logger.error(err);
+      return res.status(500).send({error: 'INTERNAL_SERVER_ERROR'});
+    }
   })
 
   return router

@@ -1,4 +1,5 @@
 module.exports = {
   logger: require('./logger'),
-  redirectSecure: require('./forceHttps')
+  redirectSecure: require('./forceHttps'),
+  verifyJWT: require('./jwt')
 }
