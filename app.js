@@ -18,8 +18,9 @@ const oauthRoute = require('./routes/oauth.route.js');
 const profileRoute = require('./routes/profile.route.js');
 const playingRoute = require('./routes/playingMatch.route.js');
 const playerRoute = require('./routes/player.route.js');
+const statsRoute = require('./routes/statistics.route.js');
 
-require("dotenv").config()
+require("dotenv").config();
 
 const corsOption = {
   origin: true,
@@ -73,6 +74,7 @@ app.use('/api', oauthRoute);
 app.use('/api', profileRoute);
 app.use('/api', playingRoute);
 app.use('/api', playerRoute);
+app.use('/api', statsRoute);
 
 // Put all API endpoints under '/api'
 app.get('/api/*', (req, res) => {

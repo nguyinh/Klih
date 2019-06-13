@@ -1,8 +1,8 @@
-const express = require('express')
-const jwt = require('jsonwebtoken')
-const mongoose = require('mongoose')
-const Player = require('../models/player.model.js')
-const Match = require('../models/match.model.js')
+const express = require('express');
+const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
+const Player = require('../models/player.model.js');
+const Match = require('../models/match.model.js');
 const {verifyJWT, logger} = require('../middlewares');
 
 require("dotenv").config();
