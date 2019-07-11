@@ -44,7 +44,7 @@ module.exports = (() => {
           }
         });
 
-      return res.status(200).send({wins: matchWins, losses: matchLosses, count: matchCount});
+      return res.status(200).send({wins: matchWins, losses: matchLosses, matchCount: matchCount});
     } catch (err) {
       logger.error(err);
       return res.status(500).send({error: 'INTERNAL_SERVER_ERROR'});
@@ -185,9 +185,9 @@ module.exports = (() => {
         });
       });
 
-      goalAverage = goalCount / matchTotal;
-      minusAverage = minusCount / matchTotal;
-      betrayAverage = betrayCount / matchTotal;
+      goalAverage = goalCount / goalTotal;
+      minusAverage = minusCount / goalTotal;
+      betrayAverage = betrayCount / goalTotal;
 
       return res.status(200).send({
         goalAverage,
