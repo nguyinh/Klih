@@ -166,10 +166,10 @@ module.exports = (() => {
       let minusAverage = 0;
       let betrayAverage = 0;
       let goalTotal = 0;
-      let matchTotal = 0;
+      let matchCount = 0;
 
       matchs.forEach(m => {
-        matchTotal++;
+        matchCount++;
         m.history.forEach(g => {
           if (g.byPlayer == playerId) {
             goalTotal++;
@@ -197,7 +197,7 @@ module.exports = (() => {
         minusCount,
         betrayCount,
         goalTotal,
-        matchTotal
+        matchCount
       });
     } catch (err) {
       logger.error(err);
@@ -341,6 +341,167 @@ module.exports = (() => {
       return res.status(500).send({error: 'INTERNAL_SERVER_ERROR'});
     }
   });
+
+  router.get('/statistics/placementCount', verifyJWT, async (req, res) => {
+    try {
+      const playerId = req.decoded._id;
+      const matchs = await Match.find({
+        $or: [
+          {
+            player1: playerId
+          }, {
+            player2: playerId
+          }, {
+            player3: playerId
+          }, {
+            player4: playerId
+          }
+        ]
+      });
+
+      let attackCount = 0;
+      let defenseCount = 0;
+      let unknownCount = 0;
+      let matchCount = 0;
+
+      matchs.forEach(async m => {
+        matchCount++;
+        m.history.filter(g => g.byPlayer == req.decoded._id)
+          .forEach(g => {
+            if (g.placement === 'A') 
+              attackCount++;
+            else if (g.placement === 'D') 
+              defenseCount++;
+            else 
+              unknownCount++;
+          }
+        );
+      });
+
+      return res.status(200).send({
+        attackCount,
+        defenseCount,
+        unknownCount,
+        matchCount
+      });
+    } catch (err) {
+      logger.error(err);
+      return res.status(500).send({error: 'INTERNAL_SERVER_ERROR'});
+    }
+  });
+
+
+  // router.get('/statistics/placementAveragePerMatch', verifyJWT, async (req, res) => {
+  //   try {
+  //     const playerId = req.decoded._id;
+  //     const matchs = await Match.find({
+  //       $or: [
+  //         {
+  //           player1: playerId
+  //         }, {
+  //           player2: playerId
+  //         }, {
+  //           player3: playerId
+  //         }, {
+  //           player4: playerId
+  //         }
+  //       ]
+  //     });
+
+  //     let attackCount = 0;
+  //     let defenseCount = 0;
+  //     let unknownCount = 0;
+  //     let matchCount = 0;
+
+  //     matchs.forEach(m => {
+  //       matchCount++;
+  //       m.history.filter(g => g.byPlayer == req.decoded._id)
+  //         .forEach(g => {
+  //           if (g.placement === 'A') 
+  //             attackCount++;
+  //           else if (g.placement === 'D') 
+  //             defenseCount++;
+  //           else 
+  //             unknownCount++;
+  //         }
+  //       );
+  //     });
+
+  //     return res.status(200).send({
+  //       attackCount,
+  //       defenseCount,
+  //       unknownCount,
+  //       matchCount
+  //     });
+  //   } catch (err) {
+  //     logger.error(err);
+  //     return res.status(500).send({error: 'INTERNAL_SERVER_ERROR'});
+  //   }
+  // });
+
+
+  router.get('/statistics/winStreak', verifyJWT, async (req, res) => {
+    try {
+      const playerId = req.decoded._id;
+      const matchs = await Match.find({
+        $or: [
+          {
+            player1: playerId
+          }, {
+            player2: playerId
+          }, {
+            player3: playerId
+          }, {
+            player4: playerId
+          }
+        ]
+      });
+
+      let winStreak = 0;
+      let matchCount = 0;
+      // console.log(matchs);
+      matchs.reverse()
+        .some(m => {
+          console.log(m._id)
+          matchCount++;
+          console.log('analyse')
+          if ((m.player1 && m.player1._id == playerId || 
+            m.player2 && m.player2._id == playerId) &&
+            m.score1 > m.score2) {
+            winStreak++;
+            return false;
+          } else if ((m.player3 && m.player3._id == playerId ||
+            m.player4 && m.player4._id == playerId) &&
+            m.score1 < m.score2) {
+            winStreak++;
+            return false;
+          }
+          else {
+            console.log('end')
+            return true;
+          }
+          console.log('pardon')
+        // const actualTeam
+        // matchCount++;
+        // m.history.filter(g => g.byPlayer == req.decoded._id)
+        //   .forEach(g => {
+        //     if (g.placement === 'A') 
+        //       attackCount++;
+        //     else if (g.placement === 'D') 
+        //       defenseCount++;
+        //     else 
+        //       unknownCount++;
+        //   }
+        // );
+      });
+      console.log(winStreak);
+      return res.status(200).send({ winStreak });
+    } catch (err) {
+      logger.error(err);
+      return res.status(500).send({error: 'INTERNAL_SERVER_ERROR'});
+    }
+  });
+
 
   return router;
 })()

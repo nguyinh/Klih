@@ -52,7 +52,7 @@ class GoalAnalysis extends Component {
           goalCount, 
           minusCount,
           betrayCount,
-          matchTotal
+          matchCount
         }
       } = await axios.get('api/statistics/goalsAveragePerMatch');
 
@@ -65,16 +65,16 @@ class GoalAnalysis extends Component {
           },
           {
             type: 'Gamelles',
-            average: Math.floor(betrayAverage * 100),
-            count: betrayCount
+            average: Math.floor(minusAverage * 100),
+            count: minusCount
           },
           {
             type: 'Contre son camp',
-            average: Math.floor(minusAverage * 100),
-            count: minusCount
+            average: Math.floor(betrayAverage * 100),
+            count: betrayCount
           }
         ],
-        matchCount: matchTotal
+        matchCount: matchCount
       });
     } catch (err) {
       console.log(err);
