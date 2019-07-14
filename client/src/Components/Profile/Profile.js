@@ -5,7 +5,6 @@ import Team from '../Team/Team';
 import { withRouter, Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
 import {
-  Button,
   Grid,
   Row,
   Col,
@@ -19,6 +18,7 @@ import axios from 'axios';
 import str from '../../constants/labels.constants.js';
 import { arrayBufferToBase64 } from '../../utils';
 // import QRCode from 'qrcode.react';
+import Button from '../Button/Button';
 
 const mapDispatchToProps = dispatch => {
   return ({
@@ -435,12 +435,11 @@ class Profile extends Component {
                         style={{display: 'none'}}
                         ref={this.uploaderRef}/>
                       <Button
-                        block="block"
+                        block
                         type="submit"
                         color='blue'
                         value="submit"
-                        onClick={this.uploadHandler}
-                        className='roundButton'>
+                        onClick={this.uploadHandler}>
                         Upload
                       </Button>
                     </Col>
@@ -457,14 +456,14 @@ class Profile extends Component {
                       <Button
                         block
                         onClick={this.openCreateTeamModal}
-                        className='roundButton green'>Créer une équipe</Button>
+                        className='green team-button'>Créer</Button>
                     </Col>
 
                     <Col xs={12}>
                       <Button
                         block
                         onClick={this.openJoinTeamModal}
-                        className='roundButton blue'>Rejoindre une équipe</Button>
+                        className='blue team-button'>Rejoindre</Button>
                     </Col>
                   </Row>
 
@@ -543,7 +542,7 @@ class Profile extends Component {
                 onClick={this.createTeamButton}
                 disabled={this.state.createModal.loading}
                 loading={this.state.createModal.loading}
-                className='roundButton green'>Créer l'équipe</Button>}
+                className='green create-team-button'>Créer l'équipe</Button>}
             </Modal.Body>
           </Modal>
 
@@ -575,13 +574,15 @@ class Profile extends Component {
               <span className='joinMessage'>{this.state.joinModal.message}</span>
 
               {Object.size(this.state.joinModal.searchedTeam) !== 0 &&
-                <><h3 className='searchedTeamTitle'>{this.state.joinModal.searchedTeam.name}</h3>
-                <Button
-                  block
-                  onClick={this.joinTeamButton}
-                  disabled={this.state.joinModal.loading}
-                  loading={this.state.joinModal.loading}
-                  className='roundButton blue'>Rejoindre</Button></>}
+                <>
+                  <h3 className='searchedTeamTitle'>{this.state.joinModal.searchedTeam.name}</h3>
+                  <Button
+                    block
+                    onClick={this.joinTeamButton}
+                    disabled={this.state.joinModal.loading}
+                    loading={this.state.joinModal.loading}
+                    className='blue join-team-button'>Rejoindre</Button>
+                </>}
             </Modal.Body>
           </Modal>
 

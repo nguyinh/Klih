@@ -4,14 +4,16 @@ import { withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
 import axios from 'axios';
 import {
-  Button,
   Form,
   FormGroup,
   FormControl,
+  Icon
 } from 'rsuite';
 import { setUserAuth, setUser } from '../../redux/actions/index.actions.js';
-import str from '../../constants/labels.constants.js'
+import str from '../../constants/labels.constants.js';
 import { arrayBufferToBase64 } from '../../utils';
+import Button from '../Button/Button';
+
 
 const mapDispatchToProps = dispatch => {
   return ({
@@ -41,7 +43,8 @@ class Signin extends Component {
       inputErrors: {
         email: '',
         password: ''
-      }
+      },
+      isConnecting: false
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -82,7 +85,7 @@ class Signin extends Component {
     if (hasEmpty(this.state.inputErrors))
       return;
 
-    this.setState({ buttonDisabled: true });
+    this.setState({ buttonDisabled: true, isConnecting: true });
 
     try {
       const signRes = await axios.post('api/signin', {
@@ -101,14 +104,15 @@ class Signin extends Component {
         });
         this.props.setUserAuth(true);
       }
-      this.setState({ buttonDisabled: false });
+      this.setState({ buttonDisabled: false, isConnecting: false });
     } catch (err) {
       console.log(err);
       this.setState({
         errorMessage: str[err.response.data.error] || str.INTERNAL_SERVER_ERROR,
         usernameState: 'error',
         passwordState: 'error',
-        buttonDisabled: false
+        buttonDisabled: false,
+        isConnecting: false
       });
       this.props.setUserAuth(false);
     }
@@ -141,13 +145,15 @@ class Signin extends Component {
       </div>
       <FormGroup>
         <Button
-          appearance="primary"
-          block={true}
-          size="lg"
+          block
           onClick={this.signInButton}
           disabled={this.state.buttonDisabled}
-          className='roundButton green'>
-          {str.SIGNIN}
+          className='green'>
+            { 
+              this.state.isConnecting ?
+              <Icon icon='circle-o-notch' spin size="lg" style={{fontSize: '16px'}}/> :
+              str.SIGNIN
+            }
         </Button>
       </FormGroup>
     </Form>

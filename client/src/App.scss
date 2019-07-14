@@ -50,107 +50,107 @@ a {
   overflow: hidden;
 }
 
-button {
+// button {
   // -moz-appearance: none !important;
   // -webkit-appearance: none !important;
   // appearance: none !important;
-  &.roundButton {
-    border-radius: 30px !important;
-    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.46) !important;
-    -moz-box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.46) !important;
-    -webkit-box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.46) !important;
-    color: white !important;
+  // &.roundButton {
+  //   border-radius: 30px !important;
+  //   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.46) !important;
+  //   -moz-box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.46) !important;
+  //   -webkit-box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.46) !important;
+  //   color: white !important;
 
-    &:active,
-    &:hover :not(disabled) {
-      animation: buttonPress 0.2s ease-in;
-    }
+  //   &:active,
+  //   &:hover :not(disabled) {
+  //     animation: buttonPress 0.2s ease-in;
+  //   }
 
-    &.green {
-      background: #00b09b !important;
-      background: -webkit-linear-gradient(
-        to right,
-        #96c93d,
-        #00b09b
-      ) !important;
-      background: linear-gradient(to right, #96c93d, #00b09b) !important;
-    }
+  //   &.green {
+  //     background: #00b09b !important;
+  //     background: -webkit-linear-gradient(
+  //       to right,
+  //       #96c93d,
+  //       #00b09b
+  //     ) !important;
+  //     background: linear-gradient(to right, #96c93d, #00b09b) !important;
+  //   }
 
-    &.blue {
-      background: #36d1dc !important;
-      background: -webkit-linear-gradient(
-        to right,
-        #5b96e6,
-        #36d1dc
-      ) !important;
-      background: linear-gradient(to right, #5b96e6, #36d1dc) !important;
-    }
+  //   &.blue {
+  //     background: #36d1dc !important;
+  //     background: -webkit-linear-gradient(
+  //       to right,
+  //       #5b96e6,
+  //       #36d1dc
+  //     ) !important;
+  //     background: linear-gradient(to right, #5b96e6, #36d1dc) !important;
+  //   }
 
-    &.lightblue {
-      background: #02aab0 !important;
-      background: -webkit-linear-gradient(
-        to right,
-        #00cdac,
-        #02aab0
-      ) !important;
-      background: linear-gradient(to right, #00cdac, #02aab0) !important;
-    }
+  //   &.lightblue {
+  //     background: #02aab0 !important;
+  //     background: -webkit-linear-gradient(
+  //       to right,
+  //       #00cdac,
+  //       #02aab0
+  //     ) !important;
+  //     background: linear-gradient(to right, #00cdac, #02aab0) !important;
+  //   }
 
-    &.darkblue {
-      background: #5c258d !important;
-      background: -webkit-linear-gradient(
-        to right,
-        #4389a2,
-        #5c258d
-      ) !important;
-      background: linear-gradient(to right, #4389a2, #5c258d) !important;
-    }
+  //   &.darkblue {
+  //     background: #5c258d !important;
+  //     background: -webkit-linear-gradient(
+  //       to right,
+  //       #4389a2,
+  //       #5c258d
+  //     ) !important;
+  //     background: linear-gradient(to right, #4389a2, #5c258d) !important;
+  //   }
 
-    &.cyan {
-      background-color: #1cd8d2 !important;
-      background: -webkit-linear-gradient(
-        to right,
-        #93edc7,
-        #1cd8d2
-      ) !important;
-      background: linear-gradient(to right, #93edc7, #1cd8d2) !important;
-    }
+  //   &.cyan {
+  //     background-color: #1cd8d2 !important;
+  //     background: -webkit-linear-gradient(
+  //       to right,
+  //       #93edc7,
+  //       #1cd8d2
+  //     ) !important;
+  //     background: linear-gradient(to right, #93edc7, #1cd8d2) !important;
+  //   }
 
-    &.red {
-      background: #ff512f !important;
-      background: -webkit-linear-gradient(
-        to right,
-        #dd2476,
-        #ff512f
-      ) !important;
-      background: linear-gradient(to right, #dd2476, #ff512f) !important;
-    }
+  //   &.red {
+  //     background: #ff512f !important;
+  //     background: -webkit-linear-gradient(
+  //       to right,
+  //       #dd2476,
+  //       #ff512f
+  //     ) !important;
+  //     background: linear-gradient(to right, #dd2476, #ff512f) !important;
+  //   }
 
-    &.violet {
-      background: #4776e6 !important;
-      background: -webkit-linear-gradient(
-        to right,
-        #8e54e9,
-        #4776e6
-      ) !important;
-      background: linear-gradient(to right, #8e54e9, #4776e6) !important;
-    }
+  //   &.violet {
+  //     background: #4776e6 !important;
+  //     background: -webkit-linear-gradient(
+  //       to right,
+  //       #8e54e9,
+  //       #4776e6
+  //     ) !important;
+  //     background: linear-gradient(to right, #8e54e9, #4776e6) !important;
+  //   }
 
-    &.orange {
-      background: #f09819 !important;
-      background: -webkit-linear-gradient(
-        to right,
-        #edde5d,
-        #f09819
-      ) !important;
-      background: linear-gradient(to right, #edde5d, #f09819) !important;
-    }
+  //   &.orange {
+  //     background: #f09819 !important;
+  //     background: -webkit-linear-gradient(
+  //       to right,
+  //       #edde5d,
+  //       #f09819
+  //     ) !important;
+  //     background: linear-gradient(to right, #edde5d, #f09819) !important;
+  //   }
 
-    &:disabled {
-      background: #989898 !important;
-    }
-  }
-}
+  //   &:disabled {
+  //     background: #989898 !important;
+  //   }
+  // }
+// }
 @keyframes buttonPress {
   0% {
     transform: scale(0.95);
@@ -223,3 +223,49 @@ button {
     transform: scale(1);
   }
 }
+
+
+
+
+// .klih-button {
+//   background: linear-gradient(to right, #96c93d, #00b09b);
+//   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.46);
+//   border-radius: 30px;
+//   color: white;
+//   width: 100%;
+//   padding: 10px 16px;
+//   line-height: 1.375;
+//   font-size: 16px;
+//   cursor: pointer;
+//   user-select: none;
+//   // -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+//   outline: none;
+//   margin: 10px 0px;
+// }
+
+// @keyframes buttonPressEffect {
+//   0% {
+//       transform: scale(1);
+//   }
+
+//   50% {
+//       transform: scaleY(0.9) scaleX(0.98);
+//   }
+
+//   100% {
+//       transform: scale(1);
+//   }
+// }
+
+// .klih-button:active
+// {
+//   animation: buttonPressEffect 0.1s; /* On utilise "ma super animation" définie plus tôt */
+//   -webkit-animation: buttonPressEffect 0.1s;
+// }
+
+// .klih-button:disabled
+// {
+//   background: #989898;
+//   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.46);
+//   opacity: 0.3;
+// }

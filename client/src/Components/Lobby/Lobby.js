@@ -14,7 +14,6 @@ import {
 } from '../../redux/actions/index.actions.js'
 import axios from 'axios';
 import {
-  Button,
   Grid,
   Row,
   Col,
@@ -24,6 +23,7 @@ import {
   Alert
 } from 'rsuite';
 import { arrayBufferToBase64 } from '../../utils';
+import Button from '../Button/Button';
 
 
 const mapDispatchToProps = dispatch => {
@@ -417,7 +417,6 @@ class Lobby extends Component {
                       <Col xs={12}>
                         <Button
                           block
-                          size='lg'
                           className='roundButton violet'
                           onClick={this.onRandomButtonTouch}>
                           <Icon icon='random'/> Aléatoire
@@ -427,7 +426,6 @@ class Lobby extends Component {
 
                           <Button
                             block
-                            size='lg'
                             className={'roundButton green beginMatchButton ' + (isMatchReady ? 'ready ' : '')}
                             disabled={!isMatchReady}
                             onClick={this.beginMatch}>

@@ -1,0 +1,126 @@
+
+.klih-button {
+    background: linear-gradient(to right, #96c93d, #00b09b);
+    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.46);
+    -webkit-box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.46);
+    -moz-box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.46);
+    border-radius: 30px;
+    color: white;
+    padding: 10px 16px;
+    line-height: 1.375;
+    font-size: 16px;
+    // cursor: pointer;
+    user-select: none;
+    outline: none;
+  
+  @keyframes buttonPressEffect {
+    0% {
+        transform: scale(1);
+    }
+  
+    50% {
+        transform: scaleY(0.9) scaleX(0.98);
+    }
+  
+    100% {
+        transform: scale(1);
+    }
+  }
+  
+  &.klih-button:active
+  {
+    animation: buttonPressEffect 0.1s; /* On utilise "ma super animation" définie plus tôt */
+    -webkit-animation: buttonPressEffect 0.1s;
+  }
+  
+  &.klih-button:disabled
+  {
+    background: #989898;
+    opacity: 0.3 !important;
+    box-shadow: none !important;
+  }
+
+  &.block {
+    width: 100%;
+  }
+
+  &.green {
+    background: #00b09b;
+    background: -webkit-linear-gradient(
+      to right,
+      #96c93d,
+      #00b09b
+    );
+    background: linear-gradient(to right, #96c93d, #00b09b);
+  }
+
+  &.blue {
+    background: #36d1dc;
+    background: -webkit-linear-gradient(
+      to right,
+      #5b96e6,
+      #36d1dc
+    );
+    background: linear-gradient(to right, #5b96e6, #36d1dc);
+  }
+
+  &.lightblue {
+    background: #02aab0;
+    background: -webkit-linear-gradient(
+      to right,
+      #00cdac,
+      #02aab0
+    );
+    background: linear-gradient(to right, #00cdac, #02aab0);
+  }
+
+  &.darkblue {
+    background: #5c258d;
+    background: -webkit-linear-gradient(
+      to right,
+      #4389a2,
+      #5c258d
+    );
+    background: linear-gradient(to right, #4389a2, #5c258d);
+  }
+
+  &.cyan {
+    background-color: #1cd8d2;
+    background: -webkit-linear-gradient(
+      to right,
+      #93edc7,
+      #1cd8d2
+    );
+    background: linear-gradient(to right, #93edc7, #1cd8d2);
+  }
+
+  &.red {
+    background: #ff512f;
+    background: -webkit-linear-gradient(
+      to right,
+      #dd2476,
+      #ff512f
+    );
+    background: linear-gradient(to right, #dd2476, #ff512f);
+  }
+
+  &.violet {
+    background: #4776e6;
+    background: -webkit-linear-gradient(
+      to right,
+      #8e54e9,
+      #4776e6
+    );
+    background: linear-gradient(to right, #8e54e9, #4776e6);
+  }
+
+  &.orange {
+    background: #f09819;
+    background: -webkit-linear-gradient(
+      to right,
+      #edde5d,
+      #f09819
+    );
+    background: linear-gradient(to right, #edde5d, #f09819);
+  }
+}

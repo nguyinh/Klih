@@ -92,13 +92,14 @@
         height: 100%;
         vertical-align: middle;
       }
-      $buttonMargin: 5px 10px;
+      $buttonMargin: 5px 0px;
       $buttonRadius: 50px;
       $buttonHeight: 70px;
       $buttonShadow: 0 1px 10px rgba(0, 0, 0, 0.3);
       $buttonShadowError: 0 1px 10px rgba(255, 0, 0, 1);
 
       .removePointButton {
+        width: 90%;
         margin: $buttonMargin;
         // background: #c64b4b;
         background: #ff512f !important;
@@ -124,6 +125,7 @@
       }
 
       .addPointButton {
+        width: 90%;
         margin: $buttonMargin;
         // background: #88c64b;
         background: #00b09b !important;
@@ -165,11 +167,11 @@
         padding: 10px 0px;
         font-weight: 1000;
         font-size: 20px;
-        background: #e0eafc;
-        background: -webkit-linear-gradient(to right, #c0cee2, #d0e1ff);
-        background: linear-gradient(to right, #c0cee2, #d0e1ff);
         border-radius: 25px;
-        box-shadow: 0 0px 7px rgba(0, 0, 0, 0.2);
+        border: 1px solid #bfbfbf;
+        background: #f5f5f5;
+        color: #525252;
+        box-shadow: 0px 0px 6px 0px rgba(1, 1, 1, 0.25);
 
         span {
           height: 20px;
@@ -177,17 +179,15 @@
         }
 
         &.active {
-          color: white;
-          box-shadow: 0 0px 5px rgba(0, 0, 0, 0.5);
-          background: #a73737;
-          background: -webkit-linear-gradient(to right, #c14747, #a73737);
-          background: linear-gradient(to right, #c14747, #a73737);
+          border: 2px solid red;
+          padding: 9px 0px;
         }
 
         &.disabled {
-          box-shadow: 0 1px 10px rgba(0, 0, 0, 0);
-          background: #c2c2c2 !important;
+          box-shadow: none !important;
+          color: #c2c2c2 !important;
           opacity: 0.3;
+          background: #f5f5f5 !important;
         }
       }
 

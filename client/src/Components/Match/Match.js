@@ -5,7 +5,6 @@ import MatchInput from '../MatchInput/MatchInput';
 import { withRouter, Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
 import {
-  Button,
   Grid,
   Row,
   Col,
@@ -14,6 +13,7 @@ import {
 } from 'rsuite';
 import { setMatch, setScore1, setScore2, setHistory, addToMatch, resetMatch } from './../../redux/actions/index.actions.js';
 import { socket } from './../../socket';
+import Button from '../Button/Button';
 
 const mapDispatchToProps = dispatch => {
   return ({
@@ -163,9 +163,8 @@ class Match extends Component {
               xs={11}
               xsOffset={1}>
               <Button
-                size='lg'
                 block
-                className='roundButton red'
+                className='red'
                 onClick={() => {this.setState({cancelModalDisplay: true})}}>
                 Quitter
               </Button>
@@ -174,9 +173,8 @@ class Match extends Component {
             <Col
               xs={11}>
               <Button
-                size='lg'
                 block
-                className='roundButton green'
+                className='green'
                 onClick={() => {this.setState({validateModalDisplay: true})}}>
                 Sauvegarder
               </Button>
@@ -202,7 +200,7 @@ class Match extends Component {
               <Col xs={12}>
                 <Button
                   onClick={() => {this.setState({validateModalDisplay: false})}}
-                  className='roundButton blue'
+                  className='blue'
                   block>
                   Retour
                 </Button>
@@ -211,7 +209,7 @@ class Match extends Component {
               <Col xs={12}>
                 <Button
                   onClick={this.onSaveButton}
-                  className='roundButton green'
+                  className='green'
                   block>
                   {this.state.isMatchLoading ? <Icon icon='circle-o-notch' spin size="lg" style={{fontSize: '15px'}}/> : 'Valider'}
                 </Button>
@@ -237,7 +235,7 @@ class Match extends Component {
               <Col xs={12}>
                 <Button
                   onClick={() => {this.setState({cancelModalDisplay: false})}}
-                  className='roundButton blue'
+                  className='blue'
                   block>
                   Retour
                 </Button>
@@ -246,7 +244,7 @@ class Match extends Component {
               <Col xs={12}>
                 <Button
                   onClick={this.onCancelButton}
-                  className='roundButton red'
+                  className='red'
                   block>
                   {this.state.isMatchLoading ? <Icon icon='circle-o-notch' spin size="lg" style={{fontSize: '15px'}}/> : 'Supprimer'}
                 </Button>

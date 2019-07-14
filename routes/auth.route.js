@@ -122,10 +122,10 @@ module.exports = (() => {
               _id: user._id
             })
           }
-          return res.status(401).send({error: 'WRONG_PASSWORD'});
+          // return res.status(401).send({error: 'WRONG_PASSWORD'});
         });
       } else { // User doesn't exists
-        return res.status(401).send({error: 'USER_NOT_FOUND'})
+        // return res.status(401).send({error: 'USER_NOT_FOUND'})
       }
     } catch (err) {
       logger.error(err);

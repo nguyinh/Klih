@@ -20,6 +20,7 @@ import { setMatch, setScore1, setScore2, setHistory, addToMatch, resetMatch } fr
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { socket } from './../../socket';
 import { p } from '../../utils';
+import Button from '../Button/Button';
 
 const mapDispatchToProps = dispatch => {
   return ({
@@ -350,97 +351,6 @@ class MatchInput extends PureComponent {
     }
   }
 
-
-
-
-  // onPlacementChange = (placementType) => {
-  //   this.resetErrors();
-  //
-  //   const { P1, P2, P3, P4 } = this.state;
-  //
-  //   if (this.state.P1.isSelected) {
-  //     this.setState({
-  //       P1: {
-  //         ...this.state.P1,
-  //         placement: (P1.placement === placementType ? '' : placementType)
-  //       },
-  //       P2: {
-  //         ...this.state.P2,
-  //         placement: (P1.placement === placementType ? P2.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
-  //       },
-  //       placement: (P1.placement === placementType ? '' : placementType)
-  //     });
-  //
-  //     socket.emit('placementChange', {
-  //       matchId: this.props.currentMatchId,
-  //       playerId: this.props.currentUser._id,
-  //       P1Placement: (P1.placement === placementType ? '' : placementType),
-  //       P2Placement: (P1.placement === placementType ? P2.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
-  //     });
-  //
-  //   } else if (this.state.P2.isSelected) {
-  //     this.setState({
-  //       P2: {
-  //         ...this.state.P2,
-  //         placement: (P2.placement === placementType ? '' : placementType)
-  //       },
-  //       P1: {
-  //         ...this.state.P1,
-  //         placement: (P2.placement === placementType ? P1.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
-  //       },
-  //       placement: (P2.placement === placementType ? '' : placementType)
-  //     });
-  //
-  //     socket.emit('placementChange', {
-  //       matchId: this.props.currentMatchId,
-  //       playerId: this.props.currentUser._id,
-  //       P1Placement: (P2.placement === placementType ? P1.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : ''))),
-  //       P2Placement: (P2.placement === placementType ? '' : placementType)
-  //     });
-  //
-  //   } else if (this.state.P3.isSelected) {
-  //     this.setState({
-  //       P3: {
-  //         ...this.state.P3,
-  //         placement: (P3.placement === placementType ? '' : placementType)
-  //       },
-  //       P4: {
-  //         ...this.state.P4,
-  //         placement: (P3.placement === placementType ? P4.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
-  //       },
-  //       placement: (P3.placement === placementType ? '' : placementType)
-  //     });
-  //
-  //     socket.emit('placementChange', {
-  //       matchId: this.props.currentMatchId,
-  //       playerId: this.props.currentUser._id,
-  //       P3Placement: (P3.placement === placementType ? '' : placementType),
-  //       P4Placement: (P3.placement === placementType ? P4.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
-  //     });
-  //
-  //   } else if (this.state.P4.isSelected) {
-  //     this.setState({
-  //       P4: {
-  //         ...this.state.P4,
-  //         placement: (P4.placement === placementType ? '' : placementType)
-  //       },
-  //       P3: {
-  //         ...this.state.P3,
-  //         placement: (P4.placement === placementType ? P3.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : '')))
-  //       },
-  //       placement: (P4.placement === placementType ? '' : placementType)
-  //     });
-  //
-  //     socket.emit('placementChange', {
-  //       matchId: this.props.currentMatchId,
-  //       playerId: this.props.currentUser._id,
-  //       P3Placement: (P4.placement === placementType ? P3.placement : (placementType === 'Attack' ? 'Defense' : (placementType ? 'Attack' : ''))),
-  //       P4Placement: (P4.placement === placementType ? '' : placementType)
-  //     });
-  //   }
-  // }
-
-
   // ====== Adding/removing points ======
   addPoint = () => {
     if (this.state.P1.isSelected ||
@@ -729,17 +639,18 @@ class MatchInput extends PureComponent {
 
             <Col
               xs={9}>
-              <div
+              <Button
                 className={'removePointButton ' +
-                  (P1.isSelected || P2.isSelected || P3.isSelected || P4.isSelected ? '' : 'disabled ') +
                   (this.state.pointMissing ? 'error ' : '')}
-                onClick={this.removePoint}>
+                onClick={this.removePoint}
+                block
+                disabled={!(P1.isSelected || P2.isSelected || P3.isSelected || P4.isSelected)}>
                 <span className="verticalHelper"></span>
                 <img
                   src={minusImage}
                   alt='minus'
                   className='minusImage'/>
-              </div>
+              </Button>
             </Col>
 
             <Col
@@ -750,17 +661,18 @@ class MatchInput extends PureComponent {
 
             <Col
               xs={9}>
-              <div
+              <Button
                 className={'addPointButton ' +
-                  (P1.isSelected || P2.isSelected || P3.isSelected || P4.isSelected ? '' : 'disabled ') +
                   (this.state.pointMissing ? 'error ' : '')}
-                onClick={this.addPoint}>
+                onClick={this.addPoint}
+                block
+                disabled={!(P1.isSelected || P2.isSelected || P3.isSelected || P4.isSelected)}>
                 <span className="verticalHelper"></span>
                 <img
                   src={plusImage}
                   alt='plus'
                   className='plusImage'/>
-              </div>
+              </Button>
             </Col>
 
           </Row>
@@ -769,11 +681,12 @@ class MatchInput extends PureComponent {
             <Col
               xs={11}
               xsOffset={1}>
-              <div
+              <Button
                 className={'betrayToggle ' +
-                  (P1.isSelected || P2.isSelected || P3.isSelected || P4.isSelected ? '' : 'disabled ') +
                   (this.state.betrayPoint ? 'active' : '')}
-                onClick={this.onBetrayButtonTouch}>
+                onClick={this.onBetrayButtonTouch}
+                disabled={!(P1.isSelected || P2.isSelected || P3.isSelected || P4.isSelected)}
+                block>
                 {this.state.betrayPoint ?
                   <>
                     <span>BOUH </span>
@@ -782,7 +695,7 @@ class MatchInput extends PureComponent {
                   :
                   <span>Contre son camp</span>
                 }
-              </div>
+              </Button>
             </Col>
 
             {/* Add score button */}
@@ -793,15 +706,16 @@ class MatchInput extends PureComponent {
                           timeout={300}
                           classNames="addGoalButtonAnim">
                   <Col xs={11} className='addButtonContainer'>
-                    <div
+                    <Button
                       className='addGoalButton'
-                      onClick={this.onAddGoalButtonTouch}>
+                      onClick={this.onAddGoalButtonTouch}
+                      block>
                       {
                         this.state.saveInProgress ?
                         <Icon icon='circle-o-notch' spin size="lg"/> :
                         <span>Ajouter</span>
                       }
-                    </div>
+                    </Button>
                   </Col>
                 </CSSTransition>
               }
