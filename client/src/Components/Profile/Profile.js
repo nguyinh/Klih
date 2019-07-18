@@ -49,6 +49,7 @@ class Profile extends Component {
     super(props);
     this.state = {
       selectedFile: null,
+      imageUploading: false,
       createTeamShow: false,
       teams: [],
       joinModal: {
@@ -129,8 +130,29 @@ class Profile extends Component {
   }
 
   // ----- Avatar upload -----
-  fileChangedHandler = event => {
-    this.setState({ selectedFile: event.target.files[0] })
+  fileChangedHandler = async event => {
+    this.setState({ imageUploading: true });
+
+    // Format image file
+    const formData = new FormData();
+    formData.append('myAvatar', event.target.files[0])
+    const config = {
+      headers: {
+        'content-type': 'multipart/form-data'
+      }
+    }
+
+    try {
+      const avatarResponse = await axios.post('api/profile/avatar', formData, config);
+      var base64Flag = 'data:image/jpeg;base64,';
+      var imageStr = arrayBufferToBase64(avatarResponse.data.data.data);
+      this.props.setAvatar(base64Flag + imageStr);
+    } catch (err) {
+      console.log(err);
+    }
+    finally {
+      this.setState({ imageUploading: false });
+    }
   }
 
   uploadHandler = async () => {
@@ -413,8 +435,20 @@ class Profile extends Component {
                   xsOffset={1}>
 
                   <Row>
-                    <Col xs={6} onClick={() => {this.uploaderRef.current.click()}}>
-                      { this.props.currentUser.avatar ?
+                    <Col 
+                      xs={6} 
+                      onClick={() => {this.uploaderRef.current.click()}}
+                      style={{ textAlign: 'center' }}>
+                      {
+                        this.state.imageUploading && 
+                        <Icon 
+                          icon='circle-o-notch' 
+                          spin 
+                          size="lg" 
+                          className='avatar-spinner'/>
+                      }
+                      { !this.state.imageUploading && 
+                        (this.props.currentUser.avatar ?
                         <img
                           src={this.props.currentUser.avatar}
                           className='profileAvatarImage'
@@ -422,7 +456,7 @@ class Profile extends Component {
                         <img
                           src={require('./../../profile.png')}
                           className='profileAvatarImage'
-                          alt='Avatar'></img>
+                          alt='Avatar'></img>)
                       }
                     </Col>
 
@@ -433,15 +467,16 @@ class Profile extends Component {
                         accept="image/*"
                         onChange={this.fileChangedHandler}
                         style={{display: 'none'}}
-                        ref={this.uploaderRef}/>
-                      <Button
+                        ref={this.uploaderRef}
+                        className='isUploading'/>
+                      {/* <Button
                         block
                         type="submit"
                         color='blue'
                         value="submit"
                         onClick={this.uploadHandler}>
                         Upload
-                      </Button>
+                      </Button> */}
                     </Col>
                   </Row>
 
