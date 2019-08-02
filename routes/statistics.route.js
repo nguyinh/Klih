@@ -9,7 +9,7 @@ require("dotenv").config();
 module.exports = (() => {
   const router = express.Router()
 
-  router.get('/statistics/winLossRatio', verifyJWT, async (req, res) => {
+  router.get('/winLossRatio', verifyJWT, async (req, res) => {
     let matchWins = 0;
     let matchLosses = 0;
     let matchCount = 0;
@@ -51,7 +51,7 @@ module.exports = (() => {
     }
   });
 
-  router.get('/statistics/goalsAnalysis', verifyJWT, async (req, res) => {
+  router.get('/goalsAnalysis', verifyJWT, async (req, res) => {
     try {
       const playerId = req.decoded._id;
       const matchs = await Match.find({
@@ -142,7 +142,7 @@ module.exports = (() => {
     }
   });
 
-  router.get('/statistics/goalsAveragePerMatch', verifyJWT, async (req, res) => {
+  router.get('/goalsAveragePerMatch', verifyJWT, async (req, res) => {
     try {
       const playerId = req.decoded._id;
       const matchs = await Match.find({
@@ -205,7 +205,7 @@ module.exports = (() => {
     }
   });
 
-  // router.get('/statistics/goalsCount', verifyJWT, async (req, res) => {
+  // router.get('/goalsCount', verifyJWT, async (req, res) => {
   //   try {
   //     const playerId = req.decoded._id;
   //     const matchs = await Match.find({
@@ -248,7 +248,7 @@ module.exports = (() => {
   //   }
   // });
 
-  // router.get('/statistics/goalsCountByPlacement', verifyJWT, async (req, res) => {
+  // router.get('/goalsCountByPlacement', verifyJWT, async (req, res) => {
   //   try {
   //     const playerId = req.decoded._id;
   //     const matchs = await Match.find({
@@ -318,7 +318,7 @@ module.exports = (() => {
   //   }
   // });
 
-  router.get('/statistics/DEBUGRENAMEPLACEMENT', verifyJWT, async (req, res) => {
+  router.get('/DEBUGRENAMEPLACEMENT', verifyJWT, async (req, res) => {
     try {
       const matchs = await Match.find({});
 
@@ -342,7 +342,7 @@ module.exports = (() => {
     }
   });
 
-  router.get('/statistics/placementCount', verifyJWT, async (req, res) => {
+  router.get('/placementCount', verifyJWT, async (req, res) => {
     try {
       const playerId = req.decoded._id;
       const matchs = await Match.find({
@@ -391,7 +391,7 @@ module.exports = (() => {
   });
 
 
-  // router.get('/statistics/placementAveragePerMatch', verifyJWT, async (req, res) => {
+  // router.get('/placementAveragePerMatch', verifyJWT, async (req, res) => {
   //   try {
   //     const playerId = req.decoded._id;
   //     const matchs = await Match.find({
@@ -440,7 +440,7 @@ module.exports = (() => {
   // });
 
 
-  router.get('/statistics/winStreak', verifyJWT, async (req, res) => {
+  router.get('/winStreak', verifyJWT, async (req, res) => {
     try {
       const playerId = req.decoded._id;
       const matchs = await Match.find({
@@ -458,13 +458,9 @@ module.exports = (() => {
       });
 
       let winStreak = 0;
-      let matchCount = 0;
-      // console.log(matchs);
+
       matchs.reverse()
         .some(m => {
-          console.log(m._id)
-          matchCount++;
-          console.log('analyse')
           if ((m.player1 && m.player1._id == playerId || 
             m.player2 && m.player2._id == playerId) &&
             m.score1 > m.score2) {
@@ -477,25 +473,191 @@ module.exports = (() => {
             return false;
           }
           else {
-            console.log('end')
             return true;
           }
-          console.log('pardon')
-        // const actualTeam
-        // matchCount++;
-        // m.history.filter(g => g.byPlayer == req.decoded._id)
-        //   .forEach(g => {
-        //     if (g.placement === 'A') 
-        //       attackCount++;
-        //     else if (g.placement === 'D') 
-        //       defenseCount++;
-        //     else 
-        //       unknownCount++;
-        //   }
-        // );
       });
-      console.log(winStreak);
+
       return res.status(200).send({ winStreak });
+    } catch (err) {
+      logger.error(err);
+      return res.status(500).send({error: 'INTERNAL_SERVER_ERROR'});
+    }
+  });
+
+
+  router.get('/bestOpponents', verifyJWT, async (req, res) => {
+    try {
+      const playerId = req.decoded._id;
+      const matchs = await Match.find({
+        $or: [
+          {
+            player1: playerId
+          }, {
+            player2: playerId
+          }, {
+            player3: playerId
+          }, {
+            player4: playerId
+          }
+        ]
+      });
+
+      let opp = [];
+      // Check if current player have specific id
+      const isPlayer = (p => p && p._id == playerId);
+      // Check if two players id are equal
+      const isSame = ((a, b) => a._id.toString() === b._id.toString());
+
+      matchs.forEach(({player1: P1, player2: P2, player3: P3, player4: P4, score1, score2}) => {
+        const [team1win, team2win] = [score1 > score2, score1 < score2];
+        // if ((
+        //   isPlayer(P1) || isPlayer(P2))
+        //   && team2win)
+        // {
+        //   if (P3) {
+        //     const i = opp.findIndex(o => isSame(o, P3));
+        //     if (i !== -1) opp[i].count += 1;
+        //     else  opp = [ ...opp, { _id: P3._id, count: 1} ];
+        //   }
+        //   if (P4) {
+        //     const i = opp.findIndex(o => isSame(o, P4));
+        //     if (i !== -1) opp[i].count += 1;
+        //     else  opp = [ ...opp, { _id: P4._id, count: 1} ];
+        //   }
+        // } 
+        // else if ((
+        //   isPlayer(P3) || isPlayer(P4))
+        //   && team1win)
+        // {
+        //   if (P1) {
+        //     const i = opp.findIndex(o => isSame(o, P1));
+        //     if (i !== -1) opp[i].count += 1;
+        //     else  opp = [ ...opp, { _id: P1._id, count: 1} ];
+        //   }
+        //   if (P2) {
+        //     const i = opp.findIndex(o => isSame(o, P2));
+        //     if (i !== -1) opp[i].count += 1;
+        //     else  opp = [ ...opp, { _id: P2._id, count: 1} ];
+        //   }
+        // }
+
+        if ((isPlayer(P1) || isPlayer(P2)) && team2win && P3) {
+          const i = opp.findIndex(m => isSame(m, P3));
+          if (i !== -1) opp[i].count += 1;
+          else  opp = [ ...opp, { _id: P3._id, count: 1} ];
+        }
+        if ((isPlayer(P1) || isPlayer(P2)) && team2win && P4) {
+          const i = opp.findIndex(m => isSame(m, P4));
+          if (i !== -1) opp[i].count += 1;
+          else  opp = [ ...opp, { _id: P4._id, count: 1} ];
+        }
+        if ((isPlayer(P3) || isPlayer(P4)) && team1win && P1) {
+          const i = opp.findIndex(m => isSame(m, P1));
+          if (i !== -1) opp[i].count += 1;
+          else  opp = [ ...opp, { _id: P1._id, count: 1} ];
+        }
+        if ((isPlayer(P3) || isPlayer(P4)) && team1win && P2) {
+          const i = opp.findIndex(m => isSame(m, P2));
+          if (i !== -1) opp[i].count += 1;
+          else  opp = [ ...opp, { _id: P2._id, count: 1} ];
+        }
+      });
+      
+      const highestCount = opp.reduce((max, o) => o.count > max ? o.count : max, 0);
+
+      opp = opp.filter(o => o.count === highestCount);
+
+      // Check if there is more than one opponent
+      let bestOpponents = await Player.find({ 
+        _id: opp.length === 1 ? 
+          opp[0]._id : 
+          opp.map(o => o._id)
+      });
+
+      // Get player(s) data
+      bestOpponents = bestOpponents.map(({firstName, lastName, avatar}) => ({
+        firstName,
+        lastName,
+        avatar,
+        matchesLoss: highestCount
+      }));
+
+      return res.status(200).send(bestOpponents);
+    } catch (err) {
+      logger.error(err);
+      return res.status(500).send({error: 'INTERNAL_SERVER_ERROR'});
+    }
+  });
+
+
+  router.get('/bestTeammates', verifyJWT, async (req, res) => {
+    try {
+      const playerId = req.decoded._id;
+      const matchs = await Match.find({
+        $or: [
+          {
+            player1: playerId
+          }, {
+            player2: playerId
+          }, {
+            player3: playerId
+          }, {
+            player4: playerId
+          }
+        ]
+      });
+
+      let mate = [];
+      // Check if current player have specific id
+      const isPlayer = (p => p && p._id == playerId);
+      // Check if two players id are equal
+      const isSame = ((a, b) => a._id.toString() === b._id.toString());
+
+      matchs.forEach(({player1: P1, player2: P2, player3: P3, player4: P4, score1, score2}) => {
+        const [team1win, team2win] = [score1 > score2, score1 < score2];
+
+        if (isPlayer(P1) && team1win && P2) {
+          const i = mate.findIndex(m => isSame(m, P2));
+          if (i !== -1) mate[i].count += 1;
+          else  mate = [ ...mate, { _id: P2._id, count: 1} ];
+        }
+        else if (isPlayer(P2) && team1win && P1) {
+          const i = mate.findIndex(m => isSame(m, P1));
+          if (i !== -1) mate[i].count += 1;
+          else  mate = [ ...mate, { _id: P1._id, count: 1} ];
+        }
+        else if (isPlayer(P3) && team2win && P4) {
+          const i = mate.findIndex(m => isSame(m, P4));
+          if (i !== -1) mate[i].count += 1;
+          else  mate = [ ...mate, { _id: P4._id, count: 1} ];
+        }
+        else if (isPlayer(P4) && team2win && P3) {
+          const i = mate.findIndex(m => isSame(m, P3));
+          if (i !== -1) mate[i].count += 1;
+          else  mate = [ ...mate, { _id: P3._id, count: 1} ];
+        }
+      });
+      
+      const highestCount = mate.reduce((max, o) => o.count > max ? o.count : max, 0);
+
+      mate = mate.filter(o => o.count === highestCount);
+
+      // Check if there is more than one opponent
+      let bestTeammates = await Player.find({ 
+        _id: mate.length === 1 ? 
+          mate[0]._id : 
+          mate.map(o => o._id)
+      });
+
+      // Get player(s) data
+      bestTeammates = bestTeammates.map(({firstName, lastName, avatar}) => ({
+        firstName,
+        lastName,
+        avatar,
+        matchesWon: highestCount
+      }));
+
+      return res.status(200).send(bestTeammates);
     } catch (err) {
       logger.error(err);
       return res.status(500).send({error: 'INTERNAL_SERVER_ERROR'});

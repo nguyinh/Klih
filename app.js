@@ -74,7 +74,7 @@ app.use('/api', oauthRoute);
 app.use('/api', profileRoute);
 app.use('/api', playingRoute);
 app.use('/api', playerRoute);
-app.use('/api', statsRoute);
+app.use('/api/statistics', statsRoute);
 
 // Put all API endpoints under '/api'
 app.get('/api/*', (req, res) => {
