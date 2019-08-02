@@ -10,6 +10,7 @@ import {
 } from 'rsuite';
 import WinLossRatio from '../WinLossRatio/WinLossRatio';
 import GoalAnalysis from '../GoalAnalysis/GoalAnalysis';
+import WinStreak from '../WinStreak/WinStreak';
 
 
 class Statistics extends Component {
@@ -28,7 +29,7 @@ class Statistics extends Component {
             <WinLossRatio/>
           </Row>
           <Row className='statistics-container'>
-            {/* <GoalAnalysis/> */}
+            <WinStreak/>
           </Row>
         </Col>
           

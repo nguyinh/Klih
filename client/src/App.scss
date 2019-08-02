@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'Avenir Light';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Avenir LT Std 35 Light'), url('AvenirLTStd-Light.woff') format('woff');
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -6,6 +13,10 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+* {
+  font-family: Avenir Light;
 }
 
 body,

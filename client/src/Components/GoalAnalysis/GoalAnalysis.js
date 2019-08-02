@@ -111,9 +111,7 @@ class GoalAnalysis extends Component {
             viewBox={vb}>
               <Group 
                 top={parent.top + parent.height / 2}
-                left={parent.left + parent.width / 2}
-                parentRef={parent.ref}
-                resizeParent={parent.resize}> 
+                left={parent.left + parent.width / 2}> 
                 <Pie
                   data={this.state.goalAnalysis}
                   pieValue={count}
