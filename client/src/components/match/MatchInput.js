@@ -1,10 +1,8 @@
 import React, { PureComponent } from 'react';
 import './MatchInput.scss';
-import swordImage from '../../sword.png';
-import shieldImage from '../../shield.png';
-import switchImage from '../../switch.png';
-import plusImage from '../../plus-sign.png';
-import minusImage from '../../minus-sign.png';
+import switchImage from '../../res/images/switch.png';
+import minusImage from '../../res/images/minus-sign.png';
+import plusImage from '../../res/images/plus-sign.png';
 import { withRouter, Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
 import {

@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import './MatchPlayer.scss';
 import { withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
-import swordImage from '../../sword.png';
-import shieldImage from '../../shield.png';
+import swordImage from '../../res/images/sword.png';
+import shieldImage from '../../res/images/shield.png';
 import {
   setPlayerCursor,
   setP1,
@@ -81,7 +81,7 @@ class MatchPlayer extends Component {
         <img
           src= {
             !this.state.image ?
-            require('./../../profile.png') :
+            require('../../res/images/profile.png') :
             this.state.image
           }
           className='avatarImage'

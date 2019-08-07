@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import './MatchHistory.scss';
-// import HistoryEntryLeft from '../HistoryEntryLeft/HistoryEntryLeft.js';
-// import HistoryEntryRight from '../HistoryEntryRight/HistoryEntryRight.js';
 import { 
   HistoryEntryRight,
   HistoryEntryLeft 
@@ -22,8 +20,6 @@ const mapStateToProps = state => {
     currentUser: state.currentUser
   };
 };
-
-// const cmp = (o1, o2) => JSON.stringify(o1) === JSON.stringify(o2);
 
 class MatchHistory extends Component {
   constructor(props) {

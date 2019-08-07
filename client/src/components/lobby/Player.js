@@ -122,7 +122,7 @@ class Player extends Component {
       <img
         src= {
           !this.state.image ?
-          require('./../../profile.png') :
+          require('../../res/images/profile.png') :
           this.state.image
         }
         className='avatarImage'

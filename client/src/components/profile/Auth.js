@@ -8,8 +8,10 @@ import {
   Col,
   Icon
 } from 'rsuite';
-import Signin from '../Signin/Signin';
-import Signup from '../Signup/Signup';
+import {
+  Signup,
+  Signin
+} from './';
 import FacebookLogin from 'react-facebook-login';
 import { GoogleLogin } from 'react-google-login';
 import config from '../../config/oauth.config.js'
@@ -103,8 +105,6 @@ class Auth extends Component {
       const res = await fetch('/api/auth/google', options);
       const token = res.headers.get('x-auth-token');
       const user = await res.json();
-      // console.log(user);
-      // console.log(res.body);
       if (token) {
         const base64Flag = 'data:image/jpeg;base64,';
         const imageStr = arrayBufferToBase64(user.avatar.data.data);

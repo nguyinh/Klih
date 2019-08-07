@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import './Profile.scss';
-// import Auth from '../Auth/Auth';
-// import Team from '../Team/Team';
 
 import { withRouter, Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
@@ -19,12 +17,11 @@ import axios from 'axios';
 import str from '../constants/labels.constants.js';
 import { arrayBufferToBase64 } from '../utils';
 // import QRCode from 'qrcode.react';
-// import Button from '../Button/Button';
 import { 
   Auth,
   Team
-} from '../Components/profile';
-import { Button } from '../Components/common';
+} from '../components/profile';
+import { Button } from '../components/common';
 
 const mapDispatchToProps = dispatch => {
   return ({
@@ -460,7 +457,7 @@ class Profile extends Component {
                           className='profileAvatarImage'
                           alt='User avatar'/> :
                         <img
-                          src={require('./../profile.png')}
+                          src={require('../res/images/profile.png')}
                           className='profileAvatarImage'
                           alt='Avatar'></img>)
                       }
@@ -475,14 +472,6 @@ class Profile extends Component {
                         style={{display: 'none'}}
                         ref={this.uploaderRef}
                         className='isUploading'/>
-                      {/* <Button
-                        block
-                        type="submit"
-                        color='blue'
-                        value="submit"
-                        onClick={this.uploadHandler}>
-                        Upload
-                      </Button> */}
                     </Col>
                   </Row>
 

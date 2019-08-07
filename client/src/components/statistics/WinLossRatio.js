@@ -2,12 +2,6 @@ import React, { Component } from 'react';
 import './WinLossRatio.scss';
 import { withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
-import {
-  Button,
-  Grid,
-  Row,
-  Col,
-} from 'rsuite';
 import axios from 'axios';
 import { Pie } from '@vx/shape';
 import { Group } from '@vx/group';

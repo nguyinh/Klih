@@ -90,9 +90,7 @@ class Navigation extends Component {
     else
       this.setState({ expanded: true })
   }
-  // {
-  //   this.state.image && <img src={'data:image/png;base64,' + this.state.image.data} className='avatarImage' alt='Avatar'></img>
-  // }
+  
   render() {
     const header = <Grid justify="space-between">
       <Row>
@@ -116,7 +114,7 @@ class Navigation extends Component {
                 className='avatarImage'
                 alt='User avatar'/> :
               <img
-                src={require('./../profile.png')}
+                src={require('../res/images/profile.png')}
                 className='avatarImage'
                 alt='Avatar'></img>
             }

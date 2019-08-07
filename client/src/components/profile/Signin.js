@@ -12,7 +12,7 @@ import {
 import { setUserAuth, setUser } from '../../redux/actions/index.actions.js';
 import str from '../../constants/labels.constants.js';
 import { arrayBufferToBase64 } from '../../utils';
-import Button from '../Button/Button';
+import { Button } from '../common';
 
 
 const mapDispatchToProps = dispatch => {

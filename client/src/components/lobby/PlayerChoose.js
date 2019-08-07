@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import './PlayerChoose.scss';
 import { withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
-import swordImage from '../../sword.png';
-import shieldImage from '../../shield.png';
+import swordImage from '../../res/images/sword.png';
+import shieldImage from '../../res/images/shield.png';
 import { p } from '../../utils';
 
 class PlayerChoose extends Component {
@@ -29,7 +29,7 @@ class PlayerChoose extends Component {
   render() {
     return <div className='playerHolder'>
       <img src={!this.state.image
-          ? require('./../../profile.png')
+          ? require('../../res/images/profile.png')
           : this.state.image
         }
         className={'avatarImage ' + (!this.state.selected || 'selectAnimation')}

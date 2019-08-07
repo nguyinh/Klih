@@ -3,15 +3,7 @@ import './WinStreak.scss';
 import { withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { Pie } from '@vx/shape';
-import { Group } from '@vx/group';
 import { ParentSize } from '@vx/responsive';
-import {
-  LegendOrdinal,
-  LegendItem,
-  LegendLabel
-} from '@vx/legend';
-import { scaleOrdinal } from '@vx/scale';
 import { Text } from '@vx/text';
 
 

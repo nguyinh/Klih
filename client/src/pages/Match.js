@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import './Match.scss';
-// import MatchHistory from '../MatchHistory/MatchHistory';
-// import MatchInput from '../MatchInput/MatchInput';
 import {
   MatchInput,
   MatchHistory
@@ -9,7 +7,7 @@ import {
 import {
   Button
 } from '../components/common';
-import { withRouter, Redirect } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
 import {
   Grid,
@@ -20,7 +18,6 @@ import {
 } from 'rsuite';
 import { setMatch, setScore1, setScore2, setHistory, addToMatch, resetMatch } from './../redux/actions/index.actions.js';
 import { socket } from './../socket';
-// import Button from '../Button/Button';
 
 const mapDispatchToProps = dispatch => {
   return ({

@@ -1,5 +1,5 @@
 import act from '../../config/actions.constants.js'
-import plusImage from './../../plus.png';
+import plusImage from '../../res/images/plus.png';
 
 const noPlayer = {
   name: '',
