@@ -31,7 +31,7 @@ module.exports = (() => {
         return res.status(200).send(currentMatch);
         // on front, send match state
       } else {
-        console.log('not found');
+        // console.log('not found');
         return res.status(404).send({error: 'NOT_FOUND'});
         // on front, keep going
       }

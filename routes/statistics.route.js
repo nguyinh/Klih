@@ -458,6 +458,7 @@ module.exports = (() => {
       });
 
       let winStreak = 0;
+      let matchCount = matchs.length;
 
       matchs.reverse()
         .some(m => {
@@ -477,7 +478,7 @@ module.exports = (() => {
           }
       });
 
-      return res.status(200).send({ winStreak });
+      return res.status(200).send({ winStreak, matchCount });
     } catch (err) {
       logger.error(err);
       return res.status(500).send({error: 'INTERNAL_SERVER_ERROR'});

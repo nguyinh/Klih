@@ -19,32 +19,23 @@ class WinStreak extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      WinStreak: [
-        {
-          status: 'Wins',
-          count: 0,
-          average: 0
-        },
-        {
-          status: 'Losses',
-          count: 0,
-          average: 0
-        }
-    ],
-    matchCount: 0
-  };
+      winStreak: 0,
+      matchCount: 0
+    };
   }
 
   async componentDidMount() {
     try {
       const {
         data: {
-          winStreak
+          winStreak,
+          matchCount
         }
       } = await axios.get('api/statistics/winStreak');
 
       this.setState({
-        winStreak
+        winStreak,
+        matchCount
       });
     } catch (err) {
       console.log(err);
@@ -69,31 +60,56 @@ class WinStreak extends Component {
             width={parent.width}
             height={height}
             viewBox={vb}>
-              <Text
-                fill="white"
-                textAnchor="middle"
-                dy="0.5em"
-                font-size="50px"
-                x={parent.width/2}
-                y={height/2}
-                className='win-streak-text'
-              >
-                {this.state.winStreak}
-              </Text>
-              <Text
-                fill="white"
-                textAnchor="middle"
-                font-size="15px"
-                x={parent.width/2}
-                y={height/1.25}
-                className='win-streak-text'
-              >
-                { this.state.winStreak === 1 ? 
-                  'Victoire d\'affilée' : 
-                  'Victoires d\'affilée'
-                }
-                
-              </Text>   
+              { this.state.winStreak !== 0 ? 
+                <>
+                  <Text
+                    fill="white"
+                    textAnchor="middle"
+                    dy="0.5em"
+                    font-size="50px"
+                    x={parent.width/2}
+                    y={height/2}
+                    className='win-streak-text'
+                  >
+                    {this.state.winStreak}
+                  </Text>
+                  <Text
+                    fill="white"
+                    textAnchor="middle"
+                    font-size="15px"
+                    x={parent.width/2}
+                    y={height/1.25}
+                    className='win-streak-text'
+                  >
+                    { this.state.winStreak === 1 ? 
+                      'Victoire d\'affilée' : 
+                      'Victoires d\'affilée'
+                    }
+                  </Text>
+                </> :
+                <>
+                  <Text
+                    fill="white"
+                    textAnchor="middle"
+                    font-size="15px"
+                    x={parent.width/2}
+                    y={height/2}
+                    className='win-streak-text'
+                  >
+                    Pas de victoires
+                  </Text>
+                  <Text
+                    fill="white"
+                    textAnchor="middle"
+                    font-size="15px"
+                    x={parent.width/2}
+                    y={height/1.5}
+                    className='win-streak-text'
+                  >
+                    dernièrement 😅
+                  </Text>
+                </>
+              }  
           </svg>
           }
         }
