@@ -11,7 +11,8 @@ import {
 import { 
   WinLossRatio,
   GoalAnalysis,
-  WinStreak
+  WinStreak,
+  BestOpponent
 } from '../components/statistics';
 
 
@@ -40,7 +41,7 @@ class Statistics extends Component {
             <GoalAnalysis/>
           </Row>
           <Row className='statistics-container'>
-            {/* <WinLossRatio/> */}
+            <BestOpponent/>
           </Row>
         </Col>
       </Row>

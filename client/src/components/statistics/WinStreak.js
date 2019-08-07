@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import './WinStreak.scss';
-import { withRouter } from "react-router-dom";
-import { connect } from 'react-redux';
 import axios from 'axios';
 import { ParentSize } from '@vx/responsive';
 import { Text } from '@vx/text';
@@ -109,4 +107,4 @@ class WinStreak extends Component {
     </div>
   }
 }
-export default withRouter(connect(null, null)(WinStreak));
+export default WinStreak;

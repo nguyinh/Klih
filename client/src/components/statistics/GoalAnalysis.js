@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import './GoalAnalysis.scss';
-import { withRouter } from "react-router-dom";
-import { connect } from 'react-redux';
 import axios from 'axios';
 import { Pie } from '@vx/shape';
 import { Group } from '@vx/group';
@@ -185,4 +183,4 @@ class GoalAnalysis extends Component {
     </div>
   }
 }
-export default withRouter(connect(null, null)(GoalAnalysis));
+export default GoalAnalysis;

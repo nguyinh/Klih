@@ -147,8 +147,8 @@ class Profile extends Component {
 
     try {
       const avatarResponse = await axios.post('api/profile/avatar', formData, config);
-      var base64Flag = 'data:image/jpeg;base64,';
-      var imageStr = arrayBufferToBase64(avatarResponse.data.data.data);
+      const base64Flag = 'data:image/jpeg;base64,';
+      const imageStr = arrayBufferToBase64(avatarResponse.data.data.data);
       this.props.setAvatar(base64Flag + imageStr);
     } catch (err) {
       console.log(err);
@@ -170,8 +170,8 @@ class Profile extends Component {
 
     try {
       const avatarResponse = await axios.post('api/profile/avatar', formData, config);
-      var base64Flag = 'data:image/jpeg;base64,';
-      var imageStr = arrayBufferToBase64(avatarResponse.data.data.data);
+      const base64Flag = 'data:image/jpeg;base64,';
+      const imageStr = arrayBufferToBase64(avatarResponse.data.data.data);
       this.props.setAvatar(base64Flag + imageStr);
     } catch (err) {
       console.log(err);

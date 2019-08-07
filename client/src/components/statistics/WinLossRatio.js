@@ -70,7 +70,7 @@ class WinLossRatio extends Component {
     const width = 150;
     const height = 130;
     const radius = Math.min(width, height);
-    const status = d => d.status;
+    // const status = d => d.status;
     const count = d => d.count;
     const pi = 3.14;
     const ordinalColorScale = scaleOrdinal({
