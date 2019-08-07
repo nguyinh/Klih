@@ -5,8 +5,6 @@ import shieldImage from '../../shield.png';
 import switchImage from '../../switch.png';
 import plusImage from '../../plus-sign.png';
 import minusImage from '../../minus-sign.png';
-import MatchPlayer from '../MatchPlayer/MatchPlayer';
-
 import { withRouter, Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
 import {
@@ -20,7 +18,8 @@ import { setMatch, setScore1, setScore2, setHistory, addToMatch, resetMatch } fr
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { socket } from './../../socket';
 import { p } from '../../utils';
-import Button from '../Button/Button';
+import { MatchPlayer } from './';
+import { Button } from '../common';
 
 const mapDispatchToProps = dispatch => {
   return ({

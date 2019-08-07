@@ -8,9 +8,12 @@ import {
   Row,
   Col,
 } from 'rsuite';
-import WinLossRatio from '../WinLossRatio/WinLossRatio';
-import GoalAnalysis from '../GoalAnalysis/GoalAnalysis';
-import WinStreak from '../WinStreak/WinStreak';
+
+import { 
+  WinLossRatio,
+  GoalAnalysis,
+  WinStreak
+} from '../components/statistics';
 
 
 class Statistics extends Component {

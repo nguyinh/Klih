@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import './Lobby.scss';
 import { withRouter, Redirect } from "react-router-dom";
-import PlayerChoose from '../PlayerChoose/PlayerChoose';
-import TeamContainer from '../TeamContainer/TeamContainer';
 import { connect } from 'react-redux';
 import {
   setPlayerCursor,
@@ -11,7 +9,7 @@ import {
   setP3,
   setP4,
   setCurrentMatchId
-} from '../../redux/actions/index.actions.js'
+} from '../redux/actions/index.actions.js'
 import axios from 'axios';
 import {
   Grid,
@@ -22,8 +20,12 @@ import {
   Icon,
   Alert
 } from 'rsuite';
-import { arrayBufferToBase64 } from '../../utils';
-import Button from '../Button/Button';
+import { arrayBufferToBase64 } from '../utils';
+import {
+  PlayerChoose, 
+  TeamContainer
+} from '../components/lobby';
+import { Button } from '../components/common';
 
 
 const mapDispatchToProps = dispatch => {
@@ -431,7 +433,7 @@ class Lobby extends Component {
                             onClick={this.beginMatch}>
                             {
                               this.state.beginMatchLoading ?
-                              <Icon icon='circle-o-notch' spin size="lg"/> :
+                              <Icon icon='circle-o-notch' spin size="md"/> :
                               <span>Commencer <span role="img" aria-label="Football">⚽️</span></span>
                             }
                           </Button>

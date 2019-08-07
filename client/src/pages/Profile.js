@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import './Profile.scss';
-import Auth from '../Auth/Auth';
-import Team from '../Team/Team';
+// import Auth from '../Auth/Auth';
+// import Team from '../Team/Team';
+
 import { withRouter, Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
 import {
@@ -13,12 +14,17 @@ import {
   Input,
   Modal
 } from 'rsuite';
-import { setUserAuth, setAvatar, resetUserSession, setUser } from '../../redux/actions/index.actions.js';
+import { setUserAuth, setAvatar, resetUserSession, setUser } from '../redux/actions/index.actions.js';
 import axios from 'axios';
-import str from '../../constants/labels.constants.js';
-import { arrayBufferToBase64 } from '../../utils';
+import str from '../constants/labels.constants.js';
+import { arrayBufferToBase64 } from '../utils';
 // import QRCode from 'qrcode.react';
-import Button from '../Button/Button';
+// import Button from '../Button/Button';
+import { 
+  Auth,
+  Team
+} from '../Components/profile';
+import { Button } from '../Components/common';
 
 const mapDispatchToProps = dispatch => {
   return ({
@@ -454,7 +460,7 @@ class Profile extends Component {
                           className='profileAvatarImage'
                           alt='User avatar'/> :
                         <img
-                          src={require('./../../profile.png')}
+                          src={require('./../profile.png')}
                           className='profileAvatarImage'
                           alt='Avatar'></img>)
                       }

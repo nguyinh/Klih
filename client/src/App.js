@@ -5,14 +5,22 @@ import axios from 'axios';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 
-import Match from './Components/Match/Match';
-import Lobby from './Components/Lobby/Lobby';
+// import Match from './Components/Match/Match';
+import Match from './pages/Match';
+// import Lobby from './Components/Lobby/Lobby';
+import Lobby from './pages/Lobby';
 // import History from './Components/History/History';
-import Statistics from './Components/Statistics/Statistics';
-import Monitor from './Components/Monitor/Monitor';
-import Profile from './Components/Profile/Profile';
-import Navigation from './Components/Navigation/Navigation';
-import Welcome from './Components/Welcome/Welcome';
+// import Statistics from './Components/Statistics/Statistics';
+import Statistics from './pages/Statistics';
+// import Monitor from './Components/Monitor/Monitor';
+import Monitor from './pages/Monitor';
+// import Profile from './Components/Profile/Profile';
+import Profile from './pages/Profile';
+// import Navigation from './Components/Navigation/Navigation';
+import Navigation from './pages/Navigation';
+// import Welcome from './Components/Welcome/Welcome';
+import Welcome from './pages/Welcome';
+// import Welcome from './pages/Welcome';
 
 import { arrayBufferToBase64 } from './utils';
 

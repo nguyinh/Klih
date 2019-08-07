@@ -10,7 +10,7 @@ import {
 } from 'rsuite';
 import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
-import { setNavigationState, setUserAuth, setAvatar, setUser } from './../../redux/actions/index.actions.js'
+import { setNavigationState, setUserAuth, setAvatar, setUser } from '../redux/actions/index.actions.js'
 require('dotenv').config()
 
 const mapDispatchToProps = dispatch => {
@@ -116,7 +116,7 @@ class Navigation extends Component {
                 className='avatarImage'
                 alt='User avatar'/> :
               <img
-                src={require('./../../profile.png')}
+                src={require('./../profile.png')}
                 className='avatarImage'
                 alt='Avatar'></img>
             }

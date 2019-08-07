@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './TeamContainer.scss';
-import Player from '../Player/Player';
+import { Player } from './';
 import { withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
 import {

@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
 import './Match.scss';
-import MatchHistory from '../MatchHistory/MatchHistory';
-import MatchInput from '../MatchInput/MatchInput';
+// import MatchHistory from '../MatchHistory/MatchHistory';
+// import MatchInput from '../MatchInput/MatchInput';
+import {
+  MatchInput,
+  MatchHistory
+} from '../components/match';
+import {
+  Button
+} from '../components/common';
 import { withRouter, Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
 import {
@@ -11,9 +18,9 @@ import {
   Icon,
   Modal
 } from 'rsuite';
-import { setMatch, setScore1, setScore2, setHistory, addToMatch, resetMatch } from './../../redux/actions/index.actions.js';
-import { socket } from './../../socket';
-import Button from '../Button/Button';
+import { setMatch, setScore1, setScore2, setHistory, addToMatch, resetMatch } from './../redux/actions/index.actions.js';
+import { socket } from './../socket';
+// import Button from '../Button/Button';
 
 const mapDispatchToProps = dispatch => {
   return ({

@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import './MatchHistory.scss';
-import HistoryEntryLeft from '../HistoryEntryLeft/HistoryEntryLeft.js';
-import HistoryEntryRight from '../HistoryEntryRight/HistoryEntryRight.js';
+// import HistoryEntryLeft from '../HistoryEntryLeft/HistoryEntryLeft.js';
+// import HistoryEntryRight from '../HistoryEntryRight/HistoryEntryRight.js';
+import { 
+  HistoryEntryRight,
+  HistoryEntryLeft 
+} from './';
 import { withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
 import {
