@@ -12,6 +12,9 @@ import {
   LegendLabel
 } from '@vx/legend';
 import { scaleOrdinal } from '@vx/scale';
+import {
+  Icon
+} from 'rsuite';
 
 
 class WinLossRatio extends Component {
@@ -30,7 +33,8 @@ class WinLossRatio extends Component {
           average: 0
         }
     ],
-    matchCount: 0
+    matchCount: 0,
+    isFetching: true
   };
   }
 
@@ -57,7 +61,8 @@ class WinLossRatio extends Component {
             average: Math.floor(losses / matchCount * 100)
           }
         ],
-        matchCount: matchCount
+        matchCount,
+        isFetching: false
       });
     } catch (err) {
       console.log(err);
@@ -79,99 +84,98 @@ class WinLossRatio extends Component {
     });
 
     return <div className='graph-container'>
-      <ParentSize>
-        {parent => {
-          const vbX = parent.width - parent.width / 1.07;
-          const vbY = parent.height - parent.height / 1.07;
-          const vbsX = parent.width - parent.width / 7;
-          const vbsY = parent.height - parent.height / 7;
-          const vb = `${vbX} ${vbY} ${vbsX} ${vbsY}`;
+      { !this.state.isFetching ? 
+        <>
+          <ParentSize>
+            {parent => {
+              const vbX = parent.width - parent.width / 1.07;
+              const vbY = parent.height - parent.height / 1.07;
+              const vbsX = parent.width - parent.width / 7;
+              const vbsY = parent.height - parent.height / 7;
+              const vb = `${vbX} ${vbY} ${vbsX} ${vbsY}`;
 
-          return <svg 
-            width={parent.width}
-            height={height}
-            viewBox={vb}>
-            <Group 
-              top={parent.top + parent.height / 2}
-              left={parent.left + parent.width / 2}> 
-              <Pie
-                data={this.state.winLossRatio}
-                pieValue={count}
-                outerRadius={radius / 2.5}
-                innerRadius={radius / 5}
-                cornerRadius={5}
-                padAngle={2*pi*0.02}
-              >
-                {pie => {
-                  return pie.arcs.map((arc, i) => {
-                    const [centroidX, centroidY] = pie.path.centroid(arc);
+              return <svg 
+                width={parent.width}
+                height={height}
+                viewBox={vb}>
+                <Group 
+                  top={parent.top + parent.height / 2}
+                  left={parent.left + parent.width / 2}> 
+                  <Pie
+                    data={this.state.winLossRatio}
+                    pieValue={count}
+                    outerRadius={radius / 2.5}
+                    innerRadius={radius / 5}
+                    cornerRadius={5}
+                    padAngle={2*pi*0.02}
+                  >
+                    {pie => {
+                      return pie.arcs.map((arc, i) => {
+                        const [centroidX, centroidY] = pie.path.centroid(arc);
+                        return (
+                          <g key={`letters-${arc.data.label}-${i}`}>
+                            <path
+                              d={pie.path(arc)}
+                              fill={
+                                i === 0 ? 
+                                  '#3fab3f' :
+                                  '#f16262'
+                              }/>
+                              <text
+                                fill="white"
+                                textAnchor="middle"
+                                x={centroidX}
+                                y={centroidY}
+                                dy=".33em"
+                                className='graph-label'
+                              >
+                                {arc.data.average + '%'}
+                              </text>
+                          </g>
+                        );
+                      });
+                    }}
+                  </Pie>
+                </Group>
+              </svg>
+              }
+            }
+          </ParentSize>
+
+          <LegendOrdinal scale={ordinalColorScale} labelFormat={label => `${label}`}>
+            {labels => {
+              return (
+                <div className='legend'>
+                  {labels.map((label, i) => {
+                    const size = 15;
                     return (
-                      <g key={`letters-${arc.data.label}-${i}`}>
-                        <path
-                          d={pie.path(arc)}
-                          fill={
-                            i === 0 ? 
-                              '#3fab3f' :
-                              '#f16262'
-                          }/>
-                          <text
-                            fill="white"
-                            textAnchor="middle"
-                            x={centroidX}
-                            y={centroidY}
-                            dy=".33em"
-                            className='graph-label'
-                          >
-                            {arc.data.average + '%'}
-                          </text>
-                        {/* <text
-                          fill="white"
-                          textAnchor="middle"
-                          x={centroidX}
-                          y={centroidY}
-                          dy=".33em"
-                          fontSize={12}
-                        >
-                          {arc.data.status}
-                        </text> */}
-                      </g>
+                      <LegendItem
+                        key={`legend-goals-${i}`}
+                        margin={'0 5px'}
+                        onClick={event => {
+                          alert(`clicked: ${JSON.stringify(label)}`);
+                        }}
+                      >
+                        <svg width={size} height={size}>
+                          <circle fill={label.value} cx={size/2} cy={size/2} r={size/2} />
+                        </svg>
+                        <LegendLabel align={'left'} margin={'0 0 0 4px'}>
+                          {label.text}
+                        </LegendLabel>
+                      </LegendItem>
                     );
-                  });
-                }}
-              </Pie>
-            </Group>
-          </svg>
-          }
-        }
-      </ParentSize>
-
-      <LegendOrdinal scale={ordinalColorScale} labelFormat={label => `${label}`}>
-          {labels => {
-            return (
-              <div className='legend'>
-                {labels.map((label, i) => {
-                  const size = 15;
-                  return (
-                    <LegendItem
-                      key={`legend-goals-${i}`}
-                      margin={'0 5px'}
-                      onClick={event => {
-                        alert(`clicked: ${JSON.stringify(label)}`);
-                      }}
-                    >
-                      <svg width={size} height={size}>
-                        <circle fill={label.value} cx={size/2} cy={size/2} r={size/2} />
-                      </svg>
-                      <LegendLabel align={'left'} margin={'0 0 0 4px'}>
-                        {label.text}
-                      </LegendLabel>
-                    </LegendItem>
-                  );
-                })}
-              </div>
-            );
-          }}
-        </LegendOrdinal>
+                  })}
+                </div>
+              );
+            }}
+          </LegendOrdinal>
+        </> :
+        <Icon
+          icon='circle-o-notch' 
+          spin 
+          size="lg" 
+          className='statistic-spinner'/>
+      }
     </div>
   }
 }
