@@ -68,7 +68,7 @@ class BestTeammate extends Component {
                   y={height/1.5}
                   className='best-teammate-name'
                 >
-                  adversaire 🤷‍
+                  partenaire 🤷‍
                 </Text>
               </svg>;
             }
@@ -103,7 +103,7 @@ class BestTeammate extends Component {
                     y={height/1.2}
                     className='best-teammate-text'
                   >
-                    Meilleur adversaire
+                    Meilleur partenaire
                   </Text>
                   <Text
                     fill="white"
@@ -147,7 +147,7 @@ class BestTeammate extends Component {
                     y={height/1.4}
                     className='best-teammate-text'
                   >
-                    Meilleurs adversaires
+                    Meilleurs partenaires
                   </Text>
                   <Text
                     fill="white"
