@@ -12,7 +12,8 @@ import {
   WinLossRatio,
   GoalAnalysis,
   WinStreak,
-  BestOpponent
+  BestOpponent,
+  BestTeammate
 } from '../components/statistics';
 
 
@@ -31,8 +32,13 @@ class Statistics extends Component {
           <Row className='statistics-container'>
             <WinLossRatio/>
           </Row>
+
           <Row className='statistics-container'>
             <WinStreak/>
+          </Row>
+
+          <Row className='statistics-container'>
+            <BestTeammate/>
           </Row>
         </Col>
           
@@ -40,6 +46,7 @@ class Statistics extends Component {
           <Row className='statistics-container'>
             <GoalAnalysis/>
           </Row>
+
           <Row className='statistics-container'>
             <BestOpponent/>
           </Row>

@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import './BestOpponent.scss';
+import './BestTeammate.scss';
 import axios from 'axios';
 import { ParentSize } from '@vx/responsive';
 import { Text } from '@vx/text';
 import { arrayBufferToBase64 } from '../../utils';
 
 
-class BestOpponent extends Component {
+class BestTeammate extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      bestOpponents: [],
+      bestTeammates: [],
     };
   }
 
@@ -18,10 +18,10 @@ class BestOpponent extends Component {
     try {
       const {
         data
-      } = await axios.get('api/statistics/bestOpponents');
+      } = await axios.get('api/statistics/bestTeammates');
       console.log(data);
       this.setState({
-        bestOpponents: data
+        bestTeammates: data
       });
     } catch (err) {
       console.log(err);
@@ -41,7 +41,7 @@ class BestOpponent extends Component {
             const vbsY = parent.height - parent.height / 4;
             const vb = `${vbX} ${vbY} ${vbsX} ${vbsY}`;
 
-            if (this.state.bestOpponents.length === 0) {
+            if (this.state.bestTeammates.length === 0) {
               const height = 110;
 
               return <svg 
@@ -55,7 +55,7 @@ class BestOpponent extends Component {
                   font-weight="500"
                   x={parent.width/2}
                   y={height/2.2}
-                  className='best-opponent-name'
+                  className='best-teammate-name'
                 >
                   Pas de meilleur
                 </Text>
@@ -66,20 +66,20 @@ class BestOpponent extends Component {
                   font-weight="500"
                   x={parent.width/2}
                   y={height/1.5}
-                  className='best-opponent-name'
+                  className='best-teammate-name'
                 >
-                  adversaire 🤷‍♂️
+                  adversaire 🤷‍
                 </Text>
               </svg>;
             }
-            else if (this.state.bestOpponents.length === 1) {
+            else if (this.state.bestTeammates.length === 1) {
               const height = 90;
 
               return <>
                 <img
-                  src={'data:image/jpeg;base64,' + arrayBufferToBase64(this.state.bestOpponents[0].avatar.data.data)}
-                  className='best-opponent-avatar'
-                  alt='Opponent avatar'/>
+                  src={'data:image/jpeg;base64,' + arrayBufferToBase64(this.state.bestTeammates[0].avatar.data.data)}
+                  className='best-teammate-avatar'
+                  alt='Teammate avatar'/>
                 <svg 
                 width={parent.width}
                 height={height}
@@ -91,9 +91,9 @@ class BestOpponent extends Component {
                     font-weight="500"
                     x={parent.width/2}
                     y={height/2.25}
-                    className='best-opponent-name'
+                    className='best-teammate-name'
                   >
-                    {this.state.bestOpponents[0].firstName}
+                    {this.state.bestTeammates[0].firstName}
                   </Text>
                   <Text
                     fill="white"
@@ -101,7 +101,7 @@ class BestOpponent extends Component {
                     font-size="19px"
                     x={parent.width/2}
                     y={height/1.2}
-                    className='best-opponent-text'
+                    className='best-teammate-text'
                   >
                     Meilleur adversaire
                   </Text>
@@ -111,27 +111,27 @@ class BestOpponent extends Component {
                     font-size="16px"
                     x={parent.width/2}
                     y={height/0.9}
-                    className='best-opponent-text'
+                    className='best-teammate-text'
                   >
-                    {`avec ${this.state.bestOpponents[0].matchesLoss} défaites 💥 `} 
+                    {`avec ${this.state.bestTeammates[0].matchesWon} victoires 🤝`} 
                   </Text>
                 </svg>
               </>;
             }
-            else if (this.state.bestOpponents.length > 1) {
+            else if (this.state.bestTeammates.length > 1) {
               const height = 70;
 
-              return <div className='best-opponents-container'>
-                {this.state.bestOpponents.map((opponent) => {
+              return <div className='best-teammates-container'>
+                {this.state.bestTeammates.map((teammate) => {
                   return (
                     <div
-                      key={opponent.firstName + opponent.lastName}
-                      className='opponent-row'>
+                      key={teammate.firstName + teammate.lastName}
+                      className='teammate-row'>
                       <img
-                        src={'data:image/jpeg;base64,' + arrayBufferToBase64(opponent.avatar.data.data)}
-                        className='best-opponent-avatar multiple'
-                        alt='Opponent avatar'/>
-                      <span>{opponent.firstName}</span>
+                        src={'data:image/jpeg;base64,' + arrayBufferToBase64(teammate.avatar.data.data)}
+                        className='best-teammate-avatar multiple'
+                        alt='Teammate avatar'/>
+                      <span>{teammate.firstName}</span>
                     </div>
                   );
                 })}
@@ -145,7 +145,7 @@ class BestOpponent extends Component {
                     font-size="23px"
                     x={parent.width/2}
                     y={height/1.4}
-                    className='best-opponent-text'
+                    className='best-teammate-text'
                   >
                     Meilleurs adversaires
                   </Text>
@@ -155,9 +155,9 @@ class BestOpponent extends Component {
                     font-size="21px"
                     x={parent.width/2}
                     y={height/0.75}
-                    className='best-opponent-text'
+                    className='best-teammate-text'
                   >
-                    {`avec ${this.state.bestOpponents[0].matchesLoss} défaites 💥 `} 
+                    {`avec ${this.state.bestTeammates[0].matchesWon} victoires 🤝`} 
                   </Text>
                 </svg>
               </div>;
@@ -168,4 +168,4 @@ class BestOpponent extends Component {
     </div>
   }
 }
-export default BestOpponent;
+export default BestTeammate;
