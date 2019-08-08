@@ -85,63 +85,45 @@ class Lobby extends Component {
     try {
       this.setState({ isSearchingMatch: true });
 
-      const response = await axios.get('/api/playingMatch', {});
+      const {
+        data: {
+          _id, player1, player2, player3, player4
+        }
+      } = await axios.get('/api/playingMatch', {});
 
-      // TODO: get players with .populate() from MongoDB request
-
-      if (response.data.player1) {
-        const resP1 = await axios.get('/api/players/' + response.data.player1, {});
+      if (player1) {
         this.props.setP1({
-          name: resP1.data.firstName + ' ' + resP1.data.lastName,
-          firstName: resP1.data.firstName,
-          lastName: resP1.data.lastName,
-          score: resP1.data.score,
-          data: resP1.data,
-          image: 'data:image/jpeg;base64,' + arrayBufferToBase64(resP1.data.avatar.data.data),
-          _id: resP1.data._id
+          ...player1,
+          name: player1.firstName + ' ' + player1.lastName,
+          image: 'data:image/jpeg;base64,' + arrayBufferToBase64(player1.image.data.data),
         });
       }
 
-      if (response.data.player2) {
-        const resP2 = await axios.get('/api/players/' + response.data.player2, {});
+      if (player2) {
         this.props.setP2({
-          name: resP2.data.firstName + ' ' + resP2.data.lastName,
-          firstName: resP2.data.firstName,
-          lastName: resP2.data.lastName,
-          score: resP2.data.score,
-          data: resP2.data,
-          image: 'data:image/jpeg;base64,' + arrayBufferToBase64(resP2.data.avatar.data.data),
-          _id: resP2.data._id
+          ...player2,
+          name: player2.firstName + ' ' + player2.lastName,
+          image: 'data:image/jpeg;base64,' + arrayBufferToBase64(player2.image.data.data),
         });
       }
 
-      if (response.data.player3) {
-        const resP3 = await axios.get('/api/players/' + response.data.player3, {});
+      if (player3) {
         this.props.setP3({
-          name: resP3.data.firstName + ' ' + resP3.data.lastName,
-          firstName: resP3.data.firstName,
-          lastName: resP3.data.lastName,
-          score: resP3.data.score,
-          data: resP3.data,
-          image: 'data:image/jpeg;base64,' + arrayBufferToBase64(resP3.data.avatar.data.data),
-          _id: resP3.data._id
+          ...player3,
+          name: player3.firstName + ' ' + player1.lastName,
+          image: 'data:image/jpeg;base64,' + arrayBufferToBase64(player3.image.data.data),
         });
       }
 
-      if (response.data.player4) {
-        const resP4 = await axios.get('/api/players/' + response.data.player4, {});
+      if (player4) {
         this.props.setP4({
-          name: resP4.data.firstName + ' ' + resP4.data.lastName,
-          firstName: resP4.data.firstName,
-          lastName: resP4.data.lastName,
-          score: resP4.data.score,
-          data: resP4.data,
-          image: 'data:image/jpeg;base64,' + arrayBufferToBase64(resP4.data.avatar.data.data),
-          _id: resP4.data._id
+          ...player4,
+          name: player4.firstName + ' ' + player1.lastName,
+          image: 'data:image/jpeg;base64,' + arrayBufferToBase64(player4.image.data.data),
         });
       }
 
-      this.props.setCurrentMatchId(response.data._id);
+      this.props.setCurrentMatchId(_id);
     } catch (err) {
       // console.log(err);
 
@@ -262,7 +244,7 @@ class Lobby extends Component {
         beginMatch: true
       });
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       if (err.response.status === 409)
         Alert.error('Un joueur ou plus sont déjà dans un match',
           3000);

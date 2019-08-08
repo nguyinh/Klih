@@ -24,16 +24,54 @@ module.exports = (() => {
             publisher: req.decoded._id
           }
         ]
-      }).exec();
+      }).populate('player1 player2 player3 player4').exec();
 
       if (currentMatch) { // match is being played
+        const {
+          _id,
+          player1,
+          player2,
+          player3,
+          player4
+        } = currentMatch;
 
-        return res.status(200).send(currentMatch);
-        // on front, send match state
+        const respMatch = {
+          _id,
+          player1: player1 ? {
+            firstName: player1.firstName,
+            lastName: player1.lastName,
+            score: player1.score,
+            image: player1.avatar,
+            _id: player1._id
+          } : undefined,
+          player2: player2 ? {
+            firstName: player2.firstName,
+            lastName: player2.lastName,
+            score: player2.score,
+            image: player2.avatar,
+            _id: player2._id
+          } : undefined,
+          player3: player3 ? {
+            firstName: player3.firstName,
+            lastName: player3.lastName,
+            score: player3.score,
+            image: player3.avatar,
+            _id: player3._id
+          } : undefined,
+          player4: player4 ? {
+            firstName: player4.firstName,
+            lastName: player4.lastName,
+            score: player4.score,
+            image: player4.avatar,
+            _id: player4._id
+          } : undefined,
+        }
+
+        // Send players info
+        return res.status(200).send(respMatch);
+        // Then socket will send match state
       } else {
-        // console.log('not found');
         return res.status(404).send({error: 'NOT_FOUND'});
-        // on front, keep going
       }
     } catch (err) {
       logger.error(err);

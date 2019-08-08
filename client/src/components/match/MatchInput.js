@@ -414,11 +414,11 @@ class MatchInput extends PureComponent {
       this.state.saveInProgress)
       return;
 
-    const getPlayer = ({ data, firstName, placement }) => {
+    const getPlayer = ({ _id, firstName, placement }) => {
       return {
-        _id: data._id,
+        _id,
         fullName: firstName,
-        placement: placement
+        placement
       };
     };
     const selectedPlayer = getPlayer([P1, P2, P3, P4].filter(player => player.isSelected)[0]);
@@ -505,7 +505,7 @@ class MatchInput extends PureComponent {
 
 
   render() {
-    const { P1, P2, P3, P4, placement } = this.state;
+    const { P1, P2, P3, P4 } = this.state;
 
     if (!P1._id && !P2._id && !P3._id && !P4._id)
       return <Redirect push to="/lobby" />;
