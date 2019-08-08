@@ -35,7 +35,7 @@ class WinStreak extends Component {
   
 
   render() {
-    const height = 130;
+    const height = this.state.winStreak !== 0 ? 130 : 100;
 
     return <div className='graph-container'>
       <ParentSize>
@@ -83,7 +83,7 @@ class WinStreak extends Component {
                     textAnchor="middle"
                     font-size="15px"
                     x={parent.width/2}
-                    y={height/2}
+                    y={height/2.1}
                     className='win-streak-text'
                   >
                     Pas de victoires
@@ -93,7 +93,7 @@ class WinStreak extends Component {
                     textAnchor="middle"
                     font-size="15px"
                     x={parent.width/2}
-                    y={height/1.5}
+                    y={height/1.4}
                     className='win-streak-text'
                   >
                     dernièrement 😅
