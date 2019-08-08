@@ -55,24 +55,16 @@ class BestOpponent extends Component {
                     height={height}
                     viewBox={vb}>
                     <Text
-                      fill="white"
-                      textAnchor="middle"
-                      font-size="14px"
-                      font-weight="500"
                       x={parent.width/2}
                       y={height/2.2}
-                      className='best-opponent-name'
+                      className='no-best-opponent'
                     >
                       Pas de meilleur
                     </Text>
                     <Text
-                      fill="white"
-                      textAnchor="middle"
-                      font-size="14px"
-                      font-weight="500"
                       x={parent.width/2}
                       y={height/1.5}
-                      className='best-opponent-name'
+                      className='no-best-opponent'
                     >
                       adversaire 🤷‍♂️
                     </Text>
@@ -91,10 +83,6 @@ class BestOpponent extends Component {
                     height={height}
                     viewBox={vb}>
                       <Text
-                        fill="white"
-                        textAnchor="middle"
-                        font-size="23px"
-                        font-weight="500"
                         x={parent.width/2}
                         y={height/2.25}
                         className='best-opponent-name'
@@ -102,22 +90,16 @@ class BestOpponent extends Component {
                         {this.state.bestOpponents[0].firstName}
                       </Text>
                       <Text
-                        fill="white"
-                        textAnchor="middle"
-                        font-size="19px"
                         x={parent.width/2}
                         y={height/1.2}
-                        className='best-opponent-text'
+                        className='best-opponent-text-solo-1'
                       >
                         Meilleur adversaire
                       </Text>
                       <Text
-                        fill="white"
-                        textAnchor="middle"
-                        font-size="16px"
                         x={parent.width/2}
                         y={height/0.9}
-                        className='best-opponent-text'
+                        className='best-opponent-text-solo-2'
                       >
                         {`avec ${this.state.bestOpponents[0].matchesLoss} défaites 💥 `} 
                       </Text>
@@ -146,22 +128,16 @@ class BestOpponent extends Component {
                     height={height}
                     viewBox={vb}>
                       <Text
-                        fill="white"
-                        textAnchor="middle"
-                        font-size="23px"
                         x={parent.width/2}
                         y={height/1.4}
-                        className='best-opponent-text'
+                        className='best-opponent-text-multi-1'
                       >
                         Meilleurs adversaires
                       </Text>
                       <Text
-                        fill="white"
-                        textAnchor="middle"
-                        font-size="21px"
                         x={parent.width/2}
                         y={height/0.75}
-                        className='best-opponent-text'
+                        className='best-opponent-text-multi-2'
                       >
                         {`avec ${this.state.bestOpponents[0].matchesLoss} défaites 💥 `} 
                       </Text>

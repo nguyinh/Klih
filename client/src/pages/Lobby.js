@@ -87,6 +87,8 @@ class Lobby extends Component {
 
       const response = await axios.get('/api/playingMatch', {});
 
+      // TODO: get players with .populate() from MongoDB request
+
       if (response.data.player1) {
         const resP1 = await axios.get('/api/players/' + response.data.player1, {});
         this.props.setP1({
@@ -169,12 +171,14 @@ class Lobby extends Component {
   }
 
   // DEBUG
-  async componentWillReceiveProps(nextProps) {
-    if (nextProps.currentUser._id && !this.props.currentUser._id) {
-      const players = await axios('/api/team/getAllPlayers', {});
-      this.setState({ playersData: players.data });
-    }
-  }
+  // async componentWillReceiveProps(nextProps) {
+  //   console.log('received props');
+  //   if (nextProps.currentUser._id && !this.props.currentUser._id) {
+  //     console.log('what for ?');
+  //     const players = await axios('/api/team/getAllPlayers', {});
+  //     this.setState({ playersData: players.data });
+  //   }
+  // }
   // DEBUG END
 
   player1Click = () => {
@@ -235,7 +239,6 @@ class Lobby extends Component {
   }
 
   beginMatch = async () => {
-    // TODO: transition logic between lobby and match HERE
     if (this.state.beginMatchLoading)
       return;
 

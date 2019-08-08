@@ -55,24 +55,16 @@ class BestTeammate extends Component {
                     height={height}
                     viewBox={vb}>
                     <Text
-                      fill="white"
-                      textAnchor="middle"
-                      font-size="14px"
-                      font-weight="500"
                       x={parent.width/2}
                       y={height/2.2}
-                      className='best-teammate-name'
+                      className='no-best-teammate'
                     >
                       Pas de meilleur
                     </Text>
                     <Text
-                      fill="white"
-                      textAnchor="middle"
-                      font-size="14px"
-                      font-weight="500"
                       x={parent.width/2}
                       y={height/1.5}
-                      className='best-teammate-name'
+                      className='no-best-teammate'
                     >
                       partenaire 🤷‍
                     </Text>
@@ -91,10 +83,6 @@ class BestTeammate extends Component {
                     height={height}
                     viewBox={vb}>
                       <Text
-                        fill="white"
-                        textAnchor="middle"
-                        font-size="23px"
-                        font-weight="500"
                         x={parent.width/2}
                         y={height/2.25}
                         className='best-teammate-name'
@@ -102,22 +90,16 @@ class BestTeammate extends Component {
                         {this.state.bestTeammates[0].firstName}
                       </Text>
                       <Text
-                        fill="white"
-                        textAnchor="middle"
-                        font-size="19px"
                         x={parent.width/2}
                         y={height/1.2}
-                        className='best-teammate-text'
+                        className='best-teammate-text-solo-1'
                       >
                         Meilleur partenaire
                       </Text>
                       <Text
-                        fill="white"
-                        textAnchor="middle"
-                        font-size="16px"
                         x={parent.width/2}
                         y={height/0.9}
-                        className='best-teammate-text'
+                        className='best-teammate-text-solo-2'
                       >
                         {`avec ${this.state.bestTeammates[0].matchesWon} victoires 🤝`} 
                       </Text>
@@ -146,22 +128,16 @@ class BestTeammate extends Component {
                     height={height}
                     viewBox={vb}>
                       <Text
-                        fill="white"
-                        textAnchor="middle"
-                        font-size="23px"
                         x={parent.width/2}
                         y={height/1.4}
-                        className='best-teammate-text'
+                        className='best-teammate-text-multi-1'
                       >
                         Meilleurs partenaires
                       </Text>
                       <Text
-                        fill="white"
-                        textAnchor="middle"
-                        font-size="21px"
                         x={parent.width/2}
                         y={height/0.75}
-                        className='best-teammate-text'
+                        className='best-teammate-text-multi-2'
                       >
                         {`avec ${this.state.bestTeammates[0].matchesWon} victoires 🤝`} 
                       </Text>

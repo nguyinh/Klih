@@ -140,8 +140,6 @@ class GoalAnalysis extends Component {
                                     '#da52a1'}
                               />
                             <text
-                              fill="white"
-                              textAnchor="middle"
                               x={centroidX}
                               y={centroidY}
                               dy=".33em"

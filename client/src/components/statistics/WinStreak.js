@@ -60,20 +60,14 @@ class WinStreak extends Component {
                   { this.state.winStreak !== 0 ? 
                     <>
                       <Text
-                        fill="white"
-                        textAnchor="middle"
                         dy="0.5em"
-                        font-size="50px"
                         x={parent.width/2}
                         y={height/2}
-                        className='win-streak-text'
+                        className='win-streak-count'
                       >
                         {this.state.winStreak}
                       </Text>
                       <Text
-                        fill="white"
-                        textAnchor="middle"
-                        font-size="15px"
                         x={parent.width/2}
                         y={height/1.25}
                         className='win-streak-text'
@@ -86,22 +80,16 @@ class WinStreak extends Component {
                     </> :
                     <>
                       <Text
-                        fill="white"
-                        textAnchor="middle"
-                        font-size="15px"
                         x={parent.width/2}
                         y={height/2.1}
-                        className='win-streak-text'
+                        className='no-win-streak-text'
                       >
                         Pas de victoires
                       </Text>
                       <Text
-                        fill="white"
-                        textAnchor="middle"
-                        font-size="15px"
                         x={parent.width/2}
                         y={height/1.4}
-                        className='win-streak-text'
+                        className='no-win-streak-text'
                       >
                         dernièrement 😅
                       </Text>

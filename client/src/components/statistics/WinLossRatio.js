@@ -122,8 +122,6 @@ class WinLossRatio extends Component {
                                   '#f16262'
                               }/>
                               <text
-                                fill="white"
-                                textAnchor="middle"
                                 x={centroidX}
                                 y={centroidY}
                                 dy=".33em"
