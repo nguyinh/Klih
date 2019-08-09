@@ -12,7 +12,7 @@ module.exports = (() => {
   router.get('/winLossRatio', verifyJWT, async (req, res) => {
     let matchWins = 0;
     let matchLosses = 0;
-    let matchCount = 0;
+  
     try {
       const matchs = await Match.find({
         $or: [
@@ -28,8 +28,9 @@ module.exports = (() => {
         ]
       });
 
+      const matchCount = matchs.length;
+
       matchs.forEach(m => {
-        matchCount++;
         if (m.player1 == req.decoded._id || m.player2 == req.decoded._id) {
           if (m.score1 > m.score2) 
             matchWins++;
@@ -44,7 +45,7 @@ module.exports = (() => {
           }
         });
 
-      return res.status(200).send({wins: matchWins, losses: matchLosses, matchCount: matchCount});
+      return res.status(200).send({wins: matchWins, losses: matchLosses, matchCount});
     } catch (err) {
       logger.error(err);
       return res.status(500).send({error: 'INTERNAL_SERVER_ERROR'});
@@ -204,119 +205,7 @@ module.exports = (() => {
       return res.status(500).send({error: 'INTERNAL_SERVER_ERROR'});
     }
   });
-
-  // router.get('/goalsCount', verifyJWT, async (req, res) => {
-  //   try {
-  //     const playerId = req.decoded._id;
-  //     const matchs = await Match.find({
-  //       $or: [
-  //         {
-  //           player1: playerId
-  //         }, {
-  //           player2: playerId
-  //         }, {
-  //           player3: playerId
-  //         }, {
-  //           player4: playerId
-  //         }
-  //       ]
-  //     });
-  //
-  //     let goalCount = 0;
-  //     let minusCount = 0;
-  //     let betrayCount = 0;
-  //
-  //     matchs.forEach(m => {
-  //       m.history.forEach(g => {
-  //         if (g.byPlayer == playerId) {
-  //           if (g.isBetray)
-  //             betrayCount++;
-  //           else {
-  //             if (g.deltaScore > 0)
-  //               goalCount++;
-  //             else
-  //               minusCount++;
-  //             }
-  //           }
-  //       });
-  //     });
-  //
-  //     return res.status(200).send({goalCount, minusCount, betrayCount});
-  //   } catch (err) {
-  //     logger.error(err);
-  //     return res.status(500).send({error: 'INTERNAL_SERVER_ERROR'});
-  //   }
-  // });
-
-  // router.get('/goalsCountByPlacement', verifyJWT, async (req, res) => {
-  //   try {
-  //     const playerId = req.decoded._id;
-  //     const matchs = await Match.find({
-  //       $or: [
-  //         {
-  //           player1: playerId
-  //         }, {
-  //           player2: playerId
-  //         }, {
-  //           player3: playerId
-  //         }, {
-  //           player4: playerId
-  //         }
-  //       ]
-  //     });
-
-  //     let attackCount = {
-  //       goalAverage: 0,
-  //       minusAverage: 0,
-  //       betrayAverage: 0,
-  //       goalcount: 0
-  //     };
-
-  //     let defenseCount = {
-  //       goalAverage: 0,
-  //       minusAverage: 0,
-  //       betrayAverage: 0,
-  //       goalcount: 0
-  //     };
-
-  //     matchs.forEach(m => {
-  //       m.history.forEach(g => {
-  //         if (g.byPlayer == playerId) {
-  //           if (g.placement === 'A') {
-  //             attackCount.goalcount++;
-  //             if (g.isBetray) 
-  //               attackCount.betrayAverage++;
-  //             else {
-  //               if (g.deltaScore > 0) 
-  //                 attackCount.goalAverage++;
-  //               else 
-  //                 attackCount.minusAverage++;
-  //               }
-  //             } else if (g.placement === 'D') {
-  //             defenseCount.goalcount++;
-  //             if (g.isBetray) 
-  //               defenseCount.betrayAverage++;
-  //             else {
-  //               if (g.deltaScore > 0) 
-  //                 defenseCount.goalAverage++;
-  //               else 
-  //                 defenseCount.minusAverage++;
-  //               }
-  //             }
-  //         }
-  //       });
-  //     });
-
-  //     // goalAverage /= matchCount;
-  //     // minusAverage /= matchCount;
-  //     // betrayAverage /= matchCount;
-
-  //     return res.status(200).send({attackCount, defenseCount});
-  //   } catch (err) {
-  //     logger.error(err);
-  //     return res.status(500).send({error: 'INTERNAL_SERVER_ERROR'});
-  //   }
-  // });
+  
 
   router.get('/DEBUGRENAMEPLACEMENT', verifyJWT, async (req, res) => {
     try {
@@ -391,55 +280,6 @@ module.exports = (() => {
   });
 
 
-  // router.get('/placementAveragePerMatch', verifyJWT, async (req, res) => {
-  //   try {
-  //     const playerId = req.decoded._id;
-  //     const matchs = await Match.find({
-  //       $or: [
-  //         {
-  //           player1: playerId
-  //         }, {
-  //           player2: playerId
-  //         }, {
-  //           player3: playerId
-  //         }, {
-  //           player4: playerId
-  //         }
-  //       ]
-  //     });
-
-  //     let attackCount = 0;
-  //     let defenseCount = 0;
-  //     let unknownCount = 0;
-  //     let matchCount = 0;
-
-  //     matchs.forEach(m => {
-  //       matchCount++;
-  //       m.history.filter(g => g.byPlayer == req.decoded._id)
-  //         .forEach(g => {
-  //           if (g.placement === 'A') 
-  //             attackCount++;
-  //           else if (g.placement === 'D') 
-  //             defenseCount++;
-  //           else 
-  //             unknownCount++;
-  //         }
-  //       );
-  //     });
-
-  //     return res.status(200).send({
-  //       attackCount,
-  //       defenseCount,
-  //       unknownCount,
-  //       matchCount
-  //     });
-  //   } catch (err) {
-  //     logger.error(err);
-  //     return res.status(500).send({error: 'INTERNAL_SERVER_ERROR'});
-  //   }
-  // });
-
-
   router.get('/winStreak', verifyJWT, async (req, res) => {
     try {
       const playerId = req.decoded._id;
@@ -505,42 +345,12 @@ module.exports = (() => {
 
       let opp = [];
       // Check if current player have specific id
-      const isPlayer = (p => p && p._id == playerId);
+      const isPlayer = p => (p && p._id == playerId);
       // Check if two players id are equal
-      const isSame = ((a, b) => a._id.toString() === b._id.toString());
+      const isSame = (a, b) => (a._id.toString() === b._id.toString());
 
       matchs.forEach(({player1: P1, player2: P2, player3: P3, player4: P4, score1, score2}) => {
         const [team1win, team2win] = [score1 > score2, score1 < score2];
-        // if ((
-        //   isPlayer(P1) || isPlayer(P2))
-        //   && team2win)
-        // {
-        //   if (P3) {
-        //     const i = opp.findIndex(o => isSame(o, P3));
-        //     if (i !== -1) opp[i].count += 1;
-        //     else  opp = [ ...opp, { _id: P3._id, count: 1} ];
-        //   }
-        //   if (P4) {
-        //     const i = opp.findIndex(o => isSame(o, P4));
-        //     if (i !== -1) opp[i].count += 1;
-        //     else  opp = [ ...opp, { _id: P4._id, count: 1} ];
-        //   }
-        // } 
-        // else if ((
-        //   isPlayer(P3) || isPlayer(P4))
-        //   && team1win)
-        // {
-        //   if (P1) {
-        //     const i = opp.findIndex(o => isSame(o, P1));
-        //     if (i !== -1) opp[i].count += 1;
-        //     else  opp = [ ...opp, { _id: P1._id, count: 1} ];
-        //   }
-        //   if (P2) {
-        //     const i = opp.findIndex(o => isSame(o, P2));
-        //     if (i !== -1) opp[i].count += 1;
-        //     else  opp = [ ...opp, { _id: P2._id, count: 1} ];
-        //   }
-        // }
 
         if ((isPlayer(P1) || isPlayer(P2)) && team2win && P3) {
           const i = opp.findIndex(m => isSame(m, P3));
@@ -610,9 +420,9 @@ module.exports = (() => {
 
       let mate = [];
       // Check if current player have specific id
-      const isPlayer = (p => p && p._id == playerId);
+      const isPlayer = p => (p && p._id == playerId);
       // Check if two players id are equal
-      const isSame = ((a, b) => a._id.toString() === b._id.toString());
+      const isSame = (a, b) => (a._id.toString() === b._id.toString());
 
       matchs.forEach(({player1: P1, player2: P2, player3: P3, player4: P4, score1, score2}) => {
         const [team1win, team2win] = [score1 > score2, score1 < score2];
@@ -659,6 +469,119 @@ module.exports = (() => {
       }));
 
       return res.status(200).send(bestTeammates);
+    } catch (err) {
+      logger.error(err);
+      return res.status(500).send({error: 'INTERNAL_SERVER_ERROR'});
+    }
+  });
+
+
+  router.get('/weekSummary', verifyJWT, async (req, res) => {
+    try {
+      const playerId = req.decoded._id;
+      const limitPastDate = new Date();
+      const limitActualDate = new Date();
+      const weekdays = [
+        {
+          abrev: 'D',
+          fullname: 'Dimanche'
+        },
+        {
+          abrev: 'L',
+          fullname: 'Lundi'
+        },
+        {
+          abrev: 'M',
+          fullname: 'Mardi'
+        },
+        {
+          abrev: 'M',
+          fullname: 'Mercredi'
+        },
+        {
+          abrev: 'J',
+          fullname: 'Jeudi'
+        },
+        {
+          abrev: 'V',
+          fullname: 'Vendredi'
+        },
+        {
+          abrev: 'S',
+          fullname: 'Samedi'
+        }
+      ];
+      
+      const DAYS_BEFORE = 7;
+      // Set limit date to one week ago
+      limitPastDate.setDate(limitPastDate.getDate() - DAYS_BEFORE);
+      // Set dates to midnight
+      limitPastDate.setHours(0, 0, 0, 0);
+      limitActualDate.setHours(0, 0, 0, 0);
+      
+      const matchs = await Match.find({
+        $and: [
+          {
+            createdAt: { $gt: limitPastDate, $lt: limitActualDate }
+          },
+          {
+            $or: [
+              {
+                player1: playerId
+              }, {
+                player2: playerId
+              }, {
+                player3: playerId
+              }, {
+                player4: playerId
+              }
+            ]
+          }
+        ]
+      });
+
+      let weekSummary = [];
+
+      const isSameDay = (d1, d2) => (
+        d1.getFullYear() === d2.getFullYear() &&
+        d1.getMonth() === d2.getMonth() &&
+        d1.getDate() === d2.getDate()
+      );
+
+      const isPlayer = p => (p && p._id == playerId);
+
+      const isMatchWon = ({player1: P1, player2: P2, player3: P3, player4: P4, score1, score2}) => {
+        const [team1win, team2win] = [score1 > score2, score1 < score2];
+        return (
+          (isPlayer(P1) || isPlayer(P2)) && team1win) || (
+          (isPlayer(P3) || isPlayer(P4)) && team2win
+        );
+      }
+
+      limitActualDate.setDate(limitActualDate.getDate() - 1);
+
+      // For each day
+      for (let d = limitActualDate; d >= limitPastDate; d.setDate(d.getDate() - 1)) {
+        let dayMatchs = matchs.filter(m => isSameDay(m.createdAt, d));
+
+        let wins = 0;
+        let losses = 0;
+        dayMatchs.forEach(m => {
+          wins += (isMatchWon(m) ? 1 : 0);
+          losses += (!isMatchWon(m) ? 1 : 0);
+        });
+
+        weekSummary = [ 
+          ...weekSummary, 
+          {
+            wins,
+            losses,
+            day: weekdays[d.getDay()].fullname
+          }
+        ];
+      }
+
+      return res.status(200).send(weekSummary.reverse());
     } catch (err) {
       logger.error(err);
       return res.status(500).send({error: 'INTERNAL_SERVER_ERROR'});
