@@ -10,8 +10,9 @@ module.exports = (() => {
   const router = express.Router()
 
   router.get('/winLossRatio', verifyJWT, async (req, res) => {
-    let matchWins = 0;
-    let matchLosses = 0;
+    let wins = 0;
+    let losses = 0;
+    const playerId = req.decoded._id;
   
     try {
       const matchs = await Match.find({
@@ -30,22 +31,24 @@ module.exports = (() => {
 
       const matchCount = matchs.length;
 
-      matchs.forEach(m => {
-        if (m.player1 == req.decoded._id || m.player2 == req.decoded._id) {
-          if (m.score1 > m.score2) 
-            matchWins++;
-          else if (m.score1 < m.score2) 
-            matchLosses++;
-          }
-        else if (m.player3 == req.decoded._id || m.player4 == req.decoded._id) {
-          if (m.score2 > m.score1) 
-            matchWins++;
-          else if (m.score2 < m.score1) 
-            matchLosses++;
-          }
-        });
+      const isPlayer = p => (p && p._id == playerId);
 
-      return res.status(200).send({wins: matchWins, losses: matchLosses, matchCount});
+      matchs.forEach(({player1: P1, player2: P2, player3: P3, player4: P4, score1, score2}) => {
+        const [team1win, team2win] = [score1 > score2, score1 < score2];
+
+        if ((
+          (isPlayer(P1) || isPlayer(P2)) && team1win) || (
+          (isPlayer(P3) || isPlayer(P4)) && team2win)
+        )
+          wins++;
+        else if ((
+          (isPlayer(P1) || isPlayer(P2)) && team2win) || (
+          (isPlayer(P3) || isPlayer(P4)) && team1win)
+        )
+          losses++;
+      });
+
+      return res.status(200).send({wins, losses, matchCount});
     } catch (err) {
       logger.error(err);
       return res.status(500).send({error: 'INTERNAL_SERVER_ERROR'});
@@ -88,11 +91,10 @@ module.exports = (() => {
           betrayCount: 0,
           goalTotal: 0
         },
-        matchTotal: 0
+        matchTotal: matchs.length
       };
 
       matchs.forEach(m => {
-        r.matchTotal++;
         m.history.forEach(g => {
           if (g.byPlayer == playerId) {
             switch (g.placement) {
@@ -167,10 +169,9 @@ module.exports = (() => {
       let minusAverage = 0;
       let betrayAverage = 0;
       let goalTotal = 0;
-      let matchCount = 0;
+      let matchCount = matchs.length;
 
       matchs.forEach(m => {
-        matchCount++;
         m.history.forEach(g => {
           if (g.byPlayer == playerId) {
             goalTotal++;
@@ -300,16 +301,17 @@ module.exports = (() => {
       let winStreak = 0;
       let matchCount = matchs.length;
 
+      const isPlayer = p => (p && p._id == playerId);
+      
       matchs.reverse()
-        .some(m => {
-          if ((m.player1 && m.player1._id == playerId || 
-            m.player2 && m.player2._id == playerId) &&
-            m.score1 > m.score2) {
+        // .some(m => {
+        .some(({player1: P1, player2: P2, player3: P3, player4: P4, score1, score2}) => {
+          const [team1win, team2win] = [score1 > score2, score1 < score2];
+
+          if ((isPlayer(P1) || isPlayer(P2)) && team1win) {
             winStreak++;
             return false;
-          } else if ((m.player3 && m.player3._id == playerId ||
-            m.player4 && m.player4._id == playerId) &&
-            m.score1 < m.score2) {
+          } else if ((isPlayer(P3) || isPlayer(P4)) && team2win) {
             winStreak++;
             return false;
           }
