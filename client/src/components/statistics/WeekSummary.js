@@ -142,9 +142,11 @@ class WeekSummary extends Component {
 
               const daysCount = weekSummary.length;
 
+              // Letting 1 as 'minimal' maximum to avoid scale problems
               const maxCount = Math.max(
                 ...weekSummary.map(d => d.wins),
-                ...weekSummary.map(d => d.losses)
+                ...weekSummary.map(d => d.losses),
+                1
               );
 
               const countScale = scaleLinear({
