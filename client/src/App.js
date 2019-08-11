@@ -110,7 +110,7 @@ class App extends Component {
 
         <Route path="/match" component={Match}/>
 
-        {/*<Route path="/history" component={History}/>*/}
+        <Route path="/history" component={Monitor}/>
 
         <Route path="/statistics" component={Statistics}/>
 

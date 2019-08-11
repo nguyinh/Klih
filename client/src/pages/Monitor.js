@@ -10,7 +10,12 @@ class Monitor extends Component {
   }
 
   render() {
-    return <div></div>
+    return <div className='WIP'>
+      <img 
+        src='https://netsuiteblogs.curiousrubik.com/hubfs/WIP.png' 
+        alt='WIP' 
+        className='WIP-image'/>
+    </div>
   }
 }
 export default withRouter(connect(null, null)(Monitor));
