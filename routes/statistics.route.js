@@ -578,7 +578,7 @@ module.exports = (() => {
           {
             wins,
             losses,
-            day: weekdays[d.getDay()].fullname
+            day: weekdays[d.getDay()].abrev
           }
         ];
       }

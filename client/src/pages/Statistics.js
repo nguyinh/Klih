@@ -13,7 +13,8 @@ import {
   GoalAnalysis,
   WinStreak,
   BestOpponent,
-  BestTeammate
+  BestTeammate,
+  WeekSummary
 } from '../components/statistics';
 
 
@@ -26,8 +27,14 @@ class Statistics extends Component {
 
   render() {
 
-    return <Grid>
+    return <Grid className='statistics-page'>
       <Row>
+      <Col xs={22} xsOffset={1}>
+          <Row className='statistics-container'>
+            <WeekSummary/>
+          </Row>
+        </Col>
+
         <Col xs={10} xsOffset={1}>
           <Row className='statistics-container'>
             <WinLossRatio/>
@@ -51,6 +58,8 @@ class Statistics extends Component {
             <BestOpponent/>
           </Row>
         </Col>
+
+        
       </Row>
     </Grid>
   }

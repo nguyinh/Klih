@@ -1,0 +1,29 @@
+.histogram-container {
+  margin-top: 5px;
+}
+
+.week-summary-legend {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding-right: 0%;
+  padding-bottom: 15px;
+  color: #ffffff;
+}
+
+.wins-histogram {
+  fill: #3fab3f;
+}
+
+.losses-histogram {
+  fill: #f16262;
+}
+
+.baseline-histogram {
+  fill: #6d6d6d;
+}
+
+// .day-label {
+
+// }
