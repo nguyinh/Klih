@@ -53,7 +53,6 @@
     .goalEventContainer {
       margin-top: 3px;
       position: relative;
-      overflow: hidden;
       max-height: 50px;
     }
 
@@ -71,10 +70,9 @@
         position: absolute;
         width: 110%;
         color: white;
-        height: 110%;
+        height: 100%;
         text-align: center;
-        background: red;
-        top: -1px;
+        background: #ff3e3e;
         border-radius: 20px;
         box-shadow: 0px 0px 8px -2px #4e4e4e;
 
