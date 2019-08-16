@@ -199,12 +199,6 @@ class MatchInput extends PureComponent {
     }
   }
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   console.log(this.state);
-  //   console.log(nextState);
-  //   return this.state !== nextState;
-  // }
-
   componentWillUnmount() {
     socket.off('onConnectedPlayersChange');
     socket.off('placementChange');

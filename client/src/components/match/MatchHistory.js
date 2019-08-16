@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import './MatchHistory.scss';
 import { 
   HistoryEntryRight,
-  HistoryEntryLeft 
+  HistoryEntryLeft ,
+  HistoryEntry
 } from './';
 import { withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
@@ -27,8 +28,7 @@ class MatchHistory extends Component {
     this.state = {
       score1: props.score1 || 0,
       score2: props.score2 || 0,
-      team1History: [],
-      team2History: [],
+      goalHistory: [],
       imageP1: props.imageP1,
       imageP2: props.imageP2,
       imageP3: props.imageP3,
@@ -52,8 +52,7 @@ class MatchHistory extends Component {
       this.setState({
         score1: data.score1,
         score2: data.score2,
-        team1History: data.history.filter(h => h.team === 'Team1').reverse(),
-        team2History: data.history.filter(h => h.team === 'Team2').reverse()
+        goalHistory: data.history.reverse(),
       });
     });
 
@@ -61,8 +60,7 @@ class MatchHistory extends Component {
       this.setState({
         score1: data.score1,
         score2: data.score2,
-        team1History: data.history.filter(h => h.team === 'Team1').reverse(),
-        team2History: data.history.filter(h => h.team === 'Team2').reverse(),
+        goalHistory: data.history.reverse(),
         createdAt: Date.parse(data.createdAt)
       });
 
@@ -120,6 +118,8 @@ class MatchHistory extends Component {
 
 
   render() {
+    const { goalHistory } = this.state;
+
     return <Grid className='matchHistoryContainer'>
       <Row>
         <Col
@@ -184,41 +184,35 @@ class MatchHistory extends Component {
       </Row>
 
       <Row className='history'>
-        <Col
-          xs={12}
-          className='team1History'>
-            {
-              this.state.team1History.map((goal, i) => {
-                return <HistoryEntryLeft
-                          index={goal.index}
-                          goalTime={goal.goalTime}
-                          deltaScore={goal.deltaScore}
-                          fullName={goal.fullName}
-                          currentMatchId={this.props.currentMatchId}
-                          currentUserId={this.props.currentUser._id}
-                          key={goal.index}
-                          openRemoveConfirmation={this.openRemoveConfirmation}
-                          removeGoalEvent={this.removeGoalEvent}/>;
-              })
-            }
-        </Col>
+        <div>
+          <div className='time-line'/>
+        </div>
 
         <Col
-          xs={12}
-          className='team2History'>
+          xs={24}
+          className='goal-history'>
             {
-              this.state.team2History.map((goal, i) => {
-                return <HistoryEntryRight
-                          index={goal.index}
-                          goalTime={goal.goalTime}
-                          deltaScore={goal.deltaScore}
-                          fullName={goal.fullName}
-                          currentMatchId={this.props.currentMatchId}
-                          currentUserId={this.props.currentUser._id}
-                          key={goal.index}
-                          openRemoveConfirmation={this.openRemoveConfirmation}
-                          removeGoalEvent={this.removeGoalEvent}/>;
-              })
+              goalHistory.map((goal, i) => (
+                <HistoryEntry
+                  index={goal.index}
+                  goalTime={
+                    i === goalHistory.length-1 || (
+                      (i+1) < goalHistory.length &&
+                      goalHistory[i+1].goalTime !== goal.goalTime
+                    ) ? 
+                      goal.goalTime :
+                      ''
+                  }
+                  deltaScore={goal.deltaScore}
+                  team={goal.team}
+                  fullName={goal.fullName}
+                  currentMatchId={this.props.currentMatchId}
+                  currentUserId={this.props.currentUser._id}
+                  key={goal.index}
+                  openRemoveConfirmation={this.openRemoveConfirmation}
+                  removeGoalEvent={this.removeGoalEvent}
+                  toLoad={true}/>
+              ))
             }
         </Col>
       </Row>

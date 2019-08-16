@@ -405,7 +405,8 @@ class Lobby extends Component {
                         <Button
                           block
                           className='roundButton violet'
-                          onClick={this.onRandomButtonTouch}>
+                          onClick={this.onRandomButtonTouch}
+                          disabled>
                           <Icon icon='random'/> Aléatoire
                         </Button>
                       </Col>

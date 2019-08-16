@@ -49,6 +49,14 @@
 
   .history {
     margin-top: 10px;
+    position: relative;
+
+    .time-line {
+      border-right: solid 1px #e2e2e2;
+      position: absolute;
+      height: 100%;
+      left: 50%;
+    }
 
     .goalEventContainer {
       margin-top: 3px;
@@ -65,7 +73,8 @@
     }
 
     .team1History,
-    .team2History {
+    .team2History,
+    .goal-history {
       .removeOverlay {
         position: absolute;
         width: 110%;
@@ -83,10 +92,12 @@
         &.right {
           transform-origin: right;
           right: 0;
+          text-align: left;
+          padding: 0% 15%;
           &.displayOverlay {
             visibility: visible;
             opacity: 1;
-            transform: translate(10%);
+            transform: translate(60%);
             transition: visibility 0s, opacity 0.3s, transform 0.3s ease-out;
           }
           &:not(.displayOverlay) {
@@ -99,10 +110,12 @@
         &.left {
           transform-origin: left;
           left: 0;
+          text-align: right;
+          padding: 0% 15%;
           &.displayOverlay {
             visibility: visible;
             opacity: 1;
-            transform: translate(-10%);
+            transform: translate(-60%);
             transition: visibility 0s, opacity 0.3s, transform 0.3s ease-out;
           }
           &:not(.displayOverlay) {
@@ -116,6 +129,10 @@
     }
 
     .goalTime {
+      // background: #f9f9f9;
+      // padding: 7px 0px;
+      background: radial-gradient(closest-side, #f9f9f9 50%, #f9f9f900);
+      padding: 11px 0px;
       color: #bdbdbd;
       font-family: sans-serif;
       font-weight: 1000;

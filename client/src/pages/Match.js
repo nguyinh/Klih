@@ -110,12 +110,6 @@ class Match extends Component {
     });
   }
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   console.log(this.props);
-  //   console.log(nextProps);
-  // return false;
-  // }
-
   componentWillUnmount() {
     socket.off('reconnect');
   }

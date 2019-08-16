@@ -26,7 +26,7 @@ const matchEventScheme = mongoose.Schema({
     type: String
   },
   index: {
-    type: String
+    type: Number
   }
 });
 

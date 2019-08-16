@@ -161,6 +161,10 @@ module.exports = (io) => {
         if (match) {
           const removedGoalEvent = match.history.find((goal) => goal.index === data.index);
           match.history = match.history.filter((goal) => goal.index !== data.index);
+          match.history = match.history.map((g, i) => {
+            g.index += 1;
+            return g;
+          })
 
           match.score1 -= (
             ((removedGoalEvent.team === 'Team1' && removedGoalEvent.deltaScore > 0) || (removedGoalEvent.team === 'Team2' && removedGoalEvent.deltaScore < 0))
