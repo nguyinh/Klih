@@ -131,8 +131,7 @@ class Auth extends Component {
             xs={22}
             className='container'>
 
-
-            <Row>
+            <Row className='switch-log'>
               <Col xsOffset={1} xs={11}>
                 <Button
                   block={true}
@@ -158,31 +157,32 @@ class Auth extends Component {
               </Col>
             </Row>
 
-            <Row>
-              <Col xs={22} xsOffset={1}>
-                <FacebookLogin
-                  size='metro'
-                  appId={config.FACEBOOK_APP_ID}
-                  disableMobileRedirect={true}
-                  autoLoad={false} fields="name,email,picture"
-                  callback={this.facebookResponse}
-                  className='facebookLogin'
-                  icon="fa-facebook"
-                  textButton={str.SIGNIN + ' avec Facebook'}/>
-              </Col>
-            </Row>
+            <div className='auth-buttons'>
+              <Row>
+                <Col xs={22} xsOffset={1}>
+                  <FacebookLogin
+                    size='metro'
+                    appId={config.FACEBOOK_APP_ID}
+                    disableMobileRedirect={true}
+                    autoLoad={false} fields="name,email,picture"
+                    callback={this.facebookResponse}
+                    className='facebookLogin'
+                    icon="fa-facebook"
+                    textButton={str.SIGNIN + ' avec Facebook'}/>
+                </Col>
+              </Row>
 
-            <Row>
-              <Col xs={22} xsOffset={1}>
-                <GoogleLogin
-                  clientId={config.GOOGLE_CLIENT_ID}
-                  buttonText={str.SIGNIN + ' avec Google'}
-                  onSuccess={this.googleResponse}
-                  onFailure={this.googleResponse}
-                  className='googleLogin'/>
-              </Col>
-            </Row>
-
+              <Row>
+                <Col xs={22} xsOffset={1}>
+                  <GoogleLogin
+                    clientId={config.GOOGLE_CLIENT_ID}
+                    buttonText={str.SIGNIN + ' avec Google'}
+                    onSuccess={this.googleResponse}
+                    onFailure={this.googleResponse}
+                    className='googleLogin'/>
+                </Col>
+              </Row>
+            </div>
           </Col>
         </Row>
       </Grid>

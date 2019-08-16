@@ -4,13 +4,13 @@ import { withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
 import axios from 'axios';
 import {
-  Button,
   Form,
   FormGroup,
   FormControl,
 } from 'rsuite';
 import { setUserAuth, setUser } from '../../redux/actions/index.actions.js';
-import str from '../../constants/labels.constants.js'
+import str from '../../constants/labels.constants.js';
+import { Button } from '../common';
 
 const mapDispatchToProps = dispatch => {
   return ({
@@ -204,12 +204,10 @@ class Signup extends Component {
       </div>
       <FormGroup>
         <Button
-          appearance="primary"
-          block={true}
-          size="lg"
+          block
           onClick={this.signUpButton}
           disabled={this.state.buttonDisabled}
-          className='roundButton green'>
+          className='green'>
           {str.CREATE_ACCOUNT}
         </Button>
       </FormGroup>
