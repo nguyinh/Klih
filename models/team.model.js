@@ -12,7 +12,7 @@ const teamPlayerScheme = mongoose.Schema({
     type: Boolean,
     required: true
   },
-  playerId: {
+  player: {
     type: ObjectId,
     ref: 'Player',
     required: true

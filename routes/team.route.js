@@ -150,5 +150,34 @@ module.exports = (() => {
     }
   });
 
+  router.get('/team/getTeams', verifyJWT, async (req, res) => {
+    try {
+      // Get teams where logged Player is
+      const teams = await Team.find({"players.player": req.decoded._id}).populate('players.player').lean().exec();
+
+      const result = teams.map(t => {
+        // Avoid deleted players
+        // TODO: DELETE DELETED PLAYERS FROM TEAMS
+        t.players = t.players.filter(p => p.player !== null);
+        return {
+          ...t,
+          players: t.players.map(({player: {firstName, lastName, avatar}}) => (
+            {
+              firstName,
+              lastName,
+              avatar
+            }
+          ))
+        };
+      });
+
+      return res.status(200).send(result);
+
+    } catch (err) {
+      logger.error(err);
+      res.status(500).send({error: 'INTERNAL_SERVER_ERROR'});
+    }
+  });
+
   return router
 })()
