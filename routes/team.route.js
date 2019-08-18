@@ -34,7 +34,7 @@ module.exports = (() => {
         teamTag: tag,
         players: [
           {
-            playerId: player._id,
+            player: player._id,
             isAdmin: true,
             AddedAt: Date.now()
           }
@@ -75,7 +75,7 @@ module.exports = (() => {
   router.get('/teams', verifyJWT, async (req, res) => {
     try {
       // Get teams where logged Player is
-      let teams = await Team.find({"players.playerId": req.decoded._id}).lean().exec();
+      let teams = await Team.find({"players.player": req.decoded._id}).lean().exec();
       for (let i in teams) {
         teams[i] = {
           name: teams[i].name,
@@ -96,13 +96,13 @@ module.exports = (() => {
       else {
         // Check if Player is not already in Team
         team.players.map((teamPlayer) => {
-          if (teamPlayer.playerId == req.decoded._id) {
+          if (teamPlayer.player == req.decoded._id) {
             throw 'PLAYER_ALREADY_IN_TEAM';
           }
         })
 
         // Add Player to Team
-        team.players.push({playerId: req.decoded._id, isAdmin: false, AddedAt: Date.now()})
+        team.players.push({player: req.decoded._id, isAdmin: false, AddedAt: Date.now()})
 
         // Save Player in Team
         await team.save();
@@ -121,16 +121,16 @@ module.exports = (() => {
   router.get('/team/getAllPlayers', verifyJWT, async (req, res) => {
     try {
       // Get teams where logged Player is
-      const teamsObj = await Team.find({"players.playerId": req.decoded._id}).lean().exec();
+      const teamsObj = await Team.find({"players.player": req.decoded._id}).lean().exec();
 
-      const playerIds = new Set();
+      const players = new Set();
       const playerTest = {};
 
       for (const teamObj of teamsObj) {
         playerTest[teamObj.name] = [];
         for (const playerObj of teamObj.players) {
-          playerTest[teamObj.name].push(playerObj.playerId.toString());
-          playerIds.add(playerObj.playerId.toString());
+          playerTest[teamObj.name].push(playerObj.player.toString());
+          players.add(playerObj.player.toString());
         }
       }
 
