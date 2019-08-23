@@ -19,7 +19,8 @@ import { arrayBufferToBase64 } from '../utils';
 // import QRCode from 'qrcode.react';
 import { 
   Auth,
-  Team
+  Team,
+  TeamsContainer
 } from '../components/profile';
 import { Button } from '../components/common';
 
@@ -506,14 +507,20 @@ class Profile extends Component {
                     </Col>
                   </Row>
 
-                  <Row className='teamsContainer'>
+                  <Row>
+                    <Col xs={24}>
+                      <TeamsContainer/>
+                    </Col>
+                  </Row>
+
+                  {/* <Row className='teamsContainer'>
                     {this.state.teams.map((team) => {
                       return <Team
                         name={team.name}
                         tag={team.teamTag}
                         key={team.name + '-' + team.teamTag}/>;
                     })}
-                  </Row>
+                  </Row> */}
 
                   <hr/>
 

@@ -17,32 +17,15 @@ class Team extends Component {
     this.state = {
       name: props.name,
       tag: props.tag,
-      image: undefined
+      avatar: undefined
     }
   }
 
   render() {
-    return <Col xs={8}>
+    console.log(this.props)
+    return <Col xs={12}>
 
-      <Grid className='tagContainer'>
-        <Row>
-          <Col xs={24} className='nameContainer'>
-            <Button>
-              <h5>{this.state.name}</h5>
-            </Button>
-          </Col>
-      </Row>
-        <Row>
-          <Col xs={12} xsOffset={3}>
-            <span className='tagText'>TeamTag</span>
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={12} xsOffset={3}>
-            <span>{this.state.tag}</span>
-          </Col>
-        </Row>
-      </Grid>
+      
 
     </Col>
   }

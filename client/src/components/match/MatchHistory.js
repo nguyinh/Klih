@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import './MatchHistory.scss';
 import { 
-  HistoryEntryRight,
-  HistoryEntryLeft ,
   HistoryEntry
 } from './';
 import { withRouter } from "react-router-dom";
