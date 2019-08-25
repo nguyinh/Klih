@@ -1,7 +1,5 @@
 const express = require('express')
-const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
-const path = require('path');
 const Team = require('../models/team.model.js')
 const Player = require('../models/player.model.js')
 const multer = require('multer');
@@ -221,8 +219,6 @@ module.exports = (() => {
       })
 
       return res.status(200).send(team.avatar);
-      // return res.status(200).send(team);
-
     } catch (err) {
       logger.error(err);
       fs.unlink(req.file.path, (fsErr) => {

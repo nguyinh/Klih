@@ -8,9 +8,8 @@ import {
 } from 'rsuite';
 import { PlayerAvatar, TeamAvatar } from '../common';
 
-const Team = ({name, players, teamTag, createdAt, isAdmin, _id, avatar, teamImageUpload}) => {
+const Team = ({name, players, teamTag, createdAt, isUploading, isAdmin, _id, avatar, teamImageUpload}) => {
   let uploaderRef = React.createRef();
-  console.log(isAdmin);
 
   return <Col xs={12}>
     <div className='team-content'>
@@ -19,8 +18,8 @@ const Team = ({name, players, teamTag, createdAt, isAdmin, _id, avatar, teamImag
           
         </Col>
 
-        <Col xs={8} onClick={() => {isAdmin && uploaderRef.current.click()}}>
-          <TeamAvatar image={avatar} edit={isAdmin}/>
+        <Col xs={8} onClick={() => {isAdmin && uploaderRef.current.click()}}> 
+          <TeamAvatar image={avatar} edit={isAdmin} loading={isUploading}/>
           { 
             isAdmin &&
             <input
@@ -31,11 +30,10 @@ const Team = ({name, players, teamTag, createdAt, isAdmin, _id, avatar, teamImag
               style={{display: 'none'}}
               ref={uploaderRef}/>
           }
-          
         </Col>
 
         <Col xs={8} className='team-id-container'>
-          <span className='team-id-label'>TeamId</span>
+          <span className='team-id-label'>{name}</span>
           <div className='team-id'>{teamTag}</div>
         </Col>
       </Row>
@@ -51,9 +49,7 @@ const Team = ({name, players, teamTag, createdAt, isAdmin, _id, avatar, teamImag
   </Col>
 }
 
-const TeamsContainer = ({teams, createTeam, teamImageUpload, currentUser}) => {
-  console.log(currentUser);
-  
+const TeamsContainer = ({teams, createTeam, teamImageUpload}) => {
   return <>
   {
     teams.map((t, i) =>
@@ -70,7 +66,7 @@ const TeamsContainer = ({teams, createTeam, teamImageUpload, currentUser}) => {
     <div className='team-content add' onClick={createTeam}>
       <Row className='team-header-container'>
         <Col xsOffset={8} xs={8}>
-          <TeamAvatar className='test-test' adding/>
+          <TeamAvatar adding/>
         </Col>
       </Row>
     </div>

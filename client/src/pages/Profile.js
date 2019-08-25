@@ -19,7 +19,6 @@ import { arrayBufferToBase64 } from '../utils';
 // import QRCode from 'qrcode.react';
 import { 
   Auth,
-  Team,
   TeamsContainer
 } from '../components/profile';
 import { Button } from '../components/common';
@@ -140,7 +139,7 @@ class Profile extends Component {
   }
 
   // ----- Avatar upload -----
-  fileChangedHandler = async event => {
+  playerImageUploadHandler = async event => {
     this.setState({ imageUploading: true });
 
     // Format image file
@@ -165,28 +164,13 @@ class Profile extends Component {
     }
   }
 
-  // uploadHandler = async () => {
-  //   // Format image file
-  //   const formData = new FormData();
-  //   formData.append('myAvatar', this.state.selectedFile)
-  //   const config = {
-  //     headers: {
-  //       'content-type': 'multipart/form-data'
-  //     }
-  //   }
-
-  //   try {
-  //     const avatarResponse = await axios.post('api/profile/avatar', formData, config);
-  //     const base64Flag = 'data:image/jpeg;base64,';
-  //     const imageStr = arrayBufferToBase64(avatarResponse.data.data.data);
-  //     this.props.setAvatar(base64Flag + imageStr);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }
-
   teamImageUploadHandler = async (event, teamId) => {
-    // this.setState({ imageUploading: true });
+    this.setState(({teams}) => ({
+      teams: teams.map(t => ({
+        ...t,
+        isUploading: teamId === t._id ? true : false
+      }))
+    }));
 
     // Format image file
     const formData = new FormData();
@@ -198,15 +182,12 @@ class Profile extends Component {
     }
 
     try {
-      const avatarResponse = await axios.post('api/teams/avatar/?teamId=' + teamId, formData, config);
+      await axios.post('api/teams/avatar/?teamId=' + teamId, formData, config);
 
       this.fetchTeams();
     } catch (err) {
       console.log(err);
     }
-    // finally {
-    //   this.setState({ imageUploading: false });
-    // }
   }
 
 
@@ -283,17 +264,10 @@ class Profile extends Component {
           message: 'Vous avez créé l\'équipe ' + createResponse.data.team.name + ' 👌'
         }
       });
+
       this.fetchTeams();
-      // TODO: Update Profile Teams container
     } catch (err) {
       console.log(err.response);
-      // if (err.response.status === 409)
-      //   this.setState({
-      //     joinModal: {
-      //       ...this.state.joinModal,
-      //       errorMessage: '👍 Vous êtes déjà membre de cette équipe'
-      //     }
-      //   });
     } finally {
       this.setState({
         createModal: {
@@ -414,7 +388,6 @@ class Profile extends Component {
         }
       });
       this.fetchTeams();
-      // TODO: Update Profile Teams container
     } catch (err) {
       // console.log(err.response);
       if (err.response.status === 409)
@@ -501,7 +474,7 @@ class Profile extends Component {
                         type="file"
                         name="myAvatar"
                         accept="image/*"
-                        onChange={this.fileChangedHandler}
+                        onChange={this.playerImageUploadHandler}
                         style={{display: 'none'}}
                         ref={this.uploaderRef}
                         className='isUploading'/>
@@ -523,7 +496,6 @@ class Profile extends Component {
                     
                   </Row>
 
-                  {/* TODO: Add admin behavior */}
                   <Row>
                     <Col xs={24}>
                       <TeamsContainer

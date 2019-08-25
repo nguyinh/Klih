@@ -23,8 +23,12 @@ $AVATAR_INTERNAL_MARGIN: (100% - $AVATAR_LENGTH) / 2;
   left: 50%;
   transform: translate(-50%);
 
-  &.adding {
+  // &.adding {
     // box-shadow: none;
+  // }
+
+  &.loading {
+    background: #d2d2d2;
   }
 
   .edit-icon {
@@ -36,5 +40,9 @@ $AVATAR_INTERNAL_MARGIN: (100% - $AVATAR_LENGTH) / 2;
     border-radius: 20px;
     padding: 1px;
     border: solid 1px #ababab;
+  }
+
+  .team-image-spinner {
+    line-height: 2.1;
   }
 }
