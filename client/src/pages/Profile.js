@@ -80,7 +80,7 @@ class Profile extends Component {
   }
 
   componentDidMount() {
-    this.fetchUserTeams();
+    this.fetchTeams();
 
     // Save TeamTag from /join/:teamTag
     if (this.props.location.state) {
@@ -90,7 +90,7 @@ class Profile extends Component {
 
   async componentWillReceiveProps(nextProps) {
     if (nextProps.currentUser !== this.props.currentUser) {
-      this.fetchUserTeams();
+      this.fetchTeams();
 
       if (nextProps.currentUser && this.state.isJoining) {
         await this.setState({
@@ -128,9 +128,15 @@ class Profile extends Component {
     });
   }
 
-  fetchUserTeams = async () => {
-    const fetchResponse = await axios.get('/api/teams', {});
-    this.setState({ teams: fetchResponse.data.teams });
+  fetchTeams = async () => {
+    try {
+      const { data } = await axios.get('api/team/getTeams');
+
+      this.setState({ teams: data });
+    } catch (err) {
+      console.log(err);
+    }
+
   }
 
   // ----- Avatar upload -----
@@ -253,7 +259,7 @@ class Profile extends Component {
           message: 'Vous avez créé l\'équipe ' + createResponse.data.team.name + ' 👌'
         }
       });
-      this.fetchUserTeams();
+      this.fetchTeams();
       // TODO: Update Profile Teams container
     } catch (err) {
       console.log(err.response);
@@ -383,7 +389,7 @@ class Profile extends Component {
           searchedTeam: {}
         }
       });
-      this.fetchUserTeams();
+      this.fetchTeams();
       // TODO: Update Profile Teams container
     } catch (err) {
       // console.log(err.response);
@@ -414,6 +420,8 @@ class Profile extends Component {
         state: { teamTag: this.props.match.params.teamTag }
       }}/>;
     }
+
+    const { teams } = this.state;
 
     Object.size = (obj) => {
       let size = 0,
@@ -476,51 +484,28 @@ class Profile extends Component {
                     </Col>
                   </Row>
 
-                  <Row>
-
-                  </Row>
-
-                  <hr/>
-
-                  <Row className='teamButtons'>
-                    <Col xs={12}>
-                      <Button
-                        block
-                        onClick={this.openCreateTeamModal}
-                        className='green team-button'>Créer</Button>
-                    </Col>
-
-                    <Col xs={12}>
-                      <Button
-                        block
-                        onClick={this.openJoinTeamModal}
-                        className='blue team-button'>Rejoindre</Button>
-                    </Col>
-                  </Row>
-
-
                   <hr/>
 
                   <Row>
-                    <Col xs={24}>
+                    <Col xs={14}>
                       <h2>Vos équipes <span role="img" aria-label="Team">👥</span></h2>
                     </Col>
+                    
+                    <Col xs={10} className='join-button'>
+                      <Button
+                        onClick={this.openJoinTeamModal}
+                        className='blue team-button'><Icon icon="user-plus" /> Rejoindre</Button>
+                    </Col>
+                    
                   </Row>
 
                   <Row>
                     <Col xs={24}>
-                      <TeamsContainer/>
+                      <TeamsContainer
+                        teams={teams}
+                        createTeam={this.openCreateTeamModal}/>
                     </Col>
                   </Row>
-
-                  {/* <Row className='teamsContainer'>
-                    {this.state.teams.map((team) => {
-                      return <Team
-                        name={team.name}
-                        tag={team.teamTag}
-                        key={team.name + '-' + team.teamTag}/>;
-                    })}
-                  </Row> */}
 
                   <hr/>
 

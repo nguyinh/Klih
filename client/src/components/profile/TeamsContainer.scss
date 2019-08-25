@@ -5,7 +5,11 @@
   border-radius: 20px;
   padding: 0px 5px;
   text-align: center;
-  margin-top: 15%;
+  margin-top: 18%;
+
+  &.add {
+    background: linear-gradient(180deg, #eaeaea85 63% ,#eaeaea00);
+  }
 
   .team-image-background {
     transform: translate(-50%, 10%);

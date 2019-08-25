@@ -154,9 +154,7 @@ module.exports = (() => {
     try {
       // Get teams where logged Player is
       const teams = await Team.find({"players.player": req.decoded._id}).populate('players.player').exec();
-      // console.log(teams.json());
       const result = teams.map(t => {
-        console.log(t);
         // Avoid deleted players
         // TODO: DELETE DELETED PLAYERS FROM TEAMS
         t.players = t.players.filter(p => p.player !== null);

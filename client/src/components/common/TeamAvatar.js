@@ -2,20 +2,22 @@ import React from 'react';
 import './TeamAvatar.scss';
 import { arrayBufferToBase64 } from '../../utils';
 
-const TeamAvatar = (props) => {
+const TeamAvatar = ({image, adding}) => {
     // let className = `klih-button ${props.className}`;
     // if (props.block) {
     //     className += ' block';
     // }
 
-    return <div className='team-image-background'>
+    return <div className={'team-image-background' + (adding ? ' adding' : '')}>
         <img 
             src= {
-                !props.image ?
-                require('../../res/images/profile.png') :
-                'data:image/jpeg;base64,' + arrayBufferToBase64(props.image.data.data)
+                adding ? 
+                    require('../../res/images/plus.png') :
+                    !image ?
+                        require('../../res/images/profile.png') :
+                        'data:image/jpeg;base64,' + arrayBufferToBase64(image.data.data)
             }
-            className='team-avatar'
+            className={'team-avatar'}
             alt='Team avatar'/>
     </div>
 };

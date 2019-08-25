@@ -16,10 +16,14 @@ $AVATAR_INTERNAL_MARGIN: (100% - $AVATAR_LENGTH) / 2;
   border-radius: 5px;
   display: inline-block;
   vertical-align: middle;
-  border: solid 2px #dad8d8;
+  border: solid 2px #ababab;
   position: absolute;
   top: -20px;
-  box-shadow: 0 0 4px 2px #0000006b;
+  box-shadow: 0 0 4px 2px #9696966b;
   left: 50%;
   transform: translate(-50%);
+
+  &.adding {
+    // box-shadow: none;
+  }
 }
