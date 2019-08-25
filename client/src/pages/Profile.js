@@ -131,7 +131,7 @@ class Profile extends Component {
   fetchTeams = async () => {
     try {
       const { data } = await axios.get('api/team/getTeams');
-
+      console.log(data);
       this.setState({ teams: data });
     } catch (err) {
       console.log(err);
@@ -165,10 +165,32 @@ class Profile extends Component {
     }
   }
 
-  uploadHandler = async () => {
+  // uploadHandler = async () => {
+  //   // Format image file
+  //   const formData = new FormData();
+  //   formData.append('myAvatar', this.state.selectedFile)
+  //   const config = {
+  //     headers: {
+  //       'content-type': 'multipart/form-data'
+  //     }
+  //   }
+
+  //   try {
+  //     const avatarResponse = await axios.post('api/profile/avatar', formData, config);
+  //     const base64Flag = 'data:image/jpeg;base64,';
+  //     const imageStr = arrayBufferToBase64(avatarResponse.data.data.data);
+  //     this.props.setAvatar(base64Flag + imageStr);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }
+
+  teamImageUploadHandler = async (event, teamId) => {
+    // this.setState({ imageUploading: true });
+
     // Format image file
     const formData = new FormData();
-    formData.append('myAvatar', this.state.selectedFile)
+    formData.append('teamAvatar', event.target.files[0]);
     const config = {
       headers: {
         'content-type': 'multipart/form-data'
@@ -176,13 +198,15 @@ class Profile extends Component {
     }
 
     try {
-      const avatarResponse = await axios.post('api/profile/avatar', formData, config);
-      const base64Flag = 'data:image/jpeg;base64,';
-      const imageStr = arrayBufferToBase64(avatarResponse.data.data.data);
-      this.props.setAvatar(base64Flag + imageStr);
+      const avatarResponse = await axios.post('api/teams/avatar/?teamId=' + teamId, formData, config);
+
+      this.fetchTeams();
     } catch (err) {
       console.log(err);
     }
+    // finally {
+    //   this.setState({ imageUploading: false });
+    // }
   }
 
 
@@ -499,11 +523,13 @@ class Profile extends Component {
                     
                   </Row>
 
+                  {/* TODO: Add admin behavior */}
                   <Row>
                     <Col xs={24}>
                       <TeamsContainer
                         teams={teams}
-                        createTeam={this.openCreateTeamModal}/>
+                        createTeam={this.openCreateTeamModal}
+                        teamImageUpload={this.teamImageUploadHandler}/>
                     </Col>
                   </Row>
 

@@ -4,6 +4,15 @@ const mongoose = require('mongoose')
 const path = require('path');
 const Team = require('../models/team.model.js')
 const Player = require('../models/player.model.js')
+const multer = require('multer');
+const upload = multer({
+  limits: {
+    fileSize: 20000000
+  },
+  dest: './uploads/'
+});
+const fs = require('fs');
+const sharp = require('sharp');
 const {verifyJWT, logger} = require('../middlewares');
 
 require("dotenv").config()
@@ -160,17 +169,56 @@ module.exports = (() => {
         t.players = t.players.filter(p => p.player !== null);
         return {
           ...t.toObject(),
-          players: t.players.map(({player: {firstName, lastName, avatar}}) => (
+          players: t.players.map(({player: {firstName, lastName, avatar}}, isAdmin) => (
             {
               firstName,
               lastName,
-              avatar
+              avatar,
+              isAdmin
             }
           ))
         };
       });
 
       return res.status(200).send(result);
+
+    } catch (err) {
+      logger.error(err);
+      res.status(500).send({error: 'INTERNAL_SERVER_ERROR'});
+    }
+  });
+
+  router.post('/teams/avatar', verifyJWT, upload.single('teamAvatar'), async (req, res) => {
+    try {
+      const { teamId } = req.query;
+      //TODO: check if player is admin
+      if (!teamId)
+        return res.status(400).send({error: 'MISSING_PARAMETERS'});
+      if (!req.file)
+        return res.status(400).send({error: 'MISSING_FILE'})
+      
+
+      const team = await Team.findOne({_id: teamId}).exec();
+
+      if (team) {
+        const resizedImg = await sharp(req.file.path).resize(300, 300).toBuffer();
+        console.log('resizedImg',resizedImg);
+        console.log('\n');
+        team.avatar.data = Buffer.from(resizedImg.toString('base64'), 'base64');
+        console.log('team.avatar.data',team.avatar.data)
+        console.log('\n');
+        team.avatar.contentType = req.file.mimetype;
+        console.log('team.avatar',team.avatar);
+        console.log('\n');
+        await team.save();
+        fs.unlink(req.file.path, (err) => {
+          console.log(err);
+        })
+      }
+
+      console.log(team);
+      return res.status(200).send(team.avatar);
+      // return res.status(200).send(team);
 
     } catch (err) {
       logger.error(err);

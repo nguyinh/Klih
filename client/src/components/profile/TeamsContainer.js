@@ -8,8 +8,9 @@ import {
 } from 'rsuite';
 import { PlayerAvatar, TeamAvatar } from '../common';
 
-const Team = ({name, players, teamTag, createdAt, _id, avatar}) => {
-  console.log(name, players, teamTag, createdAt, _id);
+const Team = ({name, players, teamTag, createdAt, _id, avatar, teamImageUpload}) => {
+  let uploaderRef = React.createRef();
+
   return <Col xs={12}>
     <div className='team-content'>
       <Row className='team-header-container'>
@@ -17,8 +18,15 @@ const Team = ({name, players, teamTag, createdAt, _id, avatar}) => {
           
         </Col>
 
-        <Col xs={8}>
+        <Col xs={8} onClick={() => {uploaderRef.current.click()}}>
           <TeamAvatar image={avatar} className='test-test'/>
+          <input
+            type="file"
+            name="teamAvatar"
+            accept="image/*"
+            onChange={(evt) => {teamImageUpload(evt, _id)}}
+            style={{display: 'none'}}
+            ref={uploaderRef}/>
         </Col>
 
         <Col xs={8} className='team-id-container'>
@@ -38,10 +46,10 @@ const Team = ({name, players, teamTag, createdAt, _id, avatar}) => {
   </Col>
 }
 
-const TeamsContainer = ({teams, createTeam}) => {
+const TeamsContainer = ({teams, createTeam, teamImageUpload}) => {
   return <>
   {
-    teams.map((t, i) => <Team {...t} key={`team-${i}`}/>)
+    teams.map((t, i) => <Team {...t} key={`team-${i}`} teamImageUpload={teamImageUpload}/>)
   }
 
   <Col xs={12}>
