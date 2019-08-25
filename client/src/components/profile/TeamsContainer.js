@@ -8,8 +8,9 @@ import {
 } from 'rsuite';
 import { PlayerAvatar, TeamAvatar } from '../common';
 
-const Team = ({name, players, teamTag, createdAt, _id, avatar, teamImageUpload}) => {
+const Team = ({name, players, teamTag, createdAt, isAdmin, _id, avatar, teamImageUpload}) => {
   let uploaderRef = React.createRef();
+  console.log(isAdmin);
 
   return <Col xs={12}>
     <div className='team-content'>
@@ -18,15 +19,19 @@ const Team = ({name, players, teamTag, createdAt, _id, avatar, teamImageUpload})
           
         </Col>
 
-        <Col xs={8} onClick={() => {uploaderRef.current.click()}}>
-          <TeamAvatar image={avatar} className='test-test'/>
-          <input
-            type="file"
-            name="teamAvatar"
-            accept="image/*"
-            onChange={(evt) => {teamImageUpload(evt, _id)}}
-            style={{display: 'none'}}
-            ref={uploaderRef}/>
+        <Col xs={8} onClick={() => {isAdmin && uploaderRef.current.click()}}>
+          <TeamAvatar image={avatar} edit={isAdmin}/>
+          { 
+            isAdmin &&
+            <input
+              type="file"
+              name="teamAvatar"
+              accept="image/*"
+              onChange={(evt) => {teamImageUpload(evt, _id)}}
+              style={{display: 'none'}}
+              ref={uploaderRef}/>
+          }
+          
         </Col>
 
         <Col xs={8} className='team-id-container'>
@@ -46,10 +51,19 @@ const Team = ({name, players, teamTag, createdAt, _id, avatar, teamImageUpload})
   </Col>
 }
 
-const TeamsContainer = ({teams, createTeam, teamImageUpload}) => {
+const TeamsContainer = ({teams, createTeam, teamImageUpload, currentUser}) => {
+  console.log(currentUser);
+  
   return <>
   {
-    teams.map((t, i) => <Team {...t} key={`team-${i}`} teamImageUpload={teamImageUpload}/>)
+    teams.map((t, i) =>
+      <Team 
+        {...t} 
+        key={`team-${i}`} 
+        teamImageUpload={teamImageUpload}
+        isAdmin={t.players.some(p => p.actualPlayer && p.isAdmin)}
+      />
+    )
   }
 
   <Col xs={12}>
