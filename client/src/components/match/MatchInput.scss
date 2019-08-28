@@ -92,15 +92,26 @@
         height: 100%;
         vertical-align: middle;
       }
-      $buttonMargin: 5px 0px;
-      $buttonRadius: 50px;
-      $buttonHeight: 70px;
-      $buttonShadow: 0 1px 10px rgba(0, 0, 0, 0.3);
-      $buttonShadowError: 0 1px 10px rgba(255, 0, 0, 1);
+
+      @mixin points-button-common {
+        width: 90%;
+        margin: 5px 0px;
+        border-radius: 50px;
+        height: 70px;
+        box-shadow: 0 1px 10px rgba(0, 0, 0, 0.3);
+
+        &.error {
+          box-shadow: 0 1px 10px rgba(255, 0, 0, 1);
+        }
+
+        &:disabled {
+          box-shadow: 0 1px 10px rgba(0, 0, 0, 0);
+          background: #c2c2c2 !important;
+          opacity: 0.2 !important;
+        }
+      }
 
       .removePointButton {
-        width: 90%;
-        margin: $buttonMargin;
         // background: #c64b4b;
         background: #ff512f !important;
         background: -webkit-linear-gradient(
@@ -109,24 +120,11 @@
           #dd2476
         ) !important;
         background: linear-gradient(to right, #ec4a2a, #dd2476) !important;
-        border-radius: $buttonRadius;
-        height: $buttonHeight;
-        box-shadow: $buttonShadow;
-
-        &.error {
-          box-shadow: $buttonShadowError;
-        }
-
-        &.disabled {
-          box-shadow: 0 1px 10px rgba(0, 0, 0, 0);
-          background: #c2c2c2 !important;
-          opacity: 0.3;
-        }
+        
+        @include points-button-common;
       }
 
       .addPointButton {
-        width: 90%;
-        margin: $buttonMargin;
         // background: #88c64b;
         background: #00b09b !important;
         background: -webkit-linear-gradient(
@@ -135,19 +133,8 @@
           #00b09b
         ) !important;
         background: linear-gradient(to right, #96c93d, #00b09b) !important;
-        border-radius: $buttonRadius;
-        height: $buttonHeight;
-        box-shadow: $buttonShadow;
 
-        &.error {
-          box-shadow: $buttonShadowError;
-        }
-
-        &.disabled {
-          box-shadow: 0 1px 10px rgba(0, 0, 0, 0);
-          background: #c2c2c2 !important;
-          opacity: 0.3;
-        }
+        @include points-button-common;
       }
 
       .changingScore {
@@ -238,6 +225,7 @@
         padding-left: 12px;
         padding-right: 12px;
         box-shadow: $buttonShadow;
+        
         &.selected {
           background-color: #dba61f88;
         }
