@@ -47,7 +47,7 @@ const teamScheme = mongoose.Schema({
   seasons: {
     type: [
       {
-        _id: {
+        id: {
           type: ObjectId,
           ref: 'Season',
           required: true

@@ -121,36 +121,35 @@ module.exports = (() => {
         ]
       }).exec();
 
-      if (matchPlaying) {
+      if (matchPlaying)
         return res.status(409).send({error: 'PLAYERS_ALREADY_IN_MATCH'});
-      } else {
-        const thisID = new mongoose.Types.ObjectId();
-        let match = new PlayingMatch({
-          _id: thisID,
-          publisher: mongoose.Types.ObjectId(req.decoded._id),
-          history: [],
-          createdAt: Date.now(),
-          lastUpdateAt: Date.now(),
-          score1: 0,
-          score2: 0
-        });
 
-        if (req.body.player1) 
-          match.player1 = req.body.player1;
-        
-        if (req.body.player2) 
-          match.player2 = req.body.player2;
-        
-        if (req.body.player3) 
-          match.player3 = req.body.player3;
-        
-        if (req.body.player4) 
-          match.player4 = req.body.player4;
-        
-        const result = await match.save();
+      // const thisID = new mongoose.Types.ObjectId();
+      let match = new PlayingMatch({
+        _id: new mongoose.Types.ObjectId(),
+        publisher: mongoose.Types.ObjectId(req.decoded._id),
+        history: [],
+        createdAt: Date.now(),
+        lastUpdateAt: Date.now(),
+        score1: 0,
+        score2: 0
+      });
 
-        return res.status(201).send(result);
-      }
+      if (req.body.player1) 
+        match.player1 = req.body.player1;
+      
+      if (req.body.player2) 
+        match.player2 = req.body.player2;
+      
+      if (req.body.player3) 
+        match.player3 = req.body.player3;
+      
+      if (req.body.player4) 
+        match.player4 = req.body.player4;
+      
+      const result = await match.save();
+
+      return res.status(201).send(result);
     } catch (err) {
       logger.error(err);
       return res.status(500).json({error: 'INTERNAL_SERVER_ERROR'})
