@@ -48,7 +48,8 @@ const teamScheme = mongoose.Schema({
     type: [{
       type: ObjectId,
       ref: 'Season'
-    }]
+    }],
+    default: []
   }
 });
 

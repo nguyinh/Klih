@@ -19,6 +19,7 @@ const profileRoute = require('./routes/profile.route.js');
 const playingRoute = require('./routes/playingMatch.route.js');
 const playerRoute = require('./routes/player.route.js');
 const statsRoute = require('./routes/statistics.route.js');
+const seasonsRoute = require('./routes/season.route.js');
 
 require("dotenv").config();
 
@@ -75,6 +76,7 @@ app.use('/api', profileRoute);
 app.use('/api', playingRoute);
 app.use('/api', playerRoute);
 app.use('/api/statistics', statsRoute);
+app.use('/api/seasons', seasonsRoute);
 
 // Put all API endpoints under '/api'
 app.get('/api/*', (req, res) => {
