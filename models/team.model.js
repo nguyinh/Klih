@@ -43,6 +43,12 @@ const teamScheme = mongoose.Schema({
   createdAt: {
     type: Date,
     required: true
+  },
+  seasons: {
+    type: [{
+      type: ObjectId,
+      ref: 'Season'
+    }]
   }
 });
 

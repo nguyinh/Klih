@@ -98,6 +98,10 @@ const playingMatchScheme = mongoose.Schema({
   lastUpdateAt: {
     type: Date,
     required: true
+  },
+  season: {
+    type: ObjectId,
+    ref: 'Season'
   }
 });
 

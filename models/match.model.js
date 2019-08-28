@@ -73,6 +73,10 @@ const matchScheme = mongoose.Schema({
     type: Number,
     required: true
   },
+  season: {
+    type: ObjectId,
+    ref: 'Season'
+  },
   table: {
     type: ObjectId
   }
