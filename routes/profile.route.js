@@ -1,8 +1,8 @@
-const express = require('express')
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcrypt')
-const mongoose = require('mongoose')
-const Player = require('./../models/player.model.js')
+const express = require('express');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const mongoose = require('mongoose');
+const Player = require('./../models/player.model.js');
 const fs = require('fs');
 const {generateToken, sendToken} = require('../utils/token.utils');
 const multer = require('multer');
@@ -15,7 +15,7 @@ const upload = multer({
 const sharp = require('sharp');
 const {verifyJWT, logger} = require('../middlewares');
 
-require("dotenv").config()
+require("dotenv").config();
 
 module.exports = (() => {
   const router = express.Router()

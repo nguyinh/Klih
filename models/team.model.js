@@ -45,10 +45,18 @@ const teamScheme = mongoose.Schema({
     required: true
   },
   seasons: {
-    type: [{
-      type: ObjectId,
-      ref: 'Season'
-    }],
+    type: [
+      {
+        _id: {
+          type: ObjectId,
+          ref: 'Season',
+          required: true
+        },
+        isActive: {
+          type: Boolean,
+          required: true
+        }
+      }],
     default: []
   }
 });

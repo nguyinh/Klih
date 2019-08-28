@@ -5,7 +5,7 @@ const Player = require('./../models/player.model.js');
 const {verifyJWT, logger} = require('../middlewares');
 
 module.exports = (() => {
-  const router = express.Router()
+  const router = express.Router();
 
   router.get('/players/:playerId', verifyJWT, async (req, res) => {
     try {

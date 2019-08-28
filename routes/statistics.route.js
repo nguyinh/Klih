@@ -7,7 +7,7 @@ const {verifyJWT, logger} = require('../middlewares');
 require("dotenv").config();
 
 module.exports = (() => {
-  const router = express.Router()
+  const router = express.Router();
 
   router.get('/winLossRatio', verifyJWT, async (req, res) => {
     let wins = 0;

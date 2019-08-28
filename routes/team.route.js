@@ -1,7 +1,7 @@
-const express = require('express')
-const mongoose = require('mongoose')
-const Team = require('../models/team.model.js')
-const Player = require('../models/player.model.js')
+const express = require('express');
+const mongoose = require('mongoose');
+const Team = require('../models/team.model.js');
+const Player = require('../models/player.model.js');
 const multer = require('multer');
 const upload = multer({
   limits: {
@@ -13,10 +13,10 @@ const fs = require('fs');
 const sharp = require('sharp');
 const {verifyJWT, logger} = require('../middlewares');
 
-require("dotenv").config()
+require("dotenv").config();
 
 module.exports = (() => {
-  const router = express.Router()
+  const router = express.Router();
 
   router.post('/team/create', verifyJWT, async (req, res) => {
     try {

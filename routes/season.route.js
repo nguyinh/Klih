@@ -4,7 +4,7 @@ const Team = require('../models/team.model.js');
 const Season = require('../models/season.model.js');
 const {verifyJWT, logger} = require('../middlewares');
 
-require("dotenv").config()
+require("dotenv").config();
 
 module.exports = (() => {
   const router = express.Router();
@@ -35,12 +35,18 @@ module.exports = (() => {
 
       const { _id: seasonId } = await season.save();
 
+      // Disable all previous seasons
+      team.seasons.forEach(s => s.isActive = false);
+
       // Push season to current team
-      team.seasons.push(seasonId);
+      team.seasons.push({
+        _id: seasonId,
+        isActive: true
+      });
 
       await team.save();
 
-      return res.status(200).send(team.toObject());
+      return res.status(200).send(team);
 
     } catch (err) {
       logger.error(err);
@@ -49,7 +55,8 @@ module.exports = (() => {
   });
 
 
+
   
 
-  return router
+  return router;
 })()
