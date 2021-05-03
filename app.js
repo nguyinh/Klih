@@ -57,6 +57,7 @@ const mongoURL = process.env.MONGODB_URI || "mongodb://localhost/klih";
 mongoose.connect(mongoURL, {
   useNewUrlParser: true,
   bufferCommands: false,
+  useUnifiedTopology: true,
 });
 
 const db = mongoose.connection;
