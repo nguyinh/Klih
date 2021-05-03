@@ -58,6 +58,9 @@ mongoose.connect(mongoURL, {
   useNewUrlParser: true,
   bufferCommands: false,
   useUnifiedTopology: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
+  auto_reconnect: true,
 });
 
 const db = mongoose.connection;
